@@ -1,0 +1,112 @@
+.nav-top, .nav-bottom {
+  position: fixed;
+  width: 100%;
+  z-index: 99;
+}
+
+.nav-top {
+  top: 0;
+}
+
+.nav-bottom {
+  bottom: 0;
+}
+
+.bar {
+  width: 100%;
+  overflow: hidden;
+}
+
+.center .bar {
+  display: inline-block;
+  width: auto;
+}
+
+.bar .bar-item {
+  padding: 8px 16px;
+  float: left;
+  width: auto;
+  border: none;
+  display: block;
+  outline: 0;
+}
+
+.bar .dropdown-hover, .bar .dropdown-click {
+  position: static;
+  float: left;
+}
+
+.bar .button {
+  white-space: normal
+}
+
+.black, .hover-black:hover {
+  color: #fff !important;
+  background-color: #000 !important;
+}
+
+.card {
+  box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.16), 0 2px 10px 0 rgba(0, 0, 0, 0.12)
+}
+
+.padding-large {
+  padding: 12px 24px !important;
+}
+
+.fa {
+  display: inline-block;
+  font: normal normal normal 14px/1 FontAwesome;
+  font-size: inherit;
+  text-rendering: auto;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.fa-bars:before {
+  content: "\f0c9"
+}
+
+.btn, .button {
+  border: none;
+  display: inline-block;
+  padding: 8px 16px;
+  vertical-align: middle;
+  overflow: hidden;
+  text-decoration: none;
+  color: inherit;
+  background-color: inherit;
+  text-align: center;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.btn, .button {
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none
+}
+
+.bar-block .dropdown-hover .button, .bar-block .dropdown-click .button {
+  width: 100%;
+  text-align: left;
+  padding: 8px 16px;
+}
+
+.button {
+  width: 100%;
+}
+
+.button:hover {
+  color: #000 !important;
+  background-color: #ccc !important;
+}
+
+.black-text {
+  color: #000000;
+}
+
+h1 {
+  color: #000000;
+}

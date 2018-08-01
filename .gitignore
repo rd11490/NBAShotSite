@@ -1,0 +1,8 @@
+frontend/node_modules/.bin
+frontend/.idea
+frontend/node_modules/@angular-devkit/build-optimizer/node_modules
+frontend/node_modules
+nbashotcompare/project
+frontend/e2e
+Creds.json
+frontend/out-tsc
