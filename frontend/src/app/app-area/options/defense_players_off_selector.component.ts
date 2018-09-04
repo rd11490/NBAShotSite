@@ -1,41 +1,68 @@
-import {Component} from '@angular/core';
+import {Component, Input, OnInit, ViewChild} from '@angular/core';
 import {PlayerId} from "../../models/options.models";
 import {Store} from "@ngrx/store";
-import {Options} from "../../app.state";
+import {State} from "../../app.state";
 import * as OptionActions from './../../actions/options.action'
-import * as OptionSelectors  from './../../selectors/options.selectors'
+import * as OptionSelectors from './../../selectors/options.selectors'
 import {Observable} from "rxjs/Observable";
+import * as InitialSelectors from "../../selectors/initial.selectors";
+import {NgSelectComponent} from "@ng-select/ng-select";
 
 @Component({
   selector: 'defensive-players-off-select',
   template: `
     <div>
       Defensive Players Off Court
-      <ng-select [items]="players"
+      <ng-select [items]="this.players | async"
                  bindLabel="name"
-                 [bindValue]="selectedPlayers | async"
                  bindValue="id"
                  [multiple]="true"
                  maxSelectedItems="5"
-                 placeholder="Offensive Players"
+                 placeholder="Defensive Players"
+                 [virtualScroll]="true"
                  (change)="selectPlayers($event)">
       </ng-select>
     </div>
   `,
   styleUrls: ['../../css/general.css']
 })
-export class DefensePlayersOffSelectorComponent {
+export class DefensePlayersOffSelectorComponent implements OnInit {
 
-  private players: PlayerId[];
-  selectedPlayers: Observable<Array<PlayerId>>;
+  private _source: string;
+  private players: Observable<Array<PlayerId>>;
 
-  constructor(private store: Store<Options>) {
-    this.players = [{name: "Test1", id: 1}, {name: "Test2", id: 2}, {name: "Test3", id: 3}, {name: "Test4", id: 4}, {name: "Random Name", id: 5}, {name: "Random Name3", id: 6}, {name: "Random Name5", id: 7}, ];
-    this.selectedPlayers = OptionSelectors.selectDefensivePlayersOff(this.store);
+  constructor(private store: Store<State>) {
+
+  }
+
+  ngOnInit(): void {
+    this.players = InitialSelectors.selectPlayers(this.store);
+
+    OptionSelectors.selectDefensivePlayersOff(this.store, this._source).subscribe(players => {
+      if (players != null) {
+        players.forEach(player => {
+          if (this.ngSelect.selectedItems.filter(v => v.value == player).length < 1) {
+            this.ngSelect.select({
+              name: [player.name],
+              label: player.name,
+              value: player
+            })
+          }
+        })
+      }
+    })
+  }
+
+  @ViewChild(NgSelectComponent)
+  ngSelect: NgSelectComponent;
+
+  @Input("source")
+  set source(source: string) {
+    this._source = source;
   }
 
   selectPlayers(players: Array<PlayerId>) {
-    this.store.dispatch(new OptionActions.SetDefensePlayersOff(players));
+    this.store.dispatch(new OptionActions.SetDefensePlayersOff(players, this._source));
   }
 
 }

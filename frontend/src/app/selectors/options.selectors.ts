@@ -1,39 +1,40 @@
-import {Options} from "../app.state";
+import {State} from "../app.state";
 import {Observable} from "rxjs/Observable";
 import {PlayerId, TeamId} from "../models/options.models";
 import {Store} from "@ngrx/store";
 
-export const selectShooter = (store: Store<Options>): Observable<PlayerId> => {
-  console.log("Selector: ");
-  return store.select(state => state.shooter);
+export const selectShooter = (store: Store<State>, optionType: string): Observable<PlayerId> => {
+  return store.select(state => {
+    return state.options.get(optionType).shooter
+  });
+};
 
-}
+export const selectOffensivePlayersOn = (store: Store<State>, optionType: string): Observable<Array<PlayerId>> =>
+  store.select(state => state.options.get(optionType).offensivePlayersOn);
 
-export const selectOffensivePlayersOn = (store: Store<Options>): Observable<Array<PlayerId>> =>
-  store.select(state => state.offensivePlayersOn);
+export const selectOffensivePlayersOff = (store: Store<State>, optionType: string): Observable<Array<PlayerId>> =>
+  store.select(state => state.options.get(optionType).offensivePlayersOff);
 
-export const selectOffensivePlayersOff = (store: Store<Options>): Observable<Array<PlayerId>> =>
-  store.select(state => state.offensivePlayersOff);
+export const selectOffensiveTeam = (store: Store<State>, optionType: string): Observable<TeamId> =>
+  store.select(state => state.options.get(optionType).offensiveTeam);
 
-export const selectOffensiveTeam = (store: Store<Options>): Observable<TeamId> =>
-  store.select(state => state.offensiveTeam);
+export const selectDefensivePlayersOn = (store: Store<State>, optionType: string): Observable<Array<PlayerId>> =>
+  store.select(state => state.options.get(optionType).defensivePlayersOn);
 
-export const selectDefensivePlayersOn = (store: Store<Options>): Observable<Array<PlayerId>> =>
-  store.select(state => state.defensivePlayersOn);
+export const selectDefensivePlayersOff = (store: Store<State>, optionType: string): Observable<Array<PlayerId>> =>
+  store.select(state => state.options.get(optionType).defensivePlayersOff);
 
-export const selectDefensivePlayersOff = (store: Store<Options>): Observable<Array<PlayerId>> =>
-  store.select(state => state.defensivePlayersOff);
+export const selectDefensiveTeam = (store: Store<State>, optionType: string): Observable<TeamId> =>
+  store.select(state => state.options.get(optionType).defensiveTeam);
 
-export const selectDefensiveTeam = (store: Store<Options>): Observable<TeamId> =>
-  store.select(state => state.defensiveTeam);
+export const selectSeason = (store: Store<State>, optionType: string): Observable<string> =>
+  store.select(state => state.options.get(optionType).season);
 
-export const selectSeason = (store: Store<Options>): Observable<string> =>
-  store.select(state => state.season);
+export const selectPeriod = (store: Store<State>, optionType: string): Observable<number> =>
+  store.select(state => state.options.get(optionType).period);
 
-export const selectPeriod = (store: Store<Options>): Observable<number> =>
-  store.select(state => state.period);
+export const selectSecondsRemaining = (store: Store<State>, optionType: string): Observable<number> =>
+  store.select(state => state.options.get(optionType).secondRemaining);
 
-export const selectSecondsRemaining = (store: Store<Options>): Observable<number> =>
-  store.select(state => state.secondRemaining);
-
-
+export const selectHash = (store: Store<State>, optionType: string): Observable<string> =>
+  store.select(state => state.options.get(optionType).hash);

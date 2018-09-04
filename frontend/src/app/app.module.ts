@@ -1,14 +1,14 @@
-import { NgModule }       from '@angular/core';
-import { BrowserModule }  from '@angular/platform-browser';
-import { FormsModule }    from '@angular/forms';
-import { HttpClientModule }    from '@angular/common/http';
-
-import { AppRoutes }     from './routes/routes';
-import {NavigationComponent} from "./navigation/navigation.component";
+import {NgModule} from '@angular/core';
+import {BrowserModule} from '@angular/platform-browser';
+import {FormsModule} from '@angular/forms';
+import {HttpClientModule} from '@angular/common/http';
+import {ShotchartService} from './services/shotchart.service'
+import {AppRoutes} from './routes/routes';
+import {NavigationComponent} from "./app-area/navigation.component";
 import {AppComponent} from "./app.component";
-import {RawShotChartComponent} from "./app-area/raw/raw_shot_chart.component";
-import {FrequencyShotChartComponent} from "./app-area/frequency/frequency_shot_chart.component";
-import {CompareShotChartComponent} from "./app-area/compare/compare_shot_chart.component";
+import {RawShotChartComponent} from "./app-area/pages/raw_shot_chart.component";
+import {FrequencyShotChartComponent} from "./app-area/pages/frequency_shot_chart.component";
+import {CompareShotChartComponent} from "./app-area/pages/compare_shot_chart.component";
 import {OptionsComponent} from "./app-area/options/options.component";
 import {ShooterSelectorComponent} from "./app-area/options/shooter_selector.component";
 import {NgSelectModule} from "@ng-select/ng-select";
@@ -23,6 +23,12 @@ import {MatFormFieldModule} from "@angular/material";
 import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
 import {DefenseTeamSelectorComponent} from "./app-area/options/defense_team_selector.component";
 import {OffenseTeamSelectorComponent} from "./app-area/options/offense_team_selector.component";
+import {setPlayersReducer, setSeasonsReducer, setTeamsReducer} from "./reducers/initial.reducers";
+import {InitializeEffects} from "./effects/Search";
+import {EffectsModule} from "@ngrx/effects";
+import {HomeComponent} from "./app-area/pages/home.component";
+import {setCompareShots, setFrequencyShots, setRawShots, setSearchInProgress} from "./reducers/shotchart.reducers";
+import {SeasonSelectorComponent} from "./app-area/options/season_selector.component";
 
 @NgModule({
   imports: [
@@ -36,8 +42,18 @@ import {OffenseTeamSelectorComponent} from "./app-area/options/offense_team_sele
     MatExpansionModule,
     MatFormFieldModule,
     StoreModule.forRoot({
-      options: optionsReducer
-    })
+      options: optionsReducer,
+      players: setPlayersReducer,
+      teams: setTeamsReducer,
+      seasons: setSeasonsReducer,
+      rawShotChartResponse: setRawShots,
+      frequencyChartResponse: setFrequencyShots,
+      compareShotResponse: setCompareShots,
+      searchInProgress: setSearchInProgress
+    }),
+    EffectsModule.forRoot([
+      InitializeEffects
+    ])
   ],
   exports: [
     BrowserAnimationsModule,
@@ -46,6 +62,7 @@ import {OffenseTeamSelectorComponent} from "./app-area/options/offense_team_sele
   ],
   declarations: [
     AppComponent,
+    HomeComponent,
     NavigationComponent,
     RawShotChartComponent,
     FrequencyShotChartComponent,
@@ -57,9 +74,10 @@ import {OffenseTeamSelectorComponent} from "./app-area/options/offense_team_sele
     DefensePlayersOnSelectorComponent,
     DefensePlayersOffSelectorComponent,
     DefenseTeamSelectorComponent,
-    OffenseTeamSelectorComponent
+    OffenseTeamSelectorComponent,
+    SeasonSelectorComponent
   ],
-  providers: [ ],
+  providers: [ ShotchartService ],
   bootstrap: [ AppComponent ]
 })
 export class AppModule { }

@@ -6,3 +6,6 @@ nbashotcompare/project
 frontend/e2e
 Creds.json
 frontend/out-tsc
+serverless_shot_compare/.idea/libraries
+serverless_shot_compare/.idea
+serverless_shot_compare/project

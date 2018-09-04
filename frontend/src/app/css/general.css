@@ -110,3 +110,43 @@
 h1 {
   color: #000000;
 }
+
+::ng-deep .mat-expansion-panel-body {
+  padding: 0px 2% 1% 2%;
+}
+
+.option-offense {
+  display:inline-block;
+  width: 24%;
+}
+
+.option-defense {
+  display:inline-block;
+  width: 32%;
+}
+
+.option-other {
+  display:inline-block;
+  width: 20%;
+}
+
+.option-two {
+  display:inline-block;
+  width: 48%;
+}
+
+.option-line {
+  padding: 1% 0 1% 0;
+}
+
+.search-button {
+  background-color: #000000; /* Black */
+  border: none;
+  color: white;
+  padding: 15px 32px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  float: right;
+}

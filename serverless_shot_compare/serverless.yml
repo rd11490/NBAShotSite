@@ -1,0 +1,99 @@
+# Welcome to Serverless!
+#
+# This file is the main config file for your service.
+# It's very minimal at this point and uses default values.
+# You can always add more config options for more control.
+# We've included some commented out config examples here.
+# Just uncomment any of them to get that config option.
+#
+# For full config options, check the docs:
+#    docs.serverless.com
+#
+# Happy Coding!
+
+service: aws-scala-sbt # NOTE: update this with your service name
+
+# You can pin your service to only deploy with a specific Serverless version
+# Check out our docs for more details
+# frameworkVersion: "=X.X.X"
+
+provider:
+  name: aws
+  runtime: java8
+  memorySize: 2048
+  timeout: 30
+  environment:
+      ENV: 'Production'
+
+# you can overwrite defaults here
+#  stage: dev
+#  region: us-east-1
+
+# you can add statements to the Lambda function's IAM Role here
+#  iamRoleStatements:
+#    - Effect: "Allow"
+#      Action:
+#        - "s3:ListBucket"
+#      Resource: { "Fn::Join" : ["", ["arn:aws:s3:::", { "Ref" : "ServerlessDeploymentBucket" } ] ]  }
+#    - Effect: "Allow"
+#      Action:
+#        - "s3:PutObject"
+#      Resource:
+#        Fn::Join:
+#          - ""
+#          - - "arn:aws:s3:::"
+#            - "Ref" : "ServerlessDeploymentBucket"
+#            - "/*"
+
+# you can define service wide environment variables here
+#  environment:
+#    variable1: value1
+
+# you can add packaging information here
+# Make sure to run "sbt assembly" to create a jar file
+# with all your dependencies and put that jar file name here.
+package:
+  artifact: target/scala-2.12/nbashotsite.jar
+
+functions:
+  players:
+      handler: endpoints.PlayerInfoHandler::handle
+      events:
+        - http:
+            method: get
+            path: /players
+
+  teams:
+      handler: endpoints.TeamNameHandler::handle
+      events:
+        - http:
+            method: get
+            path: /teams
+
+  seasons:
+          handler: endpoints.SeasonHandler::handle
+          events:
+            - http:
+                method: get
+                path: /seasons
+
+  raw:
+      handler: endpoints.RawShotHandler::handle
+      events:
+        - http:
+            method: post
+            path: /raw
+
+  frequency:
+      handler: endpoints.ShotFrequencyHandler::handle
+      events:
+        - http:
+            method: post
+            path: /frequency
+
+  compare:
+        handler: endpoints.ShotCompareHandler::handle
+        events:
+          - http:
+              method: post
+              path: /compare

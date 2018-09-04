@@ -1,7 +1,8 @@
 import * as OptionActions from './../actions/options.action'
-import {Options} from "../app.state";
+import {CompareOptions1, CompareOptions2, FrequencyOptions, Options, RawOptions, State} from "../app.state";
 
 export const initialOptions: Options = {
+  hash: undefined,
   shooter: undefined,
   offensivePlayersOn: [],
   defensivePlayersOn: [],
@@ -11,148 +12,167 @@ export const initialOptions: Options = {
   offensiveTeam: undefined,
   defensiveTeam: undefined,
   period: undefined,
-  secondRemaining: undefined
-
+  secondRemaining: undefined,
+  startDate: undefined,
+  endDate: undefined
 };
 
-export const optionsReducer = (state: Options = initialOptions, action: OptionActions.Actions): Options => {
+export const initialState:  Map<string, Options> =
+    new Map<string, Options> ()
+    .set(RawOptions, initialOptions)
+    .set(FrequencyOptions, initialOptions)
+    .set(CompareOptions1, initialOptions)
+    .set(CompareOptions2, initialOptions);
+
+export const optionsReducer = (options: Map<string, Options> = initialState, action: OptionActions.Actions): Map<string, Options> => {
   switch (action.type) {
+    case OptionActions.SET_HASH: {
+      return setHashReducer(options, action as OptionActions.SetHash);
+    }
     case OptionActions.SET_SHOOTER: {
-      return setShooterReducer(state, action as OptionActions.SetShooter);
+      return setShooterReducer(options, action as OptionActions.SetShooter);
     }
     case OptionActions.SET_SEASON: {
-      return setSeasonReducer(state, action as OptionActions.SetSeason);
+      return setSeasonReducer(options, action as OptionActions.SetSeason);
     }
     case OptionActions.SET_OFFENSE_TEAM: {
-      return setOffensiveTeamReducer(state, action as OptionActions.SetOffenseTeam);
+      return setOffensiveTeamReducer(options, action as OptionActions.SetOffenseTeam);
     }
     case OptionActions.SET_DEFENSE_TEAM : {
-      return setDefensiveTeamReducer(state, action as OptionActions.SetDefenseTeam);
+      return setDefensiveTeamReducer(options, action as OptionActions.SetDefenseTeam);
     }
     case OptionActions.SET_OFFENSE_ON : {
-      return setOffensePlayersOnReducer(state, action as OptionActions.SetOffensePlayersOn);
+      return setOffensePlayersOnReducer(options, action as OptionActions.SetOffensePlayersOn);
     }
     case OptionActions.SET_OFFENSE_OFF : {
-      return setOffensePlayersOffReducer(state, action as OptionActions.SetOffensePlayersOff);
+      return setOffensePlayersOffReducer(options, action as OptionActions.SetOffensePlayersOff);
     }
     case OptionActions.SET_DEFENSE_ON : {
-      return setDefensePlayersOnReducer(state, action as OptionActions.SetDefensePlayersOn);
+      return setDefensePlayersOnReducer(options, action as OptionActions.SetDefensePlayersOn);
     }
     case OptionActions.SET_DEFENSE_OFF : {
-      return setDefensePlayersOffReducer(state, action as OptionActions.SetDefensePlayersOff);
+      return setDefensePlayersOffReducer(options, action as OptionActions.SetDefensePlayersOff);
     }
     case OptionActions.SET_PERIOD : {
-      return setPeriodReducer(state, action as OptionActions.SetPeriod);
+      return setPeriodReducer(options, action as OptionActions.SetPeriod);
     }
     case OptionActions.SET_SECONDS_REMAINING : {
-      return setSecondsRemainingReducer(state, action as OptionActions.SetSecondsRemaining);
+      return setSecondsRemainingReducer(options, action as OptionActions.SetSecondsRemaining);
     }
     default: {
-      return state;
+      return options;
 
     }
   }
 };
 
-const setSeasonReducer = (state: Options, action: OptionActions.SetSeason): Options => {
+const setHashReducer = (options: Map<string, Options>, action: OptionActions.SetHash): Map<string, Options> => {
+  switch (action.type) {
+    case OptionActions.SET_HASH:
+      options.get(action.key).hash = action.payload;
+      return options;
+    default:
+      return options;
+  }
+};
+
+const setSeasonReducer = (options: Map<string, Options>, action: OptionActions.SetSeason): Map<string, Options> => {
   switch (action.type) {
     case OptionActions.SET_SEASON:
-      state.season = action.payload;
-      return state;
+      options.get(action.key).season = action.payload;
+      return options;
     default:
-      return state;
+      return options;
   }
 };
 
-const setShooterReducer = (state: Options, action: OptionActions.SetShooter): Options => {
+const setShooterReducer = (options: Map<string, Options>, action: OptionActions.SetShooter): Map<string, Options> => {
   switch (action.type) {
     case OptionActions.SET_SHOOTER:
-      console.log("Reducer: ", action.payload);
-      console.log(state);
-      state.shooter = action.payload;
-      return state;
+      options.get(action.key).shooter = action.payload;
+      return options;
     default:
-      return state;
+      return options;
   }
 };
 
-const setOffensiveTeamReducer = (state: Options, action: OptionActions.SetOffenseTeam): Options => {
+const setOffensiveTeamReducer = (options: Map<string, Options>, action: OptionActions.SetOffenseTeam): Map<string, Options> => {
   switch (action.type) {
     case OptionActions.SET_OFFENSE_TEAM:
-      state.offensiveTeam = action.payload;
-      return state;
+      options.get(action.key).offensiveTeam = action.payload;
+      return options;
     default:
-      return state;
+      return options;
   }
 };
 
-const setDefensiveTeamReducer = (state: Options, action: OptionActions.SetDefenseTeam): Options => {
+const setDefensiveTeamReducer = (options: Map<string, Options>, action: OptionActions.SetDefenseTeam): Map<string, Options> => {
   switch (action.type) {
     case OptionActions.SET_DEFENSE_TEAM:
-      state.defensiveTeam = action.payload;
-      return state;
+      options.get(action.key).defensiveTeam = action.payload;
+      return options;
     default:
-      return state;
+      return options;
   }
 };
 
-const setOffensePlayersOnReducer = (state: Options, action: OptionActions.SetOffensePlayersOn): Options => {
+const setOffensePlayersOnReducer = (options: Map<string, Options>, action: OptionActions.SetOffensePlayersOn): Map<string, Options> => {
   switch (action.type) {
     case OptionActions.SET_OFFENSE_ON:
-      state.offensivePlayersOn = action.payload.slice(0, 5);
-      return state;
+      options.get(action.key).offensivePlayersOn = action.payload.slice(0, 5);
+      return options;
     default:
-      return state;
+      return options;
   }
 };
 
-const setOffensePlayersOffReducer = (state: Options, action: OptionActions.SetOffensePlayersOff): Options => {
+const setOffensePlayersOffReducer = (options: Map<string, Options>, action: OptionActions.SetOffensePlayersOff): Map<string, Options> => {
   switch (action.type) {
     case OptionActions.SET_OFFENSE_OFF:
-      state.offensivePlayersOff = action.payload;
-      return state;
+      options.get(action.key).offensivePlayersOff = action.payload;
+      return options;
     default:
-      return state;
+      return options;
   }
 };
 
-const setDefensePlayersOnReducer = (state: Options, action: OptionActions.SetDefensePlayersOn): Options => {
+const setDefensePlayersOnReducer = (options: Map<string, Options>, action: OptionActions.SetDefensePlayersOn): Map<string, Options> => {
   switch (action.type) {
     case OptionActions.SET_DEFENSE_ON:
-      state.defensivePlayersOn = action.payload.slice(0, 5);
-      return state;
+      options.get(action.key).defensivePlayersOn = action.payload.slice(0, 5);
+      return options;
     default:
-      return state;
+      return options;
   }
 };
 
-const setDefensePlayersOffReducer = (state: Options, action: OptionActions.SetDefensePlayersOff): Options => {
+const setDefensePlayersOffReducer = (options: Map<string, Options>, action: OptionActions.SetDefensePlayersOff): Map<string, Options> => {
   switch (action.type) {
     case OptionActions.SET_DEFENSE_OFF:
-      state.defensivePlayersOff = action.payload;
-      return state;
+      options.get(action.key).defensivePlayersOff = action.payload;
+      return options;
     default:
-      return state;
+      return options;
   }
 };
 
-const setPeriodReducer = (state: Options, action: OptionActions.SetPeriod): Options => {
+const setPeriodReducer = (options: Map<string, Options>, action: OptionActions.SetPeriod): Map<string, Options> => {
   switch (action.type) {
     case OptionActions.SET_PERIOD:
-      state.period = action.payload;
-      return state;
+      options.get(action.key).period = action.payload;
+      return options;
     default:
-      return state;
+      return options;
   }
 };
 
-const setSecondsRemainingReducer = (state: Options, action: OptionActions.SetSecondsRemaining): Options => {
+const setSecondsRemainingReducer = (options: Map<string, Options>, action: OptionActions.SetSecondsRemaining): Map<string, Options> => {
   switch (action.type) {
     case OptionActions.SET_SECONDS_REMAINING:
-      state.secondRemaining = action.payload;
-      return state;
+      options.get(action.key).secondRemaining = action.payload;
+      return options;
     default:
-      return state;
+      return options;
   }
 };
 
