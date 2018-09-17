@@ -10,7 +10,12 @@ export const selectRawShotResponse = (store: Store<State>): Observable<RawShotsR
 };
 
 export const selectRawShots = (store: Store<State>): Observable<Array<RawShot>> => {
-  return selectRawShotResponse(store).map(v => v.shots);
+  return selectRawShotResponse(store).map(v => {
+    if (v != null) {
+      return v.shots;
+    }
+    return [];
+  });
 };
 
 export const selectRawShotParams = (store: Store<State>): Observable<ShotRequest> => {
@@ -27,7 +32,12 @@ export const selectFrequencyShotResponse = (store: Store<State>): Observable<Fre
 };
 
 export const selectZonedShots = (store: Store<State>): Observable<Array<ZonedShot>> => {
-  return selectFrequencyShotResponse(store).map(v => v.data.shots);
+  return selectFrequencyShotResponse(store).map(v => {
+    if (v != null) {
+      return v.data.shots;
+    }
+    return [];
+  });
 };
 
 export const selectZonedShotTotals = (store: Store<State>): Observable<ZonedShot> => {

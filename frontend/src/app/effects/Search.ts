@@ -123,7 +123,6 @@ export class InitializeEffects {
       .withLatestFrom(this.store)
       .mergeMap(this.callFrequencyShotService)
       .map(response => {
-        console.log(response)
         return new StoreFrequencyShots(response);
       });
 

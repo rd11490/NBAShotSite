@@ -7,18 +7,26 @@ import {selectRawResponseSearchActions} from "../../selectors/initial.selectors"
 import {SetHash} from "../../actions/options.action";
 import {selectHash} from "../../selectors/options.selectors";
 import {ActivatedRoute, Router} from "@angular/router";
+import {selectRawShots} from "../../selectors/shotchart.selectors";
+import {Observable} from "rxjs/Observable";
+import {RawShot} from "../../models/shots.models";
 
 @Component({
-  selector: 'raw_shot_chart',
+  selector: 'raw_shot_chart_container',
   template: `
     <h1>RAW SHOT CHARTS</h1>
     <options [source]="this._source"></options>
     <button class="search-button" (click)="search()">Search</button>
+    <br>
+    <div>
+    <raw-shot-chart class="shot-chart" [shots]="(this._shots | async)"></raw-shot-chart>
+    </div>
   `,
   styleUrls: ['../../css/general.css']
 })
 export class RawShotChartComponent implements OnInit {
   private _source: string;
+  private _shots: Observable<Array<RawShot>>;
 
   constructor(private store: Store<State>,
               private route: ActivatedRoute,
@@ -47,11 +55,12 @@ export class RawShotChartComponent implements OnInit {
     selectHash(this.store, this._source)
       .subscribe((hashCode) => {
         setTimeout(() => {
-          console.log(hashCode);
           const url = this.route.snapshot.url;
           this.router.navigate([url[0].path], {queryParams: {id: hashCode}, replaceUrl: true})
         })
       });
+
+    this._shots = selectRawShots(this.store)
 
   }
 

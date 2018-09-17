@@ -29,6 +29,8 @@ import {EffectsModule} from "@ngrx/effects";
 import {HomeComponent} from "./app-area/pages/home.component";
 import {setCompareShots, setFrequencyShots, setRawShots, setSearchInProgress} from "./reducers/shotchart.reducers";
 import {SeasonSelectorComponent} from "./app-area/options/season_selector.component";
+import {RawShotsComponent} from "./app-area/shotcharts/rawshots.component";
+import {FrequencyShotsComponent} from "./app-area/shotcharts/frequencyshots.component";
 
 @NgModule({
   imports: [
@@ -64,6 +66,8 @@ import {SeasonSelectorComponent} from "./app-area/options/season_selector.compon
     AppComponent,
     HomeComponent,
     NavigationComponent,
+    RawShotsComponent,
+    FrequencyShotsComponent,
     RawShotChartComponent,
     FrequencyShotChartComponent,
     CompareShotChartComponent,

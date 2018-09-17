@@ -26,6 +26,6 @@ object SeasonHandler {
   implicit val executionContext: ExecutionContext = ExecutionContext.global
   def selectSeasons( /*IO*/ ): Future[Seq[String]] = {
     PostgresClient
-      .selectSeasons(NBATables.team_info)
+      .selectSeasons(NBATables.lineup_shots)
   }
 }

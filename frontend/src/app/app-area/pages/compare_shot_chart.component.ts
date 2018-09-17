@@ -55,7 +55,6 @@ export class CompareShotChartComponent implements OnInit{
     selectHash(this.store, this._source1)
       .subscribe((hashCode) => {
         setTimeout(() => {
-          console.log(hashCode);
           const url = this.route.snapshot.url;
           this.router.navigate([url[0].path], {queryParams: {id: hashCode}, replaceUrl: true})
         })
