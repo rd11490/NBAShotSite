@@ -31,6 +31,7 @@ import {setCompareShots, setFrequencyShots, setRawShots, setSearchInProgress} fr
 import {SeasonSelectorComponent} from "./app-area/options/season_selector.component";
 import {RawShotsComponent} from "./app-area/shotcharts/rawshots.component";
 import {FrequencyShotsComponent} from "./app-area/shotcharts/frequencyshots.component";
+import {LoadingComponent} from "./app-area/pages/loading.component";
 
 @NgModule({
   imports: [
@@ -79,7 +80,8 @@ import {FrequencyShotsComponent} from "./app-area/shotcharts/frequencyshots.comp
     DefensePlayersOffSelectorComponent,
     DefenseTeamSelectorComponent,
     OffenseTeamSelectorComponent,
-    SeasonSelectorComponent
+    SeasonSelectorComponent,
+    LoadingComponent
   ],
   providers: [ ShotchartService ],
   bootstrap: [ AppComponent ]

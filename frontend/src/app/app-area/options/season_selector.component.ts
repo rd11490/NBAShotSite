@@ -24,8 +24,8 @@ import {NgOption, NgSelectComponent} from "@ng-select/ng-select";
 })
 export class SeasonSelectorComponent implements OnInit {
 
-  private _source: string;
-  private seasons: Observable<Array<string>>;
+  _source: string;
+  seasons: Observable<Array<string>>;
 
   constructor(private store: Store<State>) {
 

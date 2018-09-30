@@ -6,10 +6,18 @@ import {GetPlayers, GetSeasons, GetTeams} from "../../actions/initial.action";
 @Component({
   selector: 'home-component',
   template: `  
-    <h1>Welcome to Shot Chart Compare!</h1>
+    <h1>Welcome to Shot Chart WOWY!</h1>
     <b>
-      This is an app designed to allow you to view and compare shot charts using various parameters such as players 
-      on and off the court, time remaining in the period, defending team, etc.
+      This is an app designed to allow you to build shot charts based on who is on the court, who is off the court
+      <br>
+      <h2>Common Issues:</h2>
+      <ul>
+        <li>
+          Requesting too many shots for a Raw Shot Chart: The endpont is limited in how many shots it can return. 
+          Limit your request to get results
+        </li>
+      </ul>
+      
     </b>
  
     `,

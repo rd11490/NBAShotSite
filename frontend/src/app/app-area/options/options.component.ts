@@ -42,8 +42,8 @@ import {Observable} from "rxjs/Observable";
 })
 export class OptionsComponent {
 
-  private _source: string;
-  private _description: Observable<string>;
+  _source: string;
+  _description: Observable<string>;
 
   constructor(private store: Store<State>) {
 

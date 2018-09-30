@@ -28,8 +28,8 @@ import {NgSelectComponent} from "@ng-select/ng-select";
 })
 export class DefensePlayersOffSelectorComponent implements OnInit {
 
-  private _source: string;
-  private players: Observable<Array<PlayerId>>;
+  _source: string;
+  players: Observable<Array<PlayerId>>;
 
   constructor(private store: Store<State>) {
 

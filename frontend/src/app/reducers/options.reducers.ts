@@ -24,7 +24,7 @@ export const initialState:  Map<string, Options> =
     .set(CompareOptions1, initialOptions)
     .set(CompareOptions2, initialOptions);
 
-export const optionsReducer = (options: Map<string, Options> = initialState, action: OptionActions.Actions): Map<string, Options> => {
+export function optionsReducer(options: Map<string, Options> = initialState, action: OptionActions.Actions): Map<string, Options> {
   switch (action.type) {
     case OptionActions.SET_HASH: {
       return setHashReducer(options, action as OptionActions.SetHash);

@@ -21,8 +21,8 @@ import {selectHash} from "../../selectors/options.selectors";
 })
 export class CompareShotChartComponent implements OnInit{
 
-  private _source1: string;
-  private _source2: string;
+  _source1: string;
+  _source2: string;
 
   constructor(
     private store: Store<State>,
@@ -62,7 +62,7 @@ export class CompareShotChartComponent implements OnInit{
 
   }
 
-  private search = (): void => {
+  search = (): void => {
     this.store.dispatch(new SetHash(undefined, this._source1));
     this.store.dispatch(new SetHash(undefined, this._source2));
 

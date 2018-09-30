@@ -87,14 +87,19 @@ object PlayerOnCourtDriver {
       .sortBy(_.eventNumber)
       .zipWithIndex
 
-    val index = playByPlayWithIndex
-      .filter(v => {
-        if (v._1.period > 4) {
-          v._1.pcTimeString < "5:00"
-        } else {
-          v._1.pcTimeString < "12:00"
-        }
-      }).head._2
+    val index = try {
+      playByPlayWithIndex
+        .filter(v => {
+          if (v._1.period > 4) {
+            v._1.pcTimeString < "5:00"
+          } else {
+            v._1.pcTimeString < "12:00"
+          }
+        }).head._2
+    } catch {
+      case e: Throwable =>
+        playByPlayWithIndex.foreach(println)
+    }
 
     val firstEvent = playByPlayWithIndex
       .find(_._2 == index)

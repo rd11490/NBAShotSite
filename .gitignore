@@ -9,3 +9,4 @@ frontend/out-tsc
 serverless_shot_compare/.idea/libraries
 serverless_shot_compare/.idea
 serverless_shot_compare/project
+frontend/dist

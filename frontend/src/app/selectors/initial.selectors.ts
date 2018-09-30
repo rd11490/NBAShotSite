@@ -34,6 +34,7 @@ export const selectPageLoaded = (store: Store<State>): Observable<boolean> => {
   return selectPlayers(store).combineLatest(selectTeams(store), selectSeasons(store))
     .map(value => {
       const [players, teams, seasons]: [Array<PlayerId>, Array<TeamId>, Array<string>] = value;
+      console.log(players.length > 0 && teams.length > 0 && seasons.length > 0);
       return players.length > 0 && teams.length > 0 && seasons.length > 0
     })
 };

@@ -6,7 +6,7 @@ import {FrequencyShotSearch, SearchInProgress} from "../../actions/search.action
 import {SetHash} from "../../actions/options.action";
 import {ActivatedRoute, Router} from "@angular/router";
 import {selectHash} from "../../selectors/options.selectors";
-import {selectFrequencyResponseSearchActions} from "../../selectors/initial.selectors";
+import {selectFrequencyResponseSearchActions, selectPageLoaded} from "../../selectors/initial.selectors";
 import {ZonedShot} from "../../models/shots.models";
 import {selectZonedShots} from "../../selectors/shotchart.selectors";
 import {Observable} from "rxjs/Observable";
@@ -14,12 +14,17 @@ import {Observable} from "rxjs/Observable";
 @Component({
   selector: 'frequency_shot_chart_container',
   template: `  
-    <h1>FREQUENCY SHOT CHARTS</h1>
-    <options [source]="this._source"></options>
-    <button class="search-button" (click)="search()">Search</button>
-    <br>
-    <div>
-    <frequency-shot-chart class="shot-chart" [shots]="(this._shots | async)"></frequency-shot-chart>
+    <h1>Shots By Location</h1>
+    <div *ngIf="(this._done_loading | async)">
+      <options [source]="this._source"></options>
+      <button class="search-button" (click)="search()">Search</button>
+      <br>
+      <div>
+      <frequency-shot-chart class="shot-chart" [shots]="(this._shots | async)"></frequency-shot-chart>
+      </div>
+    </div>
+    <div *ngIf="(this._loading | async)">
+      <loading-component></loading-component>
     </div>
 
   `,
@@ -27,8 +32,10 @@ import {Observable} from "rxjs/Observable";
 })
 export class FrequencyShotChartComponent implements OnInit {
 
-  private _source: string;
-  private _shots: Observable<Array<ZonedShot>>;
+  _source: string;
+  _shots: Observable<Array<ZonedShot>>;
+  _loading: Observable<boolean>;
+  _done_loading: Observable<boolean>;
 
   constructor(private store: Store<State>,
               private route: ActivatedRoute,
@@ -62,12 +69,14 @@ export class FrequencyShotChartComponent implements OnInit {
         })
       });
 
-    this._shots = selectZonedShots(this.store)
+    this._shots = selectZonedShots(this.store);
+    this._loading = selectPageLoaded(this.store).map(v => !v);
+    this._done_loading = selectPageLoaded(this.store);
 
 
   }
 
-  private search = (): void => {
+  search = (): void => {
     this.store.dispatch(new SetHash(undefined, this._source));
     this.store.dispatch(new SearchInProgress(true));
     this.store.dispatch(new FrequencyShotSearch());

@@ -26,8 +26,8 @@ import {NgSelectComponent} from "@ng-select/ng-select";
   styleUrls: ['../../css/general.css']
 })
 export class OffenseTeamSelectorComponent implements OnInit {
-  private _source: string;
-  private teams: Observable<Array<TeamId>>;
+  _source: string;
+  teams: Observable<Array<TeamId>>;
   selectedItem: Observable<TeamId>;
 
   constructor(private store: Store<State>) {

@@ -3,7 +3,7 @@ import {RawOptions, State} from '../../app.state'
 import {Store} from "@ngrx/store";
 import {GetPlayers, GetSeasons, GetTeams} from "../../actions/initial.action";
 import {RawShotSearch, SearchInProgress} from "../../actions/search.action";
-import {selectRawResponseSearchActions} from "../../selectors/initial.selectors";
+import {selectPageLoaded, selectRawResponseSearchActions} from "../../selectors/initial.selectors";
 import {SetHash} from "../../actions/options.action";
 import {selectHash} from "../../selectors/options.selectors";
 import {ActivatedRoute, Router} from "@angular/router";
@@ -14,19 +14,29 @@ import {RawShot} from "../../models/shots.models";
 @Component({
   selector: 'raw_shot_chart_container',
   template: `
-    <h1>RAW SHOT CHARTS</h1>
-    <options [source]="this._source"></options>
-    <button class="search-button" (click)="search()">Search</button>
-    <br>
-    <div>
-    <raw-shot-chart class="shot-chart" [shots]="(this._shots | async)"></raw-shot-chart>
+    <h1>Raw Shots</h1>
+    <div *ngIf="(this._done_loading | async)">
+      <options [source]="this._source"></options>
+      <button class="search-button" (click)="search()">Search</button>
+      <br>
+      <div>
+      <raw-shot-chart class="shot-chart" [shots]="(this._shots | async)"></raw-shot-chart>
+      </div>
     </div>
+    <div *ngIf="(this._loading | async)">
+      <loading-component></loading-component>
+    </div>
+
+
   `,
   styleUrls: ['../../css/general.css']
 })
 export class RawShotChartComponent implements OnInit {
-  private _source: string;
-  private _shots: Observable<Array<RawShot>>;
+  _source: string;
+  _shots: Observable<Array<RawShot>>;
+  _loading: Observable<boolean>;
+  _done_loading: Observable<boolean>;
+
 
   constructor(private store: Store<State>,
               private route: ActivatedRoute,
@@ -49,6 +59,7 @@ export class RawShotChartComponent implements OnInit {
           this.store.dispatch(action);
         })
       })
+
   }
 
   ngOnInit(): void {
@@ -60,11 +71,14 @@ export class RawShotChartComponent implements OnInit {
         })
       });
 
-    this._shots = selectRawShots(this.store)
+    this._shots = selectRawShots(this.store);
+    this._loading = selectPageLoaded(this.store).map(v => !v);
+    this._done_loading = selectPageLoaded(this.store);
+
 
   }
 
-  private search = (): void => {
+  search = (): void => {
     this.store.dispatch(new SetHash(undefined, this._source));
     this.store.dispatch(new SearchInProgress(true));
     this.store.dispatch(new RawShotSearch());

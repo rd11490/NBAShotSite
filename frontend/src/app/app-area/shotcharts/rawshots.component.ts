@@ -17,7 +17,7 @@ import * as d3Shape from 'd3-shape';
 })
 export class RawShotsComponent implements OnInit {
 
-  private _shots: Array<RawShot> = [];
+  _shots: Array<RawShot> = [];
   private svg: any;
   private scaleXPoint: any;
   private scaleYPoint: any;
@@ -60,11 +60,11 @@ export class RawShotsComponent implements OnInit {
       .attr("cy", (shot) => {
         return this.scaleYPoint(shot.yCoordinate);
       })
-      .attr('r', this.scaleR(3))
+      .attr('r', this.scaleR(5))
       .attr('fill', this.madeToColor)
       .attr('id', "SHOT")
-      .on('mouseover', this.handleMouseOver)
-      .on('mouseout', this.handleMouseOut)
+      //.on('mouseover', this.handleMouseOver)
+      //.on('mouseout', this.handleMouseOut)
 
   };
 
@@ -80,7 +80,7 @@ export class RawShotsComponent implements OnInit {
     // Draw hoop
     this.svg
       .append("circle")
-      .attr("cx",this.scaleXPoint(0))
+      .attr("cx", this.scaleXPoint(0))
       .attr("cy", this.scaleYPoint(0))
       .attr("r", this.scaleR(7.5))
       .attr("fill", 'none')
@@ -89,10 +89,10 @@ export class RawShotsComponent implements OnInit {
     // Draw backboard
     this.svg
       .append("line")
-      .attr("x1",this.scaleXPoint(-30))
-      .attr("x2",this.scaleXPoint(30))
-      .attr("y1",this.scaleYPoint(-7.5))
-      .attr("y2",this.scaleYPoint(-7.5))
+      .attr("x1", this.scaleXPoint(-30))
+      .attr("x2", this.scaleXPoint(30))
+      .attr("y1", this.scaleYPoint(-7.5))
+      .attr("y2", this.scaleYPoint(-7.5))
       .attr("stroke", 'black');
 
     // Draw Paint
@@ -118,14 +118,14 @@ export class RawShotsComponent implements OnInit {
     const freeThrowArcTop = d3Shape.arc()
       .innerRadius(this.scaleX(60))
       .outerRadius(this.scaleX(60))
-      .startAngle(90 * (Math.PI/180)) //converting from degs to radians
-      .endAngle(270 * (Math.PI/180)); //just radians
+      .startAngle(90 * (Math.PI / 180)) //converting from degs to radians
+      .endAngle(270 * (Math.PI / 180)); //just radians
 
     const freeThrowArcBottom = d3Shape.arc()
       .innerRadius(this.scaleX(60))
       .outerRadius(this.scaleX(60))
-      .startAngle(-90 * (Math.PI/180)) //converting from degs to radians
-      .endAngle(90 * (Math.PI/180)); //just radians
+      .startAngle(-90 * (Math.PI / 180)) //converting from degs to radians
+      .endAngle(90 * (Math.PI / 180)); //just radians
 
     this.svg
       .append("path")
@@ -143,8 +143,8 @@ export class RawShotsComponent implements OnInit {
     const restrictedZone = d3Shape.arc()
       .innerRadius(this.scaleX(40))
       .outerRadius(this.scaleX(40))
-      .startAngle(90 * (Math.PI/180)) //converting from degs to radians
-      .endAngle(270 * (Math.PI/180)); //just radians
+      .startAngle(90 * (Math.PI / 180)) //converting from degs to radians
+      .endAngle(270 * (Math.PI / 180)); //just radians
 
     this.svg
       .append("path")
@@ -155,25 +155,25 @@ export class RawShotsComponent implements OnInit {
     // Draw 3 Line
     this.svg
       .append("line")
-      .attr("x1",this.scaleXPoint(-220))
-      .attr("x2",this.scaleXPoint(-220))
-      .attr("y1",this.scaleYPoint(-47.5))
-      .attr("y2",this.scaleYPoint(92.5))
+      .attr("x1", this.scaleXPoint(-220))
+      .attr("x2", this.scaleXPoint(-220))
+      .attr("y1", this.scaleYPoint(-47.5))
+      .attr("y2", this.scaleYPoint(92.5))
       .attr("stroke", 'black');
 
     this.svg
       .append("line")
-      .attr("x1",this.scaleXPoint(220))
-      .attr("x2",this.scaleXPoint(220))
-      .attr("y1",this.scaleYPoint(-47.5))
-      .attr("y2",this.scaleYPoint(92.5))
+      .attr("x1", this.scaleXPoint(220))
+      .attr("x2", this.scaleXPoint(220))
+      .attr("y1", this.scaleYPoint(-47.5))
+      .attr("y2", this.scaleYPoint(92.5))
       .attr("stroke", 'black');
 
     const threePointArc = d3Shape.arc()
       .innerRadius(this.scaleX(238.25))
       .outerRadius(this.scaleX(238.25))
-      .startAngle((22.5+90) * (Math.PI/180)) //converting from degs to radians
-      .endAngle((157.5+90) * (Math.PI/180)); //just radians
+      .startAngle((22.5 + 90) * (Math.PI / 180)) //converting from degs to radians
+      .endAngle((157.5 + 90) * (Math.PI / 180)); //just radians
 
     this.svg
       .append("path")
@@ -186,14 +186,14 @@ export class RawShotsComponent implements OnInit {
     const centerCourtArcInner = d3Shape.arc()
       .innerRadius(this.scaleX(20))
       .outerRadius(this.scaleX(20))
-      .startAngle(-90 * (Math.PI/180)) //converting from degs to radians
-      .endAngle(90 * (Math.PI/180)); //just radians
+      .startAngle(-90 * (Math.PI / 180)) //converting from degs to radians
+      .endAngle(90 * (Math.PI / 180)); //just radians
 
     const centerCourtArcOuter = d3Shape.arc()
       .innerRadius(this.scaleX(60))
       .outerRadius(this.scaleX(60))
-      .startAngle(-90 * (Math.PI/180)) //converting from degs to radians
-      .endAngle(90 * (Math.PI/180)); //just radians
+      .startAngle(-90 * (Math.PI / 180)) //converting from degs to radians
+      .endAngle(90 * (Math.PI / 180)); //just radians
 
     this.svg
       .append("path")
@@ -218,15 +218,15 @@ export class RawShotsComponent implements OnInit {
   };
 
   private scaleR = (radius: number): number => {
-    return radius * (this.width/470.0);
+    return radius * (this.width / 470.0);
   };
 
   private scaleX = (radius: number): number => {
-    return radius * (this.width/500.0);
+    return radius * (this.width / 500.0);
   };
 
   private scaleY = (radius: number): number => {
-    return radius * (this.height/470.0);
+    return radius * (this.height / 470.0);
   };
 
   private initSvg = (): void => {
@@ -239,19 +239,71 @@ export class RawShotsComponent implements OnInit {
 
   // Create Event Handlers for mouse
   private handleMouseOver = (shot: RawShot, i: number): void => {  // Add interactivity
-    // Specify where to put label of text
+
     this.svg
+      .append("rect")
+      .attr('id', "x" + shot.xCoordinate + "-" + shot.yCoordinate + "-" + i + "box")
+      .attr("x", this.scaleXPoint(this.shitX(shot.xCoordinate)))
+      .attr("y", this.scaleYPoint(this.shiftY(shot.yCoordinate)))
+      .attr("width", this.scaleX(60))
+      .attr("height", this.scaleY(50))
+      .attr("fill", 'black')
+      .attr("stroke", 'black');
+
+    // Specify where to put label of text
+    var text = this.svg
       .append("text")
       .attr('id', "x" + shot.xCoordinate + "-" + shot.yCoordinate + "-" + i)
-      .attr('x', this.scaleXPoint(shot.xCoordinate))
-      .attr('y', this.scaleYPoint(shot.yCoordinate))
-      .text(function() {
-        return [shot.xCoordinate, shot.yCoordinate];  // Value of the text
+      .attr('x', this.scaleXPoint(this.shiftXText(shot.xCoordinate)))
+      .attr('y', this.scaleYPoint(this.shiftYText(shot.yCoordinate)))
+      .attr('fill', 'white')
+      .text(function () {
+        return;  // Value of the text
       });
+
+    text.append("tspan")
+      .attr("dy", "0em")
+      .attr("text-anchor", "middle")
+      .attr("x", this.scaleXPoint(this.shiftXText(shot.xCoordinate)))
+      .text(function() {return  shot.xCoordinate + ", " + shot.yCoordinate;});
+
+  };
+
+  private shitX = (x: number): number => {
+    if ((x - 30) <= -250) {
+      return x + 30
+    } else if (x + 30 >= 250) {
+      return x - 90
+    }
+    return x - 30
+  };
+
+  private shiftXText = (x: number): number => {
+    if ((x - 30) <= -250) {
+      return x + 60
+    } else if (x + 30 >= 250) {
+      return x - 60
+    }
+    return x
+  };
+
+  private shiftY = (y: number): number => {
+    if ((y - 60) <= -47.5) {
+      return y + 20
+    }
+    return y - 60
+  };
+
+  private shiftYText = (y: number): number => {
+    if ((y - 60) <= -47.5) {
+      return y + 40
+    }
+    return y - 40
   };
 
   private handleMouseOut = (shot: RawShot, i: number): void => {
     // Select text by id and then remove
+    this.svg.select("#x" + shot.xCoordinate + "-" + shot.yCoordinate + "-" + i + "box").remove();  // Remove text location
     this.svg.select("#x" + shot.xCoordinate + "-" + shot.yCoordinate + "-" + i).remove();  // Remove text location
   };
 

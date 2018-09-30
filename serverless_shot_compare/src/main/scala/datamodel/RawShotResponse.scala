@@ -2,8 +2,6 @@ package datamodel
 
 import java.{lang => jl}
 
-import storage.PostgresClient
-
 final case class RawShotResponse(
                                   xCoordinate: jl.Integer,
                                   yCoordinate: jl.Integer,
@@ -17,7 +15,10 @@ object RawShotResponse {
       xCoordinate = shotWithPlayers.xCoordinate,
       yCoordinate = shotWithPlayers.yCoordinate,
       shotMadeFlag = shotWithPlayers.shotMadeFlag,
-      metadata = Seq.empty //TODO pass params to set this
+      metadata = Seq(
+        RawShotMetadata("Distance", s"${shotWithPlayers.shotDistance} Ft"),
+        RawShotMetadata("Qtr", shotWithPlayers.period.toString),
+        RawShotMetadata("Sec Left In Qtr", shotWithPlayers.secondsRemaining.toString))
     )
 }
 

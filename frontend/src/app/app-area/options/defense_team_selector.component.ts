@@ -27,8 +27,8 @@ import {NgSelectComponent} from "@ng-select/ng-select";
 })
 export class DefenseTeamSelectorComponent implements OnInit {
 
-  private _source: string;
-  private teams: Observable<Array<TeamId>>;
+  _source: string;
+  teams: Observable<Array<TeamId>>;
 
   constructor(private store: Store<State>) {
 
