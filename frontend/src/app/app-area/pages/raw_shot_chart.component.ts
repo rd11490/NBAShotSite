@@ -15,7 +15,7 @@ import {RawShot} from "../../models/shots.models";
   selector: 'raw_shot_chart_container',
   template: `
     <h1>Raw Shots</h1>
-    <div *ngIf="(this._done_loading | async)">
+    <div [hidden]="(this._done_loading | async)">
       <options [source]="this._source"></options>
       <button class="search-button" (click)="search()">Search</button>
       <br>
@@ -23,7 +23,7 @@ import {RawShot} from "../../models/shots.models";
       <raw-shot-chart class="shot-chart" [shots]="(this._shots | async)"></raw-shot-chart>
       </div>
     </div>
-    <div *ngIf="(this._loading | async)">
+    <div [hidden]="(this._loading | async)">
       <loading-component></loading-component>
     </div>
 
@@ -72,8 +72,8 @@ export class RawShotChartComponent implements OnInit {
       });
 
     this._shots = selectRawShots(this.store);
-    this._loading = selectPageLoaded(this.store).map(v => !v);
-    this._done_loading = selectPageLoaded(this.store);
+    this._loading = selectPageLoaded(this.store);
+    this._done_loading = selectPageLoaded(this.store).map(v => !v);
 
 
   }

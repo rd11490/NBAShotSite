@@ -15,7 +15,7 @@ import {Observable} from "rxjs/Observable";
   selector: 'frequency_shot_chart_container',
   template: `  
     <h1>Shots By Location</h1>
-    <div *ngIf="(this._done_loading | async)">
+    <div [hidden]="(this._done_loading | async)">
       <options [source]="this._source"></options>
       <button class="search-button" (click)="search()">Search</button>
       <br>
@@ -23,7 +23,7 @@ import {Observable} from "rxjs/Observable";
       <frequency-shot-chart class="shot-chart" [shots]="(this._shots | async)"></frequency-shot-chart>
       </div>
     </div>
-    <div *ngIf="(this._loading | async)">
+    <div [hidden]="(this._loading | async)">
       <loading-component></loading-component>
     </div>
 
@@ -70,8 +70,8 @@ export class FrequencyShotChartComponent implements OnInit {
       });
 
     this._shots = selectZonedShots(this.store);
-    this._loading = selectPageLoaded(this.store).map(v => !v);
-    this._done_loading = selectPageLoaded(this.store);
+    this._loading = selectPageLoaded(this.store);
+    this._done_loading = selectPageLoaded(this.store).map(v => !v);
 
 
   }

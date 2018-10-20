@@ -84,6 +84,20 @@ functions:
             method: post
             path: /raw
 
+  addraw:
+      handler: endpoints.RawShotAdderHandler::handle
+      events:
+        - http:
+            method: post
+            path: /addraw
+
+  addraws:
+        handler: endpoints.RawShotsAdderHandler::handle
+        events:
+          - http:
+              method: post
+              path: /addraws
+
   frequency:
       handler: endpoints.ShotFrequencyHandler::handle
       events:

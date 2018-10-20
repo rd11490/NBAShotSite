@@ -33,6 +33,7 @@ final case class ShotWithPlayers(
                                   secondsRemaining: jl.Integer,
                                   gameDate: Long,
                                   season: String,
+                                  seasonType: String,
                                   dt: String
                                 )
 
@@ -76,6 +77,7 @@ object ShotWithPlayers extends ResultSetMapper {
 
       getLong(resultSet, 26),
       getString(resultSet, 27),
-      getString(resultSet, 28)
+      getString(resultSet, 28),
+      getString(resultSet, 29)
     )
 }

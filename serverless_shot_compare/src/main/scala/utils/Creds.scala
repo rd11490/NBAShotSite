@@ -29,7 +29,8 @@ final case class Creds(Local: EnvironmentCreds, Production: EnvironmentCreds)
 
 final case class EnvironmentCreds(
   MySQL: Option[MySQLCred],
-  Postgresql: Option[PostgresqlCred]
+  Postgresql: Option[PostgresqlCred],
+  Write: Option[String]
 )
 
 final case class MySQLCred(Username: String, Password: String)

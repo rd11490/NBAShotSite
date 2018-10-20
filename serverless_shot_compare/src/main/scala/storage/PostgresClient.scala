@@ -77,7 +77,7 @@ object PostgresClient {
     table: PostgresTable,
     data: Seq[T]
   ): Boolean = {
-    val query = insertTableStatement(table, data)
+    val query = trace(insertTableStatement(table, data))
     try {
       val out = PostgresConnection.getConnection(Database.nba).sendQuery(query)
       Await.result(out, 5 seconds)

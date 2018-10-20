@@ -5,7 +5,6 @@ import {ShotchartService} from "../services/shotchart.service";
 import {Observable} from "rxjs/Observable";
 import * as initialActions from "../actions/initial.action";
 import {GetPlayers, GetSeasons, GetTeams, SetPlayers, SetSeasons, SetTeams} from "../actions/initial.action";
-import * as searchActions from "../actions/search.action";
 import {
   CompareShotSearch,
   FrequencyShotSearch,
@@ -34,6 +33,7 @@ import {
   SetSeason,
   SetShooter,
 } from "../actions/options.action";
+import * as searchActions from "../actions/search.action";
 
 
 @Injectable()
@@ -161,6 +161,24 @@ export class InitializeEffects {
     };
     return this.playersService.getCompareShots(params);
   };
+
+  @Effect()
+  freqSearchComplete = (): Observable<Action> =>
+    this.actions
+      .ofType(searchActions.STORE_FREQUENCY_SHOTS)
+      .map(v => new SearchInProgress(false));
+
+  @Effect()
+  rawSearchComplete = (): Observable<Action> =>
+    this.actions
+      .ofType(searchActions.STORE_RAW_SHOTS)
+      .map(v => new SearchInProgress(false));
+
+  @Effect()
+  compareSearchComplete = (): Observable<Action> =>
+    this.actions
+      .ofType(searchActions.STORE_COMPARE_SHOTS)
+      .map(v => new SearchInProgress(false));
 
 }
 

@@ -1,6 +1,6 @@
 package storage.tables
 
-import datamodel.CacheParams
+import datamodel.{CacheParams, ShotWithPlayers}
 import storage.datamodel._
 
 object NBATables {

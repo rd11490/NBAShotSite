@@ -18,4 +18,7 @@ object APIResponse {
   def response[T](body: Option[T]): Either[Throwable, ProxyResponse[T]] =
     Right(ProxyResponse(200, StandardHeaders.Headers, body))
 
+  def noAuthResponse(): Either[Throwable, ProxyResponse[String]] =
+    Right(ProxyResponse(402, StandardHeaders.Headers, Some("Invalid Authorization")))
+
 }
