@@ -12,7 +12,7 @@ import {Observable} from "rxjs/Observable";
     <mat-expansion-panel>
       <mat-expansion-panel-header>
         <mat-panel-description>
-          {{this._description | async}}
+          <span style="width: 100%;text-align: center">{{this._description | async}}</span>
         </mat-panel-description>
       </mat-expansion-panel-header>
       <div>

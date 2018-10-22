@@ -1,9 +1,14 @@
 import {Store} from "@ngrx/store";
-import {ShotCompareRequest, ShotParams, ShotRequest} from "../models/options.models";
+import {ShotCompareRequest, ShotRequest} from "../models/options.models";
 import {Observable} from "rxjs/Observable";
 import {State} from "../app.state";
 import {RawShot, ZonedShot} from "../models/shots.models";
-import {CompareShotResponse, FrequencyShotResponse, RawShotsResponse} from "../models/response.models";
+import {
+  CompareShotResponse,
+  FrequencyShotResponse,
+  RawShotsResponse,
+  ShotStatisticsContainer, ZeroShotStatisticsContainer
+} from "../models/response.models";
 
 export const selectRawShotResponse = (store: Store<State>): Observable<RawShotsResponse> => {
   return store.select(state => state.rawShotChartResponse);
@@ -40,8 +45,17 @@ export const selectZonedShots = (store: Store<State>): Observable<Array<ZonedSho
   });
 };
 
-export const selectZonedShotTotals = (store: Store<State>): Observable<ZonedShot> => {
-  return selectFrequencyShotResponse(store).map(v => v.data.total);
+export const selectZonedShotStatistics = (store: Store<State>): Observable<ShotStatisticsContainer> => {
+  return selectFrequencyShotResponse(store).map(v => {
+    if (v != null) {
+      console.log(v.data.statistics);
+      console.log(v.data.statistics.total);
+
+      return v.data.statistics;
+    } else {
+      return ZeroShotStatisticsContainer;
+    }
+  });
 };
 
 export const selectFrequencyShotParams = (store: Store<State>): Observable<ShotRequest> => {

@@ -13,14 +13,17 @@ import {Observable} from "rxjs/Observable";
 
 @Component({
   selector: 'frequency_shot_chart_container',
-  template: `  
+  template: `
     <h1>Shots By Location</h1>
     <div [hidden]="(this._done_loading | async)">
       <options [source]="this._source"></options>
       <button class="search-button" (click)="search()">Search</button>
       <br>
+      <div class="shot-stats-container">
+        <stats-totals-component class="shot-stats"></stats-totals-component>
+      </div>
       <div>
-      <frequency-shot-chart class="shot-chart" [shots]="(this._shots | async)"></frequency-shot-chart>
+        <frequency-shot-chart class="shot-chart" [shots]="(this._shots | async)"></frequency-shot-chart>
       </div>
     </div>
     <div [hidden]="(this._loading | async)">

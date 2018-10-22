@@ -8,8 +8,11 @@ import {GetPlayers, GetSeasons, GetTeams} from "../../actions/initial.action";
   template: `  
     <h1>Welcome to Shot Chart WOWY!</h1>
     <b>
-      This is an app designed to allow you to build shot charts based on who is on the court, who is off the court
+      This is an app designed to allow you to build shot charts based on who is on the court, who is off the court, the season, 
+      and/or the teams playing.
       <br>
+      This site is still a work in progress. Please report any issues, suggestions, or complaints to @rd11490 on twitter or
+      rd11490@gmail.com
       <h2>Common Issues:</h2>
       <ul>
         <li>

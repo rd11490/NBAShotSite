@@ -18,19 +18,36 @@ object RawShotResponse {
       metadata = Seq(
         RawShotMetadata("Distance", s"${shotWithPlayers.shotDistance} Ft"),
         RawShotMetadata("Qtr", shotWithPlayers.period.toString),
-        RawShotMetadata("Sec Left In Qtr", shotWithPlayers.secondsRemaining.toString))
+        RawShotMetadata("Sec Left In Qtr",
+          shotWithPlayers.secondsRemaining.toString)
+      )
     )
 }
 
 final case class RawShots(params: RawShotRequest, shots: Seq[RawShotResponse])
 
-final case class ZonedShots(total: ZonedShot, shots: Seq[ZonedShot])
+final case class ZonedShots(total: ZonedShot,
+                            statistics: ShotStatisticsContainer,
+                            shots: Seq[ZonedShot])
 
-final case class ZonedShotsResponse(params: FrequencyShotRequest, data: ZonedShots)
+final case class ShotStatisticsContainer(total: ShotStatistics,
+                                         threes: ShotStatistics,
+                                         twos: ShotStatistics,
+                                         rim: ShotStatistics,
+                                         midrange: ShotStatistics)
+
+final case class ShotStatistics(attempts: Int,
+                                made: Int,
+                                frequency: Double,
+                                pointsPerShot: Double)
+
+final case class ZonedShotsResponse(params: FrequencyShotRequest,
+                                    data: ZonedShots)
 
 final case class ZonedShotCompare(shots1: ZonedShots, shots2: ZonedShots)
 
-final case class ZonedShotCompareResponse(params: CompareShotRequest, data: ZonedShotCompare)
+final case class ZonedShotCompareResponse(params: CompareShotRequest,
+                                          data: ZonedShotCompare)
 
 final case class ZonedShot(
                             key: String,

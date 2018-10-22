@@ -32,6 +32,7 @@ export class CompareShotResponse {
 
 export class ZonedShots {
   total?: ZonedShot;
+  statistics?: ShotStatisticsContainer;
   shots?: Array<ZonedShot>
 }
 
@@ -39,3 +40,35 @@ export class ZonedShotCompare {
   shots1?: ZonedShots;
   shots2?: ZonedShots;
 }
+
+export class ShotStatisticsContainer {
+  total?: ShotStatistics;
+  threes?: ShotStatistics;
+  twos?: ShotStatistics;
+  rim?: ShotStatistics;
+  midrange?: ShotStatistics;
+
+}
+
+export class ShotStatistics {
+  attempts?: number;
+  made?: number;
+  frequency?: number;
+  pointsPerShot?: number;
+}
+
+export const ZeroShotStatistics = {
+  attempts: 0,
+  made: 0,
+  frequency: 0.0,
+  pointsPerShot: 0.0
+};
+
+export const ZeroShotStatisticsContainer = {
+  total: ZeroShotStatistics,
+  threes: ZeroShotStatistics,
+  twos: ZeroShotStatistics,
+  rim: ZeroShotStatistics,
+  midrange: ZeroShotStatistics
+};
+

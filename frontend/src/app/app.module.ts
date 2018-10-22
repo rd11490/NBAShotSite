@@ -32,6 +32,7 @@ import {SeasonSelectorComponent} from "./app-area/options/season_selector.compon
 import {RawShotsComponent} from "./app-area/shotcharts/rawshots.component";
 import {FrequencyShotsComponent} from "./app-area/shotcharts/frequencyshots.component";
 import {LoadingComponent} from "./app-area/pages/loading.component";
+import {ShotStatsTotalsComponent} from "./app-area/shotcharts/shot_stats_totals.component";
 
 @NgModule({
   imports: [
@@ -81,7 +82,8 @@ import {LoadingComponent} from "./app-area/pages/loading.component";
     DefenseTeamSelectorComponent,
     OffenseTeamSelectorComponent,
     SeasonSelectorComponent,
-    LoadingComponent
+    LoadingComponent,
+    ShotStatsTotalsComponent
   ],
   providers: [ ShotchartService ],
   bootstrap: [ AppComponent ]
