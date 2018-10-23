@@ -1,7 +1,7 @@
 package endpoints
 
 import com.amazonaws.services.lambda.runtime.Context
-import datamodel._
+import datamodel.TeamInfo
 import io.circe.generic.auto._
 import io.github.mkotsur.aws.handler.Lambda.{Proxy, _}
 import io.github.mkotsur.aws.proxy
@@ -12,29 +12,29 @@ import utils.Creds
 
 import scala.concurrent.ExecutionContext
 
-class RawShotAdderHandler extends Proxy[ShotWithPlayers, String] {
+class TeamNameAdderHandler extends Proxy[Seq[TeamInfo], String] {
+
   implicit val executionContext: ExecutionContext = ExecutionContext.global
 
-  override def handle(input: proxy.ProxyRequest[ShotWithPlayers],
+  override def handle(input: proxy.ProxyRequest[Seq[TeamInfo]],
                       c: Context): Either[Throwable, ProxyResponse[String]] = {
-
     val auth = input.headers.flatMap(v => v.get("Authorization"))
-    if (auth.exists(RawShotAdderHandler.verifyId)) {
+    if (auth.exists(PlayerInfoAdderHandler.verifyId)) {
       val message = input.body match {
-        case Some(shot) =>
+        case Some(teams) =>
           val success =
-            PostgresClient.insertInto(NBATables.lineup_shots, Seq(shot))
+            PostgresClient.insertInto(NBATables.team_info, teams)
           if (success) "Success" else "Failure"
-        case None => "No Shot Provided"
+        case None => "No Players Provided"
       }
       APIResponse.response(Some(message))
     } else {
       APIResponse.noAuthResponse()
     }
-
   }
 }
-object RawShotAdderHandler {
+
+object TeamNameAdderHandler {
   implicit val executionContext: ExecutionContext = ExecutionContext.global
 
   def verifyId(id: String): Boolean = {

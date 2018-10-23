@@ -7,7 +7,6 @@ import io.github.mkotsur.aws.handler.Lambda.{Proxy, _}
 import io.github.mkotsur.aws.proxy
 import io.github.mkotsur.aws.proxy.ProxyResponse
 import storage.PostgresClient
-import storage.datamodel.PlayerInfo
 import storage.tables.NBATables
 
 import scala.concurrent.{ExecutionContext, Future}

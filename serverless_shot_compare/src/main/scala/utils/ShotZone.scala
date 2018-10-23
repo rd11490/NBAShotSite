@@ -1,8 +1,5 @@
 package utils
 
-import storage.datamodel.RawShotData
-
-
 sealed trait ShotZone {
   def isInZone(x: Integer, y: Integer, shotValue: Integer): Boolean
 
@@ -15,10 +12,10 @@ sealed trait NonCornerShotZone extends ShotZone {
     val dist = ShotZone.distance(x, y)
 
     shotValue == value &&
-      theta >= thetaMin &&
-      theta < thetaMax &&
-      dist >= distMin &&
-      dist < distMax
+    theta >= thetaMin &&
+    theta < thetaMax &&
+    dist >= distMin &&
+    dist < distMax
   }
 
   def thetaMin: Double
@@ -44,7 +41,8 @@ sealed trait CornerShotZone extends ShotZone {
 
 object ShotZone {
 
-  lazy val zones: Seq[ShotZone] = CornerShotZones ++ NonCornerShotZones :+ RestrictedArea
+  lazy val zones
+    : Seq[ShotZone] = CornerShotZones ++ NonCornerShotZones :+ RestrictedArea
 
   private val CornerShotZones: Seq[CornerShotZone] =
     Seq(
@@ -54,32 +52,29 @@ object ShotZone {
 
   private val NonCornerShotZones: Seq[NonCornerShotZone] =
     Seq(
-      LeftBaseline11FT, Left11FT, Right11FT, RightBaseline11FT,
-      LeftBaseline18FT, Left18FT, Right18FT, RightBaseline18FT,
-      LeftBaseline23FT, Left23FT, Right23FT, RightBaseline23FT,
-      Left27FT, Right27FT,
-      LeftLong3, RightLong3
+      LeftBaseline11FT,
+      Left11FT,
+      Right11FT,
+      RightBaseline11FT,
+      LeftBaseline18FT,
+      Left18FT,
+      Right18FT,
+      RightBaseline18FT,
+      LeftBaseline23FT,
+      Left23FT,
+      Right23FT,
+      RightBaseline23FT,
+      Left27FT,
+      Right27FT,
+      LeftLong3,
+      RightLong3
     )
 
   def find(str: String): ShotZone =
     (CornerShotZones ++ NonCornerShotZones :+ RestrictedArea)
       .find(_.toString == str)
-      .getOrElse(throw new IllegalArgumentException(s"$str is not a valid Shot Zone"))
-
-  def findShotZone(shot: RawShotData): ShotZone = {
-    val shotValue = ShotZone.shotValue(shot)
-    try {
-      findShotZone(shot.xCoordinate, shot.yCoordinate, shotValue)
-    } catch {
-      case e: Throwable =>
-        println()
-        println(shot)
-        println(shot.xCoordinate, shot.yCoordinate, shotValue)
-        println(distance(shot.xCoordinate, shot.yCoordinate))
-        println(theta(shot.xCoordinate, shot.yCoordinate))
-        throw e
-    }
-  }
+      .getOrElse(
+        throw new IllegalArgumentException(s"$str is not a valid Shot Zone"))
 
   def findShotZone(x: Integer, y: Integer, value: Integer): ShotZone = {
     try {
@@ -114,22 +109,14 @@ object ShotZone {
   private def shotLocToReal(inches: Double): Double =
     (inches / 7.5) * 9.0
 
-  def shotValue(shot: RawShotData): Int =
-    try {
-      shot.shotZoneBasic.substring(0, 1).toInt
-    } catch {
-      case e: Throwable =>
-        println(shot)
-        throw e
-    }
-
   private def realToShotLoc(inches: Double): Double =
     (inches / 9.0) * 7.5
 
   case object RestrictedArea extends ShotZone {
     override val value: Int = 2
 
-    override def isInZone(x: Integer, y: Integer, value: Integer): Boolean = distance(x, y) <= 4
+    override def isInZone(x: Integer, y: Integer, value: Integer): Boolean =
+      distance(x, y) <= 4
   }
 
   case object LeftCorner extends CornerShotZone {

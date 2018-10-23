@@ -1,13 +1,12 @@
 package endpoints
 
 import com.amazonaws.services.lambda.runtime.Context
-import datamodel._
+import datamodel.{TeamInfo, _}
 import io.circe.generic.auto._
 import io.github.mkotsur.aws.handler.Lambda.{Proxy, _}
 import io.github.mkotsur.aws.proxy
 import io.github.mkotsur.aws.proxy.ProxyResponse
 import storage.PostgresClient
-import storage.datamodel.TeamInfo
 import storage.tables.NBATables
 
 import scala.concurrent.{ExecutionContext, Future}

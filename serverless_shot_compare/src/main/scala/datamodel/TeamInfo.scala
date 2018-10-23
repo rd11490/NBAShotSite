@@ -1,4 +1,4 @@
-package storage.datamodel
+package datamodel
 
 import com.github.mauricio.async.db.RowData
 
