@@ -32,6 +32,10 @@ import {Observable} from "rxjs/Observable";
           <div class="option-two"><defensive-players-off-select [source]="this._source"></defensive-players-off-select></div>
         </div>
         <div class="option-line">
+          <div class="option-two"><start-date-select [source]="this._source"></start-date-select></div>
+          <div class="option-two"><end-date-select [source]="this._source"></end-date-select></div>
+        </div>
+        <div class="option-line">
           <div class="option-other"><season-select [source]="this._source"></season-select></div>
         </div>
       </div>

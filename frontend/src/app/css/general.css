@@ -116,22 +116,22 @@ h1 {
 }
 
 .option-offense {
-  display:inline-block;
+  display: inline-block;
   width: 24%;
 }
 
 .option-defense {
-  display:inline-block;
+  display: inline-block;
   width: 32%;
 }
 
 .option-other {
-  display:inline-block;
+  display: inline-block;
   width: 20%;
 }
 
 .option-two {
-  display:inline-block;
+  display: inline-block;
   width: 48%;
 }
 
@@ -160,12 +160,12 @@ h1 {
   display: block;
   margin: auto;
   float: left;
-  white-space:nowrap;
+  white-space: nowrap;
 }
 
 .shot-stats {
   border: 1px solid black;
-  display : block;
+  display: block;
 }
 
 .shot-stats-content {
@@ -213,4 +213,8 @@ h4, h5, h6 {
   color: #444;
   font-family: Arial, Helvetica, sans-serif;
   display: inline;
+}
+
+mat-datepicker-toggle {
+  position: relative;
 }

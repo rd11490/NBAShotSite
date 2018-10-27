@@ -2,25 +2,33 @@ import {Component, OnInit} from '@angular/core';
 import {FrequencyOptions, State} from "../../app.state";
 import {GetPlayers, GetSeasons, GetTeams} from "../../actions/initial.action";
 import {Store} from "@ngrx/store";
-import {FrequencyShotSearch, SearchInProgress} from "../../actions/search.action";
+import {FrequencyShotSearch, SearchInProgress, StoreFrequencyShots} from "../../actions/search.action";
 import {SetHash} from "../../actions/options.action";
 import {ActivatedRoute, Router} from "@angular/router";
 import {selectHash} from "../../selectors/options.selectors";
 import {selectFrequencyResponseSearchActions, selectPageLoaded} from "../../selectors/initial.selectors";
 import {ZonedShot} from "../../models/shots.models";
-import {selectZonedShots} from "../../selectors/shotchart.selectors";
+import {
+  selectFrequencyShotSearchError,
+  selectFrequencyShotSearchIsError,
+  selectZonedShots, selectZonedShotStatistics
+} from "../../selectors/shotchart.selectors";
 import {Observable} from "rxjs/Observable";
+import {SearchError, ShotStatisticsContainer} from "../../models/response.models";
 
 @Component({
   selector: 'frequency_shot_chart_container',
   template: `
     <h1>Shots By Location</h1>
+    <div [hidden]="(this._searchFailure | async)">
+      <h1 style="color:red;">{{(this._searchFailureMessage | async)}}</h1>
+    </div>
     <div [hidden]="(this._done_loading | async)">
       <options [source]="this._source"></options>
       <button class="search-button" (click)="search()">Search</button>
       <br>
       <div class="shot-stats-container">
-        <stats-totals-component class="shot-stats"></stats-totals-component>
+        <stats-totals-component class="shot-stats" [stats]="(this._stats | async)"></stats-totals-component>
       </div>
       <div>
         <frequency-shot-chart class="shot-chart" [shots]="(this._shots | async)"></frequency-shot-chart>
@@ -39,6 +47,9 @@ export class FrequencyShotChartComponent implements OnInit {
   _shots: Observable<Array<ZonedShot>>;
   _loading: Observable<boolean>;
   _done_loading: Observable<boolean>;
+  _searchFailure: Observable<boolean>;
+  _searchFailureMessage: Observable<string>;
+  _stats: Observable<ShotStatisticsContainer>;
 
   constructor(private store: Store<State>,
               private route: ActivatedRoute,
@@ -75,6 +86,26 @@ export class FrequencyShotChartComponent implements OnInit {
     this._shots = selectZonedShots(this.store);
     this._loading = selectPageLoaded(this.store);
     this._done_loading = selectPageLoaded(this.store).map(v => !v);
+
+    this._stats = selectZonedShotStatistics(this.store);
+
+    this._searchFailure = selectFrequencyShotSearchIsError(this.store).map(v => !v);
+    this._searchFailureMessage = selectFrequencyShotSearchError(this.store).map((v: SearchError) => {
+      if (v != null) {
+        return v.message;
+      }
+      return undefined;
+    });
+
+    selectFrequencyShotSearchIsError(this.store).subscribe(v => {
+      if (v) {
+        Observable.timer(3000).subscribe(() => {
+          this.store.dispatch(new StoreFrequencyShots(undefined));
+          this.store.dispatch(new SearchInProgress(false));
+
+        })
+      }
+    })
 
 
   }

@@ -1,5 +1,7 @@
 /* Master Styles */
 @import "~@ng-select/ng-select/themes/default.theme.css";
+@import '~@angular/material/prebuilt-themes/deeppurple-amber.css';
+
 
 h1 {
   color: #369;

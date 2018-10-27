@@ -59,6 +59,12 @@ export function optionsReducer(options: Map<string, Options> = initialState, act
     case OptionActions.SET_SECONDS_REMAINING : {
       return setSecondsRemainingReducer(options, action as OptionActions.SetSecondsRemaining);
     }
+    case OptionActions.SET_DATE_UPPER_BOUND : {
+      return setEndDateReducer(options, action as OptionActions.SetDateUpperBound);
+    }
+    case OptionActions.SET_DATE_LOWER_BOUND : {
+    return setStartDateReducer(options, action as OptionActions.SetDateLowerBound);
+  }
     default: {
       return options;
 
@@ -176,3 +182,22 @@ const setSecondsRemainingReducer = (options: Map<string, Options>, action: Optio
   }
 };
 
+const setStartDateReducer = (options: Map<string, Options>, action: OptionActions.SetDateLowerBound): Map<string, Options> => {
+  switch (action.type) {
+    case OptionActions.SET_DATE_LOWER_BOUND:
+      options.get(action.key).startDate = action.payload;
+      return options;
+    default:
+      return options;
+  }
+};
+
+const setEndDateReducer = (options: Map<string, Options>, action: OptionActions.SetDateUpperBound): Map<string, Options> => {
+  switch (action.type) {
+    case OptionActions.SET_DATE_UPPER_BOUND:
+      options.get(action.key).endDate = action.payload;
+      return options;
+    default:
+      return options;
+  }
+};

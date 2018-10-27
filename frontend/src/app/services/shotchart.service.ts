@@ -3,21 +3,22 @@ import {
   CompareShotResponse,
   FrequencyShotResponse,
   PlayerNameResponse,
-  RawShotsResponse, SeasonsResponse,
+  RawShotsResponse,
+  SeasonsResponse,
   TeamInfoResponse
 } from "../models/response.models";
 import {Observable} from "rxjs/Observable";
 import {Injectable} from "@angular/core";
-import {ShotCompareParams, ShotCompareRequest, ShotParams, ShotRequest} from "../models/options.models";
+import {ShotCompareRequest, ShotRequest} from "../models/options.models";
 
 const BASE_URL: string = "https://7enmqppfr7.execute-api.us-east-1.amazonaws.com/dev";
 
 const buildUrl = (endpoint) => {
-  return BASE_URL+endpoint;
+  return BASE_URL + endpoint;
 };
 
 const httpOptions = {
-  headers: new HttpHeaders({ 'Content-Type': 'text/plain' }),
+  headers: new HttpHeaders({'Content-Type': 'text/plain'}),
   withCredentials: false
 };
 
@@ -39,15 +40,33 @@ export class ShotchartService {
   }
 
   getRawShots(params: ShotRequest): Observable<RawShotsResponse> {
-    return this.http.post<RawShotsResponse>(buildUrl('/raw'), params, httpOptions)
+    return this.http.post<RawShotsResponse>(buildUrl('/raw'), params, httpOptions).catch(err => {
+      return Observable.of({
+        params: undefined,
+        shots: undefined,
+        searchError: {isError: true, message: 'Search Failure: Please Try Again'}
+      })
+    })
   }
 
   getFrequencyShots(params: ShotRequest): Observable<FrequencyShotResponse> {
-    return this.http.post<FrequencyShotResponse>(buildUrl('/frequency'), params, httpOptions)
+    return this.http.post<FrequencyShotResponse>(buildUrl('/frequency'), params, httpOptions).catch(err => {
+      return Observable.of({
+        params: undefined,
+        data: undefined,
+        searchError: {isError: true, message: 'Search Failure: Please Try Again'}
+      })
+    })
   }
 
   getCompareShots(params: ShotCompareRequest): Observable<CompareShotResponse> {
-    return this.http.post<CompareShotResponse>(buildUrl('/compare'), params, httpOptions)
+    return this.http.post<CompareShotResponse>(buildUrl('/compare'), params, httpOptions).catch(err => {
+      return Observable.of({
+        searchError: {isError: true, message: 'Search Failure: Please Try Again'},
+        params: undefined,
+        data: undefined
+      })
+    })
   }
 
 

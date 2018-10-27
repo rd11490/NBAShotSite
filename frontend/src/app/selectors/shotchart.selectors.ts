@@ -6,7 +6,7 @@ import {RawShot, ZonedShot} from "../models/shots.models";
 import {
   CompareShotResponse,
   FrequencyShotResponse,
-  RawShotsResponse,
+  RawShotsResponse, SearchError,
   ShotStatisticsContainer, ZeroShotStatisticsContainer
 } from "../models/response.models";
 
@@ -16,7 +16,7 @@ export const selectRawShotResponse = (store: Store<State>): Observable<RawShotsR
 
 export const selectRawShots = (store: Store<State>): Observable<Array<RawShot>> => {
   return selectRawShotResponse(store).map(v => {
-    if (v != null) {
+    if (v != null && v.shots != null) {
       return v.shots;
     }
     return [];
@@ -31,6 +31,35 @@ export const selectRawShotParams = (store: Store<State>): Observable<ShotRequest
     return undefined;
   });
 };
+
+export const selectRawShotSearchError = (store: Store<State>): Observable<SearchError> => {
+  return selectRawShotResponse(store).map((v: RawShotsResponse) => {
+    if (v != null) {
+      return v.searchError;
+    }
+    return undefined;
+  });
+};
+
+export const selectRawShotSearchIsError = (store: Store<State>): Observable<boolean> => {
+  return selectRawShotSearchError(store).map((v: SearchError) => {
+    if (v != null) {
+      return v.isError;
+    }
+    return false;
+  })
+};
+
+export const selectRawShotStatistics = (store: Store<State>): Observable<ShotStatisticsContainer> => {
+  return selectRawShotResponse(store).map(v => {
+    if (v != null) {
+      return v.statistics;
+    } else {
+      return ZeroShotStatisticsContainer;
+    }
+  });
+};
+
 
 export const selectFrequencyShotResponse = (store: Store<State>): Observable<FrequencyShotResponse> => {
   return store.select(state => state.frequencyChartResponse);
@@ -48,9 +77,6 @@ export const selectZonedShots = (store: Store<State>): Observable<Array<ZonedSho
 export const selectZonedShotStatistics = (store: Store<State>): Observable<ShotStatisticsContainer> => {
   return selectFrequencyShotResponse(store).map(v => {
     if (v != null) {
-      console.log(v.data.statistics);
-      console.log(v.data.statistics.total);
-
       return v.data.statistics;
     } else {
       return ZeroShotStatisticsContainer;
@@ -59,12 +85,30 @@ export const selectZonedShotStatistics = (store: Store<State>): Observable<ShotS
 };
 
 export const selectFrequencyShotParams = (store: Store<State>): Observable<ShotRequest> => {
-  return selectFrequencyShotResponse(store).map(v => {
+  return selectFrequencyShotResponse(store).map((v: FrequencyShotResponse) => {
     if (v != null) {
       return v.params;
     }
     return undefined;
   });
+};
+
+export const selectFrequencyShotSearchError = (store: Store<State>): Observable<SearchError> => {
+  return selectFrequencyShotResponse(store).map((v: FrequencyShotResponse) => {
+    if (v != null) {
+      return v.searchError;
+    }
+    return undefined;
+  });
+};
+
+export const selectFrequencyShotSearchIsError = (store: Store<State>): Observable<boolean> => {
+  return selectFrequencyShotSearchError(store).map((v: SearchError) => {
+    if (v != null) {
+      return v.isError;
+    }
+    return false;
+  })
 };
 
 export const selectCompareShotResponse = (store: Store<State>): Observable<CompareShotResponse> => {

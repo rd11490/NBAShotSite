@@ -16,17 +16,20 @@ export class SeasonsResponse {
 export class RawShotsResponse {
   params?: ShotRequest;
   shots?: Array<RawShot>;
-
+  statistics?: ShotStatisticsContainer;
+  searchError?: SearchError;
 }
 
 export class FrequencyShotResponse {
   params: ShotRequest;
   data: ZonedShots;
+  searchError?: SearchError;
 }
 
 export class CompareShotResponse {
   params: ShotCompareRequest;
   data: ZonedShotCompare;
+  searchError?: SearchError;
 }
 
 
@@ -71,4 +74,9 @@ export const ZeroShotStatisticsContainer = {
   rim: ZeroShotStatistics,
   midrange: ZeroShotStatistics
 };
+
+export class SearchError {
+  isError: boolean;
+  message: string;
+}
 

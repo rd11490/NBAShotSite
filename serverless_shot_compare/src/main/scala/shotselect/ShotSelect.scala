@@ -62,8 +62,11 @@ object ShotSelect {
     ZonedShots(
       total = totalZone,
       statistics = calculateStats(shots = shots, total = totalZone),
-      shots = shotZones.map(v =>
-        v.copy(frequency = v.shotAttempts.toDouble / totalShots))
+      shots = shotZones.map(v => {
+        val freq =
+          if (totalShots > 0.0) v.shotAttempts.toDouble / totalShots else 0.0
+        v.copy(frequency = freq)
+      })
     )
   }
 
@@ -91,7 +94,8 @@ object ShotSelect {
 
     val totalAttempts = shots.map(_.shotAttempts.intValue()).sum
     val totalMade = shots.map(_.shotMade.intValue()).sum
-    val points = shots.map(v => (v.shotMade * v.shotValue).intValue()).sum.toDouble
+    val points =
+      shots.map(v => (v.shotMade * v.shotValue).intValue()).sum.toDouble
     val PPS = if (totalAttempts > 0) points / totalAttempts else 0.0
     val totalStats = ShotStatistics(attempts = totalAttempts,
                                     made = totalMade,
@@ -108,10 +112,13 @@ object ShotSelect {
   private def calculateStat(shots: Seq[ZonedShot], total: ZonedShot)(
       implicit executionContext: ExecutionContext): ShotStatistics = {
 
-    val shotData = shots.reduce(_ + _)
+    val shotData = if (shots.isEmpty) {
+      ZonedShot("", "", 0, 0, 0, 0.0)
+    } else shots.reduce(_ + _)
 
     val threesFreq =
-      if (total.shotAttempts > 0) shotData.shotAttempts.toDouble / total.shotAttempts
+      if (total.shotAttempts > 0)
+        shotData.shotAttempts.toDouble / total.shotAttempts
       else 0.0
     val threesPPS =
       if (shotData.shotAttempts > 0)

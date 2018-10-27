@@ -24,6 +24,7 @@ object ParamsHandler {
   private[endpoints] def toCachedParams[T](params: T): Seq[CacheParams] = {
     println("To Cached Params")
     val id = params.hashCode().toString
+    println(Extraction.decompose(params))
     Seq(CacheParams(id, Extraction.decompose(params)))
   }
 

@@ -10,6 +10,7 @@ const routes: Routes = [
   { path: 'home', component: HomeComponent },
   { path: 'raw', component:  RawShotChartComponent},
   { path: 'frequency', component:  FrequencyShotChartComponent},
+  { path: 'zoned', component:  FrequencyShotChartComponent},
   { path: 'compare', component:  CompareShotChartComponent},
 ];
 

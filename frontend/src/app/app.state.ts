@@ -1,5 +1,5 @@
 import {PlayerId, TeamId} from "./models/options.models";
-import {CompareShotResponse, FrequencyShotResponse, RawShotsResponse} from "./models/response.models";
+import {CompareShotResponse, FrequencyShotResponse, RawShotsResponse, SearchError} from "./models/response.models";
 
 export interface State {
   options: Map<string, Options>;
@@ -10,6 +10,7 @@ export interface State {
   frequencyChartResponse: FrequencyShotResponse;
   compareShotResponse: CompareShotResponse;
   searchInProgress: boolean;
+  searchError: SearchError;
 }
 export interface Options {
   hash: string;

@@ -1,5 +1,5 @@
 import {Action} from '@ngrx/store'
-import {CompareShotResponse, FrequencyShotResponse, RawShotsResponse} from "../models/response.models";
+import {CompareShotResponse, FrequencyShotResponse, RawShotsResponse, SearchError} from "../models/response.models";
 
 export const SEARCH_IN_PROGRESS = 'Search In Progress';
 

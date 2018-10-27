@@ -395,7 +395,6 @@ export class FrequencyShotsComponent implements OnInit {
   };
 
   private drawCourt = (): void => {
-    console.log("DRAWING COURT");
     // Draw hoop
     this.svg
       .append("circle")
@@ -558,7 +557,7 @@ export class FrequencyShotsComponent implements OnInit {
 
   // Create Event Handlers for mouse
   private handleMouseOver = (shot: ZonedShot, x: number, y: number): void => {  // Add interactivity
-    console.log("Mouseover");
+    // console.log("Mouseover");
     // Specify where to put label of text
     this.svg
       .append("text")
@@ -571,7 +570,7 @@ export class FrequencyShotsComponent implements OnInit {
   };
 
   private handleMouseOut = (shot: ZonedShot): void => {
-    console.log("MouseOut")
+    // console.log("MouseOut")
 
     // Select text by id and then remove
     this.svg.select("#x" + shot.bin).remove();  // Remove text location

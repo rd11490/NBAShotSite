@@ -1,10 +1,11 @@
 import {Injectable} from "@angular/core";
 import {CompareOptions1, CompareOptions2, FrequencyOptions, Options, RawOptions, State} from "../app.state";
-import {Action, select, Store} from "@ngrx/store";
+import {Action, Store} from "@ngrx/store";
 import {ShotchartService} from "../services/shotchart.service";
 import {Observable} from "rxjs/Observable";
 import * as initialActions from "../actions/initial.action";
 import {GetPlayers, GetSeasons, GetTeams, SetPlayers, SetSeasons, SetTeams} from "../actions/initial.action";
+import * as searchActions from "../actions/search.action";
 import {
   CompareShotSearch,
   FrequencyShotSearch,
@@ -19,21 +20,9 @@ import 'rxjs/add/operator/mergeMap';
 import 'rxjs/add/operator/switchMap';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/withLatestFrom';
-import {selectPageLoaded, selectPlayers, selectSeasons, selectTeams} from "../selectors/initial.selectors";
+import {selectPlayers, selectSeasons, selectTeams} from "../selectors/initial.selectors";
 import {PlayerId, ShotParams, TeamId} from "../models/options.models";
 import {CompareShotResponse, FrequencyShotResponse, RawShotsResponse} from "../models/response.models";
-import {
-  SetDefensePlayersOff,
-  SetDefensePlayersOn,
-  SetDefenseTeam,
-  SetHash,
-  SetOffensePlayersOff,
-  SetOffensePlayersOn,
-  SetOffenseTeam,
-  SetSeason,
-  SetShooter,
-} from "../actions/options.action";
-import * as searchActions from "../actions/search.action";
 
 
 @Injectable()
@@ -103,7 +92,7 @@ export class InitializeEffects {
       .ofType(searchActions.RAW_SHOT_SEARCH)
       .withLatestFrom(this.store)
       .mergeMap(this.callRawShotService)
-      .map(response => {
+      .map((response: RawShotsResponse) => {
         return new StoreRawShots(response);
       });
 

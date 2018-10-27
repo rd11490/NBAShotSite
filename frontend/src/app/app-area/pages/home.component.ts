@@ -6,7 +6,7 @@ import {GetPlayers, GetSeasons, GetTeams} from "../../actions/initial.action";
 @Component({
   selector: 'home-component',
   template: `  
-    <h1>Welcome to Shot Chart WOWY!</h1>
+    <h1>Welcome to NBA Shot Charts</h1>
     <b>
       This is an app designed to allow you to build shot charts based on who is on the court, who is off the court, the season, 
       and/or the teams playing.

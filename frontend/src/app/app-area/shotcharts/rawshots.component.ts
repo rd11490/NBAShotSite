@@ -76,7 +76,6 @@ export class RawShotsComponent implements OnInit {
   };
 
   private drawCourt = (): void => {
-    console.log("DRAWING COURT");
     // Draw hoop
     this.svg
       .append("circle")

@@ -3,6 +3,7 @@ import {PlayerId, ShotCompareRequest, ShotParams, ShotRequest, TeamId} from "../
 import {Action, Store} from "@ngrx/store";
 import {Observable} from 'rxjs/Rx';
 import {
+  SetDateLowerBound, SetDateUpperBound,
   SetDefensePlayersOff,
   SetDefensePlayersOn,
   SetDefenseTeam,
@@ -109,6 +110,9 @@ const paramsToActions = (arr: Array<Action>, loc: string, params: ShotParams, pl
 
   arr.push(new SetShooter(shooter, loc));
   arr.push(new SetSeason(params.season, loc));
+
+  arr.push(new SetDateLowerBound(params.startDate, loc));
+  arr.push(new SetDateUpperBound(params.endDate, loc));
 
   arr.push(new SetOffenseTeam(offenseTeamId, loc));
   arr.push(new SetDefenseTeam(defenseTeamId, loc));

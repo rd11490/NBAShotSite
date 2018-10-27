@@ -24,7 +24,9 @@ object RawShotResponse {
     )
 }
 
-final case class RawShots(params: RawShotRequest, shots: Seq[RawShotResponse])
+final case class RawShots(params: FrequencyShotRequest,
+                          statistics: ShotStatisticsContainer,
+                          shots: Seq[RawShotResponse])
 
 final case class ZonedShots(total: ZonedShot,
                             statistics: ShotStatisticsContainer,
@@ -36,13 +38,28 @@ final case class ShotStatisticsContainer(total: ShotStatistics,
                                          rim: ShotStatistics,
                                          midrange: ShotStatistics)
 
+object ShotStatisticsContainer {
+  def empty: ShotStatisticsContainer = ShotStatisticsContainer(
+    ShotStatistics.empty,
+    ShotStatistics.empty,
+    ShotStatistics.empty,
+    ShotStatistics.empty,
+    ShotStatistics.empty
+  )
+}
+
 final case class ShotStatistics(attempts: Int,
                                 made: Int,
                                 frequency: Double,
                                 pointsPerShot: Double)
 
+object ShotStatistics {
+  def empty: ShotStatistics = ShotStatistics(0, 0, 0.0, 0.0)
+}
+
 final case class ZonedShotsResponse(params: FrequencyShotRequest,
-                                    data: ZonedShots)
+                                    data: ZonedShots) {
+}
 
 final case class ZonedShotCompare(shots1: ZonedShots, shots2: ZonedShots)
 
@@ -63,6 +80,11 @@ final case class ZonedShot(
     shotAttempts + other.shotAttempts,
     shotMade + other.shotMade,
     shotValue,
-    if (frequency > 0) frequency else other.frequency
+    if (frequency > 0.0) frequency else if (other.frequency > 0.0) other.frequency else 0.0
   )
+}
+
+object ZonedShot {
+  def empty: ZonedShot = ZonedShot("", "", 0, 0, 0, 0.0)
+
 }

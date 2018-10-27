@@ -2,11 +2,12 @@ import {State} from "../app.state";
 import {Observable} from "rxjs/Observable";
 import {PlayerId, TeamId} from "../models/options.models";
 import {Store} from "@ngrx/store";
+import {DatePipe} from "@angular/common";
 
 export const selectDescription = (store: Store<State>, optionType: string): Observable<string> => {
-  return Observable.combineLatest(selectODescription(store, optionType), selectDDescription(store, optionType)).map(v => {
-    const [oDescription, dDescription]: [string, string] = v;
-    return `${oDescription} ${dDescription}`;
+  return Observable.combineLatest(selectODescription(store, optionType), selectDDescription(store, optionType), selectDateDescription(store, optionType)).map(v => {
+    const [oDescription, dDescription, dateDescription]: [string, string, string] = v;
+    return `${oDescription} ${dDescription} ${dateDescription}`;
   })
 };
 
@@ -26,14 +27,23 @@ export const selectDDescription = (store: Store<State>, optionType: string): Obs
   return Observable.combineLatest(
     selectDefensiveTeamName(store, optionType),
     selectDefensivePlayersOn(store, optionType),
-    selectDefensivePlayersOff(store, optionType),
-    selectSeason(store, optionType)
+    selectDefensivePlayersOff(store, optionType)
   ).map(v => {
-    const [team, on, off, season]: [string, Array<PlayerId>, Array<PlayerId>, string] = v;
-    return `Defensive Team: ${team} | D On Court: ${on.map(v => v.name).join(", ")} | D Off Court: ${off.map(v => v.name).join(", ")} | Season: ${season}`;
+    const [team, on, off]: [string, Array<PlayerId>, Array<PlayerId>] = v;
+    return `Defensive Team: ${team} | D On Court: ${on.map(v => v.name).join(", ")} | D Off Court: ${off.map(v => v.name).join(", ")} |`;
   })
 };
 
+export const selectDateDescription = (store: Store<State>, optionType: string): Observable<string> => {
+  return Observable.combineLatest(
+    selectSeasonName(store, optionType),
+    selectStartDateString(store, optionType),
+    selectEndDateString(store, optionType))
+    .map(v => {
+      const [season, start, end]: [string, string, string] = v;
+      return `Season: ${season} | Start Date ${start} | End Date ${end}`
+    })
+};
 
 export const selectShooter = (store: Store<State>, optionType: string): Observable<PlayerId> => {
   return store.select(state => {
@@ -41,10 +51,19 @@ export const selectShooter = (store: Store<State>, optionType: string): Observab
   });
 };
 
-export const selectShooterName  = (store: Store<State>, optionType: string): Observable<string> => {
+export const selectShooterName = (store: Store<State>, optionType: string): Observable<string> => {
   return selectShooter(store, optionType).map(v => {
     if (v != null) {
       return v.name;
+    }
+    return 'None';
+  })
+};
+
+export const selectSeasonName = (store: Store<State>, optionType: string): Observable<string> => {
+  return selectSeason(store, optionType).map(v => {
+    if (v != null) {
+      return v;
     }
     return 'None';
   })
@@ -98,3 +117,28 @@ export const selectSecondsRemaining = (store: Store<State>, optionType: string):
 
 export const selectHash = (store: Store<State>, optionType: string): Observable<string> =>
   store.select(state => state.options.get(optionType).hash);
+
+export const selectStartDate= (store: Store<State>, optionType: string): Observable<number> =>
+  store.select(state => state.options.get(optionType).startDate);
+
+export const selectEndDate= (store: Store<State>, optionType: string): Observable<number> =>
+  store.select(state => state.options.get(optionType).endDate);
+
+
+export const selectStartDateString = (store: Store<State>, optionType: string): Observable<string> =>
+  selectStartDate(store, optionType).map(v =>{
+    if (v != null) {
+      return datePipe.transform(v, 'MM/dd/yyyy');
+    }
+    return "None"
+  });
+
+const datePipe = new DatePipe('en-US');
+
+export const selectEndDateString= (store: Store<State>, optionType: string): Observable<string> =>
+  selectEndDate(store, optionType).map(v =>{
+    if (v != null) {
+      return datePipe.transform(v, 'MM/dd/yyyy');
+    }
+    return "None"
+  });

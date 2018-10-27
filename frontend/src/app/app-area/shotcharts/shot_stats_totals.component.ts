@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, Input, OnInit} from '@angular/core';
 import {State} from '../../app.state'
 import {Store} from "@ngrx/store";
 import {GetPlayers, GetSeasons, GetTeams} from "../../actions/initial.action";
@@ -16,15 +16,15 @@ import {selectZonedShotStatistics} from "../../selectors/shotchart.selectors";
           <table>
             <tr>
               <th align="left">Attempts</th>
-              <td>{{(this._shotStatistics | async).total.attempts}}</td>
+              <td>{{this._shotStatistics.total.attempts}}</td>
             </tr>
             <tr>
               <th align="left">Made</th>
-              <td>{{(this._shotStatistics | async).total.made}}</td>
+              <td>{{this._shotStatistics.total.made}}</td>
             </tr>
             <tr>
               <th align="left">PPS</th>
-              <td>{{(this._shotStatistics | async).total.pointsPerShot.toFixed(2)}}</td>
+              <td>{{this._shotStatistics.total.pointsPerShot.toFixed(2)}}</td>
             </tr>
           </table>
           <hr>
@@ -33,19 +33,19 @@ import {selectZonedShotStatistics} from "../../selectors/shotchart.selectors";
           <table>
             <tr>
               <th align="left">Attempts</th>
-              <td>{{(this._shotStatistics | async).threes.attempts}}</td>
+              <td>{{this._shotStatistics.threes.attempts}}</td>
             </tr>
             <tr>
               <th align="left">Made</th>
-              <td>{{(this._shotStatistics | async).threes.made}}</td>
+              <td>{{this._shotStatistics.threes.made}}</td>
             </tr>
             <tr>
               <th align="left">Freq</th>
-              <td>{{(this._shotStatistics | async).threes.frequency.toFixed(2)}}</td>
+              <td>{{this._shotStatistics.threes.frequency.toFixed(2)}}</td>
             </tr>
             <tr>
               <th align="left">PPS</th>
-              <td>{{(this._shotStatistics | async).threes.pointsPerShot.toFixed(2)}}</td>
+              <td>{{this._shotStatistics.threes.pointsPerShot.toFixed(2)}}</td>
             </tr>
           </table>
           <hr>
@@ -53,19 +53,19 @@ import {selectZonedShotStatistics} from "../../selectors/shotchart.selectors";
           <table>
             <tr>
               <th align="left">Attempts</th>
-              <td>{{(this._shotStatistics | async).twos.attempts}}</td>
+              <td>{{this._shotStatistics.twos.attempts}}</td>
             </tr>
             <tr>
               <th align="left">Made</th>
-              <td>{{(this._shotStatistics | async).twos.made}}</td>
+              <td>{{this._shotStatistics.twos.made}}</td>
             </tr>
             <tr>
               <th align="left">Freq</th>
-              <td>{{(this._shotStatistics | async).twos.frequency.toFixed(2)}}</td>
+              <td>{{this._shotStatistics.twos.frequency.toFixed(2)}}</td>
             </tr>
             <tr>
               <th align="left">PPS</th>
-              <td>{{(this._shotStatistics | async).twos.pointsPerShot.toFixed(2)}}</td>
+              <td>{{this._shotStatistics.twos.pointsPerShot.toFixed(2)}}</td>
             </tr>
           </table>
         </div>
@@ -77,19 +77,19 @@ import {selectZonedShotStatistics} from "../../selectors/shotchart.selectors";
           <table>
             <tr>
               <th align="left">Attempts</th>
-              <td>{{(this._shotStatistics | async).threes.attempts}}</td>
+              <td>{{this._shotStatistics.threes.attempts}}</td>
             </tr>
             <tr>
               <th align="left">Made</th>
-              <td>{{(this._shotStatistics | async).threes.made}}</td>
+              <td>{{this._shotStatistics.threes.made}}</td>
             </tr>
             <tr>
               <th align="left">Freq</th>
-              <td>{{(this._shotStatistics | async).threes.frequency.toFixed(2)}}</td>
+              <td>{{this._shotStatistics.threes.frequency.toFixed(2)}}</td>
             </tr>
             <tr>
               <th align="left">PPS</th>
-              <td>{{(this._shotStatistics | async).threes.pointsPerShot.toFixed(2)}}</td>
+              <td>{{this._shotStatistics.threes.pointsPerShot.toFixed(2)}}</td>
             </tr>
           </table>
           <hr>
@@ -97,19 +97,19 @@ import {selectZonedShotStatistics} from "../../selectors/shotchart.selectors";
           <table>
             <tr>
               <th align="left">Attempts</th>
-              <td>{{(this._shotStatistics | async).midrange.attempts}}</td>
+              <td>{{this._shotStatistics.midrange.attempts}}</td>
             </tr>
             <tr>
               <th align="left">Made</th>
-              <td>{{(this._shotStatistics | async).midrange.made}}</td>
+              <td>{{this._shotStatistics.midrange.made}}</td>
             </tr>
             <tr>
               <th align="left">Freq</th>
-              <td>{{(this._shotStatistics | async).midrange.frequency.toFixed(2)}}</td>
+              <td>{{this._shotStatistics.midrange.frequency.toFixed(2)}}</td>
             </tr>
             <tr>
               <th align="left">PPS</th>
-              <td>{{(this._shotStatistics | async).midrange.pointsPerShot.toFixed(2)}}</td>
+              <td>{{this._shotStatistics.midrange.pointsPerShot.toFixed(2)}}</td>
             </tr>
           </table>
           <hr>
@@ -117,19 +117,19 @@ import {selectZonedShotStatistics} from "../../selectors/shotchart.selectors";
           <table>
             <tr>
               <th align="left">Attempts</th>
-              <td>{{(this._shotStatistics | async).rim.attempts}}</td>
+              <td>{{this._shotStatistics.rim.attempts}}</td>
             </tr>
             <tr>
               <th align="left">Made</th>
-              <td>{{(this._shotStatistics | async).rim.made}}</td>
+              <td>{{this._shotStatistics.rim.made}}</td>
             </tr>
             <tr>
               <th align="left">Freq</th>
-              <td>{{(this._shotStatistics | async).rim.frequency.toFixed(2)}}</td>
+              <td>{{this._shotStatistics.rim.frequency.toFixed(2)}}</td>
             </tr>
             <tr>
               <th align="left">PPS</th>
-              <td>{{(this._shotStatistics | async).rim.pointsPerShot.toFixed(2)}}</td>
+              <td>{{this._shotStatistics.rim.pointsPerShot.toFixed(2)}}</td>
             </tr>
           </table>
         </div>
@@ -138,15 +138,16 @@ import {selectZonedShotStatistics} from "../../selectors/shotchart.selectors";
   `,
   styleUrls: ['../../css/general.css']
 })
-export class ShotStatsTotalsComponent implements OnInit {
+export class ShotStatsTotalsComponent {
 
-  _shotStatistics: Observable<ShotStatisticsContainer>;
+  _shotStatistics: ShotStatisticsContainer;
 
   constructor(private store: Store<State>) {
   }
 
-  ngOnInit(): void {
-    this._shotStatistics = selectZonedShotStatistics(this.store);
+  @Input("stats")
+  set source(stats: ShotStatisticsContainer) {
+    this._shotStatistics = stats;
   }
 
 

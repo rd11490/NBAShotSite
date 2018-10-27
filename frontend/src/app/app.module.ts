@@ -19,7 +19,7 @@ import {OffensePlayersOffSelectorComponent} from "./app-area/options/offense_pla
 import {DefensePlayersOffSelectorComponent} from "./app-area/options/defense_players_off_selector.component";
 import {DefensePlayersOnSelectorComponent} from "./app-area/options/defense_players_on_selector.component";
 import {MatExpansionModule} from '@angular/material/expansion';
-import {MatFormFieldModule} from "@angular/material";
+import {MatDatepickerModule, MatFormFieldModule, MatInputModule, MatNativeDateModule} from "@angular/material";
 import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
 import {DefenseTeamSelectorComponent} from "./app-area/options/defense_team_selector.component";
 import {OffenseTeamSelectorComponent} from "./app-area/options/offense_team_selector.component";
@@ -27,12 +27,19 @@ import {setPlayersReducer, setSeasonsReducer, setTeamsReducer} from "./reducers/
 import {InitializeEffects} from "./effects/Search";
 import {EffectsModule} from "@ngrx/effects";
 import {HomeComponent} from "./app-area/pages/home.component";
-import {setCompareShots, setFrequencyShots, setRawShots, setSearchInProgress} from "./reducers/shotchart.reducers";
+import {
+  setCompareShots,
+  setFrequencyShots,
+  setRawShots,
+  setSearchInProgress
+} from "./reducers/shotchart.reducers";
 import {SeasonSelectorComponent} from "./app-area/options/season_selector.component";
 import {RawShotsComponent} from "./app-area/shotcharts/rawshots.component";
 import {FrequencyShotsComponent} from "./app-area/shotcharts/frequencyshots.component";
 import {LoadingComponent} from "./app-area/pages/loading.component";
 import {ShotStatsTotalsComponent} from "./app-area/shotcharts/shot_stats_totals.component";
+import {StartDateSelectorComponent} from "./app-area/options/start_date_selector.component";
+import {EndDateSelectorComponent} from "./app-area/options/end_date_selector.component";
 
 @NgModule({
   imports: [
@@ -45,6 +52,9 @@ import {ShotStatsTotalsComponent} from "./app-area/shotcharts/shot_stats_totals.
     BrowserAnimationsModule,
     MatExpansionModule,
     MatFormFieldModule,
+    MatInputModule,
+    MatDatepickerModule,
+    MatNativeDateModule,
     StoreModule.forRoot({
       options: optionsReducer,
       players: setPlayersReducer,
@@ -62,7 +72,10 @@ import {ShotStatsTotalsComponent} from "./app-area/shotcharts/shot_stats_totals.
   exports: [
     BrowserAnimationsModule,
     MatExpansionModule,
-    MatFormFieldModule
+    MatFormFieldModule,
+    MatDatepickerModule,
+    MatNativeDateModule,
+    MatInputModule
   ],
   declarations: [
     AppComponent,
@@ -83,7 +96,9 @@ import {ShotStatsTotalsComponent} from "./app-area/shotcharts/shot_stats_totals.
     OffenseTeamSelectorComponent,
     SeasonSelectorComponent,
     LoadingComponent,
-    ShotStatsTotalsComponent
+    ShotStatsTotalsComponent,
+    StartDateSelectorComponent,
+    EndDateSelectorComponent
   ],
   providers: [ ShotchartService ],
   bootstrap: [ AppComponent ]

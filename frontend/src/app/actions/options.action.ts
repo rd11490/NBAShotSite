@@ -111,7 +111,21 @@ export class SetSecondsRemaining implements Action {
   }
 }
 
-// TODO Come up with solution for date
+export class SetDateLowerBound implements Action {
+  readonly type = SET_DATE_LOWER_BOUND;
+
+  constructor(public payload: number,
+              public key: string) {
+  }
+}
+
+export class SetDateUpperBound implements Action {
+  readonly type = SET_DATE_UPPER_BOUND;
+
+  constructor(public payload: number,
+              public key: string) {
+  }
+}
 
 export type Actions = SetShooter
   | SetOffensePlayersOn
@@ -124,4 +138,6 @@ export type Actions = SetShooter
   | SetPeriod
   | SetSecondsRemaining
   | SetHash
-  | SetShooter;
+  | SetShooter
+  | SetDateLowerBound
+  | SetDateUpperBound;
