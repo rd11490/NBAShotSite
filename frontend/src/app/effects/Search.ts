@@ -172,7 +172,7 @@ export class InitializeEffects {
 }
 
 const toShotParams = (storedParams: Options): ShotParams => {
-  const shooter = storedParams.shooter ? storedParams.shooter.id : undefined;
+  const shooter = storedParams.shooter ? storedParams.shooter.map(v => v.id) : undefined;
   const oTeamId = storedParams.offensiveTeam ? storedParams.offensiveTeam.teamId : undefined;
   const oPlayersOn = storedParams.offensivePlayersOn ? storedParams.offensivePlayersOn.map(v => v.id) : undefined;
   const oPlayersOff = storedParams.offensivePlayersOff ? storedParams.offensivePlayersOff.map(v => v.id) : undefined;
@@ -191,6 +191,7 @@ const toShotParams = (storedParams: Options): ShotParams => {
     period: storedParams.period,
     secondsRemaining: storedParams.secondRemaining,
     season: storedParams.season,
+    seasonType: storedParams.seasonType,
     startDate: storedParams.startDate,
     endDate: storedParams.endDate
   };

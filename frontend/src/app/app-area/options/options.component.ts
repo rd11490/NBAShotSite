@@ -17,7 +17,7 @@ import {Observable} from "rxjs/Observable";
       </mat-expansion-panel-header>
       <div>
         <div class="option-line">
-        <div class="option-two"><shooter-select [source]="this._source"></shooter-select></div>
+        <div class="option-two"><shooter-select #this._source [source]="this._source"></shooter-select></div>
         </div>
         <div class="option-line">
           <div class="option-two"><offense-team-select [source]="this._source"></offense-team-select></div>
@@ -32,11 +32,13 @@ import {Observable} from "rxjs/Observable";
           <div class="option-two"><defensive-players-off-select [source]="this._source"></defensive-players-off-select></div>
         </div>
         <div class="option-line">
-          <div class="option-two"><start-date-select [source]="this._source"></start-date-select></div>
-          <div class="option-two"><end-date-select [source]="this._source"></end-date-select></div>
+          <div class="option-three"><start-date-select [source]="this._source"></start-date-select></div>
+          <div class="option-three"><end-date-select [source]="this._source"></end-date-select></div>
+          <div class="option-three"><period-select [source]="this._source"></period-select></div>
         </div>
         <div class="option-line">
-          <div class="option-other"><season-select [source]="this._source"></season-select></div>
+          <div class="option-two"><season-select [source]="this._source"></season-select></div>
+          <div class="option-two"><season-type-select [source]="this._source"></season-type-select></div>
         </div>
       </div>
     </mat-expansion-panel>

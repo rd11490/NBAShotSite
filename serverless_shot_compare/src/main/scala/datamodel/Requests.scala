@@ -2,56 +2,78 @@ package datamodel
 
 import storage.PostgresClient
 
-final case class RawShotRequest(hash: Option[String], params: Option[ShotRequest])
-final case class FrequencyShotRequest(hash: Option[String], params: Option[ShotRequest])
-final case class CompareShotRequest(hash: Option[String], params: Option[ShotCompareRequest])
+final case class RawShotRequest(hash: Option[String],
+                                params: Option[ShotRequest])
+final case class FrequencyShotRequest(hash: Option[String],
+                                      params: Option[ShotRequest])
+final case class CompareShotRequest(hash: Option[String],
+                                    params: Option[ShotCompareRequest])
 
 final case class ShotCompareRequest(shots1: ShotRequest, shots2: ShotRequest)
 
-final case class ShotRequest(
-                              shooter: Option[Int] = None,
-                              offenseTeamId: Option[Int] = None,
-                              offensePlayerIds: Option[Seq[Int]] = None,
-                              offenseOffPlayerIds: Option[Seq[Int]] = None,
-                              defenseTeamId: Option[Int] = None,
-                              defensePlayerIds: Option[Seq[Int]] = None,
-                              defenseOffPlayerIds: Option[Seq[Int]] = None,
-                              period: Option[Int] = None,
-                              secondsRemaining: Option[Int] = None,
-                              season: Option[String] = None,
-                              startDate: Option[Long] = None,
-                              endDate: Option[Long] = None) {
+final case class ShotRequest(shooter: Option[Seq[Int]] = None,
+                             offenseTeamId: Option[Int] = None,
+                             offensePlayerIds: Option[Seq[Int]] = None,
+                             offenseOffPlayerIds: Option[Seq[Int]] = None,
+                             defenseTeamId: Option[Int] = None,
+                             defensePlayerIds: Option[Seq[Int]] = None,
+                             defenseOffPlayerIds: Option[Seq[Int]] = None,
+                             period: Option[Seq[Int]] = None,
+                             secondsRemaining: Option[Int] = None,
+                             season: Option[Seq[String]] = None,
+                             seasonType: Option[String] = None,
+                             startDate: Option[Long] = None,
+                             endDate: Option[Long] = None) {
 
   def toWhereClause: Seq[String] = {
     val where = Seq(
-      shooter.map(v => s"shooter = $v"),
+      shooter.flatMap(shooterWhere),
       offenseTeamId.map(v => s"offenseTeamId = $v"),
       defenseTeamId.map(v => s"defenseTeamId = $v"),
-      period.map(v => s"period = $v"),
+      period.flatMap(periodWhere),
       secondsRemaining.map(v => s"secondsRemaining <= $v"),
-      season.map(v => s"""season = '$v'"""),
+      season.flatMap(seasonWhere),
+      seasonType.map(v => s"""seasontype = '$v'"""),
       startDate.map(v => s"gameDate >= $v"),
       endDate.map(v => s"gameDate <= $v")
     ).flatten ++
-      (defenseOffPlayerIds.map(ids =>
-        ids.map(v => defensiveOffPlayerWhere(v))) ++
-        offenseOffPlayerIds.map(ids =>
-          ids.map(v => offensiveOffPlayerWhere(v))) ++
-        defensePlayerIds.map(ids =>
-          ids.map(v => defensivePlayerWhere(v))) ++
-        offensePlayerIds.map(ids =>
-          ids.map(v => offensivePlayerWhere(v)))).flatten
+      (defenseOffPlayerIds.map(ids => ids.map(v => defensiveOffPlayerWhere(v))) ++
+        offenseOffPlayerIds.map(ids => ids.map(v => offensiveOffPlayerWhere(v))) ++
+        defensePlayerIds.map(ids => ids.map(v => defensivePlayerWhere(v))) ++
+        offensePlayerIds.map(ids => ids.map(v => offensivePlayerWhere(v)))).flatten
 
     where.foreach(checkSql)
     where
   }
 
   private def checkSql(str: String): Unit = {
-    PostgresClient.BadTerms.foreach(v => if (str.toLowerCase.contains(v.toLowerCase)) {
-      throw new IllegalArgumentException("SQL INJECTION ATTEMPTED!")
+    PostgresClient.BadTerms.foreach(v =>
+      if (str.toLowerCase.contains(v.toLowerCase)) {
+        throw new IllegalArgumentException("SQL INJECTION ATTEMPTED!")
     })
   }
 
+  private def shooterWhere(shooters: Seq[Int]): Option[String] = {
+    if (shooters.nonEmpty) {
+      Some(shooters.map(v => s"shooter = $v").mkString("(", " OR ", ")"))
+    } else {
+      None
+    }
+  }
+
+  private def seasonWhere(seasons: Seq[String]): Option[String] =
+    if (seasons.nonEmpty) {
+      Some(seasons.map(v => s"""season = '$v'""").mkString("(", " OR ", ")"))
+    } else {
+      None
+    }
+
+  private def periodWhere(periods: Seq[Int]): Option[String] =
+    if (periods.nonEmpty) {
+      Some(periods.map(v => s"period = $v").mkString("(", " OR ", ")"))
+    } else {
+      None
+    }
 
   private def offensivePlayerWhere(id: Int): String = {
     s"""(offensePlayer1Id = $id OR offensePlayer2Id = $id OR

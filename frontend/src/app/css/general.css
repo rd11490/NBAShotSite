@@ -135,6 +135,11 @@ h1 {
   width: 48%;
 }
 
+.option-three {
+  display: inline-block;
+  width: 30%;
+}
+
 .option-line {
   padding: 1% 0 1% 0;
 }

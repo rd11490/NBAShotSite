@@ -1,4 +1,3 @@
-import {NgModule} from '@angular/core';
 import {BrowserModule} from '@angular/platform-browser';
 import {FormsModule} from '@angular/forms';
 import {HttpClientModule} from '@angular/common/http';
@@ -40,6 +39,10 @@ import {LoadingComponent} from "./app-area/pages/loading.component";
 import {ShotStatsTotalsComponent} from "./app-area/shotcharts/shot_stats_totals.component";
 import {StartDateSelectorComponent} from "./app-area/options/start_date_selector.component";
 import {EndDateSelectorComponent} from "./app-area/options/end_date_selector.component";
+import {SeasonTypeSelectorComponent} from "./app-area/options/season_type_selector.component";
+import {NgModule} from "@angular/core";
+import {PeriodSelectorComponent} from "./app-area/options/period_selector.component";
+
 
 @NgModule({
   imports: [
@@ -95,10 +98,12 @@ import {EndDateSelectorComponent} from "./app-area/options/end_date_selector.com
     DefenseTeamSelectorComponent,
     OffenseTeamSelectorComponent,
     SeasonSelectorComponent,
+    SeasonTypeSelectorComponent,
     LoadingComponent,
     ShotStatsTotalsComponent,
     StartDateSelectorComponent,
-    EndDateSelectorComponent
+    EndDateSelectorComponent,
+    PeriodSelectorComponent
   ],
   providers: [ ShotchartService ],
   bootstrap: [ AppComponent ]

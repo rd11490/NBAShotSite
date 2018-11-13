@@ -12,6 +12,9 @@ export const SET_DEFENSE_ON = 'Set Defense On';
 export const SET_DEFENSE_OFF = 'Set Defense Off';
 
 export const SET_SEASON = 'Set Season';
+export const SET_SEASON_TYPE = 'Set Season Type';
+
+
 
 export const SET_DATE_LOWER_BOUND = 'Set Date Lower Bound';
 export const SET_DATE_UPPER_BOUND = 'Set Date Upper Bound';
@@ -33,7 +36,7 @@ export class SetHash implements Action {
 export class SetShooter implements Action {
   readonly type = SET_SHOOTER;
 
-  constructor(public payload: PlayerId,
+  constructor(public payload: Array<PlayerId>,
               public key: string) {
   }
 }
@@ -73,7 +76,23 @@ export class SetDefensePlayersOff implements Action {
 export class SetSeason implements Action {
   readonly type = SET_SEASON;
 
+  constructor(public payload: Array<string>,
+              public key: string) {
+  }
+}
+
+export class SetSeasonType implements Action {
+  readonly type = SET_SEASON_TYPE;
+
   constructor(public payload: string,
+              public key: string) {
+  }
+}
+
+export class SetPeriod implements Action {
+  readonly type = SET_PERIOD;
+
+  constructor(public payload: Array<number>,
               public key: string) {
   }
 }
@@ -91,14 +110,6 @@ export class SetDefenseTeam implements Action {
   readonly type = SET_DEFENSE_TEAM;
 
   constructor(public payload: TeamId,
-              public key: string) {
-  }
-}
-
-export class SetPeriod implements Action {
-  readonly type = SET_PERIOD;
-
-  constructor(public payload: number,
               public key: string) {
   }
 }
@@ -133,6 +144,7 @@ export type Actions = SetShooter
   | SetDefensePlayersOn
   | SetDefensePlayersOff
   | SetSeason
+  | SetSeasonType
   | SetOffenseTeam
   | SetDefenseTeam
   | SetPeriod

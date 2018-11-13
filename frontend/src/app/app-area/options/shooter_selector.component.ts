@@ -17,7 +17,7 @@ import {NgOption} from "@ng-select/ng-select/ng-select/ng-select.types";
       <ng-select [items]="this.players | async"
                  bindLabel="name"
                  bindValue="id"
-                 [multiple]="false"
+                 [multiple]="true"
                  placeholder="Shooter"
                  [virtualScroll]="true"
                  (change)="selectShooter($event)">
@@ -31,33 +31,36 @@ export class ShooterSelectorComponent implements OnInit {
   _source: string;
   players: Observable<Array<PlayerId>>;
 
+  @ViewChild(NgSelectComponent)
+  ngSelect: NgSelectComponent;
+
   constructor(private store: Store<State>) {
 
   }
 
   ngOnInit(): void {
     this.players = InitialSelectors.selectPlayers(this.store);
-    OptionSelectors.selectShooter(this.store, this._source)
-      .subscribe(v => {
-        if (v != null) {
-          this.ngSelect.select({
-            name: [v.name],
-            label: v.name,
-            value: v
-          })
-        }
+    OptionSelectors.selectShooter(this.store, this._source).subscribe(shooters => {
+      if (shooters != null) {
+        shooters.forEach(shooter => {
+          if (this.ngSelect.selectedItems.filter(v => v.value == shooter).length < 1) {
+            this.ngSelect.select({
+              name: [shooter.name],
+              label: shooter.name,
+              value: shooter
+            })
+          }
+        })
+      }
       })
   }
-
-  @ViewChild(NgSelectComponent)
-  ngSelect: NgSelectComponent;
 
   @Input("source")
   set source(source: string) {
     this._source = source;
   }
 
-  selectShooter(player: PlayerId) {
+  selectShooter(player: Array<PlayerId>) {
     this.store.dispatch(new OptionActions.SetShooter(player, this._source));
   }
 

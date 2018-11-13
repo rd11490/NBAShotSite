@@ -10,10 +10,10 @@ class SelectSpec  extends TestSpec {
     implicit val context: ExecutionContextExecutor = ExecutionContext.global
     import utils.RichFuture._
 
-    val request = ShotRequest(shooter = Some(1628369), season = Some("2014-15"))
-
-    val out = ShotSelect.selectZonedShots(request).await()
-    println(out)
+//    val request = ShotRequest(shooter = Some(1628369), season = Some("2014-15"))
+//
+//    val out = ShotSelect.selectZonedShots(request).await()
+//    println(out)
   }
 }
 

@@ -6,45 +6,42 @@ import * as OptionSelectors from './../../selectors/options.selectors'
 import {Observable} from "rxjs/Observable";
 import * as InitialSelectors from "../../selectors/initial.selectors";
 import {NgOption, NgSelectComponent} from "@ng-select/ng-select";
+import {SetPeriod} from "../../actions/options.action";
 
 @Component({
-  selector: 'season-select',
+  selector: 'period-select',
   template: `
     <div>
-      Seasons
-      <ng-select [items]="this.seasons | async"
+      Period
+      <ng-select [items]="this.periods"
                  [multiple]="true"
-                 placeholder="Season"
+                 placeholder="Period"
                  [virtualScroll]="true"
-                 (change)="selectSeason($event)">
+                 (change)="selectPeriods($event)">
       </ng-select>
     </div>
   `,
   styleUrls: ['../../css/general.css']
 })
-export class SeasonSelectorComponent implements OnInit {
+export class PeriodSelectorComponent implements OnInit {
 
   _source: string;
-  seasons: Observable<Array<string>>;
+  periods:Array<number> = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
 
   constructor(private store: Store<State>) {
 
   }
 
   ngOnInit(): void {
-    this.seasons = InitialSelectors.selectSeasons(this.store);
-    OptionSelectors.selectSeason(this.store, this._source).subscribe(seasons => {
-      if (seasons != null) {
-        seasons.forEach(season => {
-          if (this.ngSelect.selectedItems.filter(v => v.value == season).length < 1) {
+    OptionSelectors.selectPeriod(this.store, this._source).subscribe(selectedPeriods => {
+      if (selectedPeriods != null) {
+        selectedPeriods.forEach(period => {
+          if (this.ngSelect.selectedItems.filter(v => v.value == period).length < 1) {
             this.ngSelect.select({
-              name: [season],
-              label: season,
-              value: season
+              value: period
             })
           }
         })
-
       }
     })
   }
@@ -57,8 +54,8 @@ export class SeasonSelectorComponent implements OnInit {
     this._source = source;
   }
 
-  selectSeason(season: Array<string>) {
-    this.store.dispatch(new OptionActions.SetSeason(season, this._source));
+  selectPeriods(seasons: Array<number>) {
+    this.store.dispatch(new OptionActions.SetPeriod(seasons, this._source));
   }
 
 }

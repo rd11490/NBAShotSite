@@ -14,19 +14,20 @@ export interface State {
 }
 export interface Options {
   hash: string;
-  shooter: PlayerId;
+  shooter: Array<PlayerId>;
 
   offensivePlayersOn: Array<PlayerId>;
   defensivePlayersOn: Array<PlayerId>;
   offensivePlayersOff: Array<PlayerId>;
   defensivePlayersOff: Array<PlayerId>;
 
-  season: string;
+  season: Array<string>;
+  seasonType: string;
 
   offensiveTeam: TeamId;
   defensiveTeam: TeamId;
 
-  period: number;
+  period: Array<number>;
   secondRemaining: number;
 
   startDate: number;

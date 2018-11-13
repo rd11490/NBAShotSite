@@ -8,44 +8,39 @@ import * as InitialSelectors from "../../selectors/initial.selectors";
 import {NgOption, NgSelectComponent} from "@ng-select/ng-select";
 
 @Component({
-  selector: 'season-select',
+  selector: 'season-type-select',
   template: `
     <div>
-      Seasons
-      <ng-select [items]="this.seasons | async"
-                 [multiple]="true"
-                 placeholder="Season"
+      Season Type
+      <ng-select [items]="this.seasonTypes"
+                 [multiple]="false"
+                 placeholder="SeasonType"
                  [virtualScroll]="true"
-                 (change)="selectSeason($event)">
+                 (change)="selectSeasonType($event)">
       </ng-select>
     </div>
   `,
   styleUrls: ['../../css/general.css']
 })
-export class SeasonSelectorComponent implements OnInit {
+export class SeasonTypeSelectorComponent implements OnInit {
 
   _source: string;
-  seasons: Observable<Array<string>>;
+  seasonTypes:Array<string> = ["Regular Season", "Playoffs"];
 
   constructor(private store: Store<State>) {
 
   }
 
   ngOnInit(): void {
-    this.seasons = InitialSelectors.selectSeasons(this.store);
-    OptionSelectors.selectSeason(this.store, this._source).subscribe(seasons => {
-      if (seasons != null) {
-        seasons.forEach(season => {
-          if (this.ngSelect.selectedItems.filter(v => v.value == season).length < 1) {
-            this.ngSelect.select({
-              name: [season],
-              label: season,
-              value: season
-            })
-          }
+    OptionSelectors.selectSeasonType(this.store, this._source).subscribe(v => {
+      if (v != null) {
+        this.ngSelect.select({
+          name: [v],
+          label: v,
+          value: v
         })
-
       }
+
     })
   }
 
@@ -57,8 +52,8 @@ export class SeasonSelectorComponent implements OnInit {
     this._source = source;
   }
 
-  selectSeason(season: Array<string>) {
-    this.store.dispatch(new OptionActions.SetSeason(season, this._source));
+  selectSeasonType(season: string) {
+    this.store.dispatch(new OptionActions.SetSeasonType(season, this._source));
   }
 
 }

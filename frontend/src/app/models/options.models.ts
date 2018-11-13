@@ -15,16 +15,17 @@ export class ShotRequest {
 }
 
 export class ShotParams {
-  shooter?: number;
+  shooter?: Array<number>;
   offenseTeamId?: number;
   offensePlayerIds?: Array<number>;
   offenseOffPlayerIds?: Array<number>;
   defenseTeamId?: number;
   defensePlayerIds?: Array<number>;
   defenseOffPlayerIds?: Array<number>;
-  period?: number;
+  period?: Array<number>;
   secondsRemaining?: number;
-  season?: string;
+  season?: Array<string>;
+  seasonType?: string;
   startDate?: number;
   endDate?: number;
 }

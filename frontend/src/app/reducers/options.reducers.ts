@@ -1,28 +1,65 @@
 import * as OptionActions from './../actions/options.action'
 import {CompareOptions1, CompareOptions2, FrequencyOptions, Options, RawOptions, State} from "../app.state";
+import {PlayerId, TeamId} from "../models/options.models";
 
-export const initialOptions: Options = {
-  hash: undefined,
-  shooter: undefined,
-  offensivePlayersOn: [],
-  defensivePlayersOn: [],
-  offensivePlayersOff: [],
-  defensivePlayersOff: [],
-  season: undefined,
-  offensiveTeam: undefined,
-  defensiveTeam: undefined,
-  period: undefined,
-  secondRemaining: undefined,
-  startDate: undefined,
-  endDate: undefined
-};
 
-export const initialState:  Map<string, Options> =
-    new Map<string, Options> ()
-    .set(RawOptions, initialOptions)
-    .set(FrequencyOptions, initialOptions)
-    .set(CompareOptions1, initialOptions)
-    .set(CompareOptions2, initialOptions);
+class InitialOptions implements Options {
+  hash: string;
+  shooter: Array<PlayerId>;
+
+  offensivePlayersOn: Array<PlayerId>;
+  defensivePlayersOn: Array<PlayerId>;
+  offensivePlayersOff: Array<PlayerId>;
+  defensivePlayersOff: Array<PlayerId>;
+
+  season: Array<string>;
+  seasonType: string;
+
+  offensiveTeam: TeamId;
+  defensiveTeam: TeamId;
+
+  period: Array<number>;
+  secondRemaining: number;
+
+  startDate: number;
+  endDate: number;
+  constructor(hash: string = undefined,
+              shooter: Array<PlayerId> = [],
+              offensivePlayersOn: Array<PlayerId> = [],
+              defensivePlayersOn: Array<PlayerId> = [],
+              offensivePlayersOff: Array<PlayerId> = [],
+              defensivePlayersOff: Array<PlayerId> = [],
+              season: Array<string> = [],
+              seasonType: string = undefined,
+              offensiveTeam: TeamId = undefined,
+              defensiveTeam: TeamId = undefined,
+              period: Array<number> = [],
+              secondRemaining: number = undefined,
+              startDate: number = undefined,
+              endDate: number = undefined) {
+    this.hash = hash;
+    this.shooter = shooter;
+    this.offensivePlayersOn = offensivePlayersOn;
+    this.defensivePlayersOn = defensivePlayersOn;
+    this.offensivePlayersOff = offensivePlayersOff;
+    this.defensivePlayersOff = defensivePlayersOff;
+    this.season = season;
+    this.seasonType = seasonType;
+    this.offensiveTeam = offensiveTeam;
+    this.defensiveTeam = defensiveTeam;
+    this.period = period;
+    this.secondRemaining = secondRemaining;
+    this.startDate = startDate;
+    this.endDate = endDate;
+  }
+}
+
+export const initialState: Map<string, Options> =
+  new Map<string, Options>()
+    .set(RawOptions, new InitialOptions())
+    .set(FrequencyOptions, new InitialOptions())
+    .set(CompareOptions1, new InitialOptions())
+    .set(CompareOptions2, new InitialOptions());
 
 export function optionsReducer(options: Map<string, Options> = initialState, action: OptionActions.Actions): Map<string, Options> {
   switch (action.type) {
@@ -34,6 +71,9 @@ export function optionsReducer(options: Map<string, Options> = initialState, act
     }
     case OptionActions.SET_SEASON: {
       return setSeasonReducer(options, action as OptionActions.SetSeason);
+    }
+    case OptionActions.SET_SEASON_TYPE: {
+      return setSeasonTypeReducer(options, action as OptionActions.SetSeasonType);
     }
     case OptionActions.SET_OFFENSE_TEAM: {
       return setOffensiveTeamReducer(options, action as OptionActions.SetOffenseTeam);
@@ -63,8 +103,8 @@ export function optionsReducer(options: Map<string, Options> = initialState, act
       return setEndDateReducer(options, action as OptionActions.SetDateUpperBound);
     }
     case OptionActions.SET_DATE_LOWER_BOUND : {
-    return setStartDateReducer(options, action as OptionActions.SetDateLowerBound);
-  }
+      return setStartDateReducer(options, action as OptionActions.SetDateLowerBound);
+    }
     default: {
       return options;
 
@@ -86,6 +126,16 @@ const setSeasonReducer = (options: Map<string, Options>, action: OptionActions.S
   switch (action.type) {
     case OptionActions.SET_SEASON:
       options.get(action.key).season = action.payload;
+      return options;
+    default:
+      return options;
+  }
+};
+
+const setSeasonTypeReducer = (options: Map<string, Options>, action: OptionActions.SetSeasonType): Map<string, Options> => {
+  switch (action.type) {
+    case OptionActions.SET_SEASON_TYPE:
+      options.get(action.key).seasonType = action.payload;
       return options;
     default:
       return options;

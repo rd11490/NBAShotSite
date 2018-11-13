@@ -11,7 +11,7 @@ import {
   SetOffensePlayersOff,
   SetOffensePlayersOn,
   SetOffenseTeam,
-  SetSeason,
+  SetSeason, SetSeasonType,
   SetShooter
 } from "../actions/options.action";
 import 'rxjs/add/observable/combineLatest';
@@ -98,7 +98,7 @@ export const selectCompareResponseSearchActions = (store: Store<State>): Observa
 };
 
 const paramsToActions = (arr: Array<Action>, loc: string, params: ShotParams, players: Array<PlayerId>, teams: Array<TeamId>): Array<Action> => {
-  const shooter = findPlayer(params.shooter, players);
+  const shooter = findPlayers(params.shooter, players);
   const offenseTeamId = findTeam(params.offenseTeamId, teams);
   const defenseTeamId = findTeam(params.defenseTeamId, teams);
 
@@ -110,6 +110,8 @@ const paramsToActions = (arr: Array<Action>, loc: string, params: ShotParams, pl
 
   arr.push(new SetShooter(shooter, loc));
   arr.push(new SetSeason(params.season, loc));
+  arr.push(new SetSeasonType(params.seasonType, loc));
+
 
   arr.push(new SetDateLowerBound(params.startDate, loc));
   arr.push(new SetDateUpperBound(params.endDate, loc));
