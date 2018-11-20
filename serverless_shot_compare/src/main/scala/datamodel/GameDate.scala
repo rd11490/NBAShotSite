@@ -21,3 +21,6 @@ object GameDate extends ResultSetMapper {
       getString(resultSet, 3)
     )
 }
+
+final case class Seasons(season: String)
+

@@ -106,8 +106,6 @@ export class FrequencyShotChartComponent implements OnInit {
         })
       }
     })
-
-
   }
 
   search = (): void => {

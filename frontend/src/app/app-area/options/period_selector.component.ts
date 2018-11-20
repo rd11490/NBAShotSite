@@ -38,6 +38,8 @@ export class PeriodSelectorComponent implements OnInit {
         selectedPeriods.forEach(period => {
           if (this.ngSelect.selectedItems.filter(v => v.value == period).length < 1) {
             this.ngSelect.select({
+              name: [period],
+              label: period.toLocaleString(),
               value: period
             })
           }

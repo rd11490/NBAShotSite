@@ -42,6 +42,7 @@ import {EndDateSelectorComponent} from "./app-area/options/end_date_selector.com
 import {SeasonTypeSelectorComponent} from "./app-area/options/season_type_selector.component";
 import {NgModule} from "@angular/core";
 import {PeriodSelectorComponent} from "./app-area/options/period_selector.component";
+import {CompareShotsComponent} from "./app-area/shotcharts/compareshots.component";
 
 
 @NgModule({
@@ -103,7 +104,8 @@ import {PeriodSelectorComponent} from "./app-area/options/period_selector.compon
     ShotStatsTotalsComponent,
     StartDateSelectorComponent,
     EndDateSelectorComponent,
-    PeriodSelectorComponent
+    PeriodSelectorComponent,
+    CompareShotsComponent
   ],
   providers: [ ShotchartService ],
   bootstrap: [ AppComponent ]

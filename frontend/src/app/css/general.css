@@ -184,6 +184,12 @@ h1 {
   overflow: hidden;
 }
 
+.shot-stats-container-right {
+  float: left;
+  padding-left: 5%;
+  overflow: hidden;
+}
+
 .d3-tip {
   line-height: 1;
   font-weight: bold;

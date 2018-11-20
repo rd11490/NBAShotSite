@@ -116,19 +116,49 @@ export const selectCompareShotResponse = (store: Store<State>): Observable<Compa
 };
 
 export const selectZonedShots1 = (store: Store<State>): Observable<Array<ZonedShot>> => {
-  return selectCompareShotResponse(store).map(v => v.data.shots1.shots);
+  return selectCompareShotResponse(store).map(v => {
+    if (v != null) {
+      return v.data.shots1.shots;
+    }
+    return [];
+  });
 };
 
 export const selectZonedShots1Totals = (store: Store<State>): Observable<ZonedShot> => {
   return selectCompareShotResponse(store).map(v => v.data.shots1.total);
 };
 
+export const selectZonedShot1Statistics = (store: Store<State>): Observable<ShotStatisticsContainer> => {
+  return selectCompareShotResponse(store).map(v => {
+    if (v != null) {
+      return v.data.shots1.statistics;
+    } else {
+      return ZeroShotStatisticsContainer;
+    }
+  });
+};
+
 export const selectZonedShots2 = (store: Store<State>): Observable<Array<ZonedShot>> => {
-  return selectCompareShotResponse(store).map(v => v.data.shots2.shots);
+  return selectCompareShotResponse(store).map(v => {
+    if (v != null) {
+      return v.data.shots2.shots;
+    }
+    return [];
+  });
 };
 
 export const selectZonedShots2Totals = (store: Store<State>): Observable<ZonedShot> => {
   return selectCompareShotResponse(store).map(v => v.data.shots2.total);
+};
+
+export const selectZonedShot2Statistics = (store: Store<State>): Observable<ShotStatisticsContainer> => {
+  return selectCompareShotResponse(store).map(v => {
+    if (v != null) {
+      return v.data.shots2.statistics;
+    } else {
+      return ZeroShotStatisticsContainer;
+    }
+  });
 };
 
 export const selectCompareShotParams = (store: Store<State>): Observable<ShotCompareRequest> => {
@@ -138,4 +168,22 @@ export const selectCompareShotParams = (store: Store<State>): Observable<ShotCom
     }
     return undefined;
   });
+};
+
+export const selectCompareShotSearchError = (store: Store<State>): Observable<SearchError> => {
+  return selectCompareShotResponse(store).map((v: CompareShotResponse) => {
+    if (v != null) {
+      return v.searchError;
+    }
+    return undefined;
+  });
+};
+
+export const selectCompareShotSearchIsError = (store: Store<State>): Observable<boolean> => {
+  return selectCompareShotSearchError(store).map((v: SearchError) => {
+    if (v != null) {
+      return v.isError;
+    }
+    return false;
+  })
 };

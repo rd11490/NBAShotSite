@@ -10,7 +10,7 @@ import {
   SetHash,
   SetOffensePlayersOff,
   SetOffensePlayersOn,
-  SetOffenseTeam,
+  SetOffenseTeam, SetPeriod,
   SetSeason, SetSeasonType,
   SetShooter
 } from "../actions/options.action";
@@ -112,6 +112,7 @@ const paramsToActions = (arr: Array<Action>, loc: string, params: ShotParams, pl
   arr.push(new SetSeason(params.season, loc));
   arr.push(new SetSeasonType(params.seasonType, loc));
 
+  arr.push(new SetPeriod(params.period, loc));
 
   arr.push(new SetDateLowerBound(params.startDate, loc));
   arr.push(new SetDateUpperBound(params.endDate, loc));
@@ -124,6 +125,7 @@ const paramsToActions = (arr: Array<Action>, loc: string, params: ShotParams, pl
 
   arr.push(new SetDefensePlayersOn(defensePlayersOn, loc));
   arr.push(new SetDefensePlayersOff(defensePlayersOff, loc));
+
 
   return arr;
 };

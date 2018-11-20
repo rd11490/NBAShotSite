@@ -9,6 +9,8 @@ object NBATables {
   val team_info: PostgresTable = PostgresTable[TeamInfo]("team_info")
   val player_info: PostgresTable = PostgresTable[PlayerInfo]("player_info")
   val game_dates: PostgresTable = PostgresTable[GameDate]("game_date")
+  val seasons: PostgresTable = PostgresTable[Seasons]("seasons")
+
 
   val raw_cache_table: PostgresTable =
     PostgresTable[CacheParams]("raw_cache_table")
