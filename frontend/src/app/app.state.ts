@@ -11,6 +11,7 @@ export interface State {
   compareShotResponse: CompareShotResponse;
   searchInProgress: boolean;
   searchError: SearchError;
+  colorByFreq: boolean;
 }
 export interface Options {
   hash: string;

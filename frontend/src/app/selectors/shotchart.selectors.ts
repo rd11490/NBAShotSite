@@ -10,6 +10,11 @@ import {
   ShotStatisticsContainer, ZeroShotStatisticsContainer
 } from "../models/response.models";
 
+
+export const selectColorByFreq = (store: Store<State>) : Observable<boolean> => {
+  return store.select(state => state.colorByFreq);
+};
+
 export const selectRawShotResponse = (store: Store<State>): Observable<RawShotsResponse> => {
   return store.select(state => state.rawShotChartResponse);
 };

@@ -11,6 +11,7 @@ import {SearchError, ShotStatisticsContainer} from "../../models/response.models
 import {Observable} from "rxjs/Observable";
 import {ZonedShot} from "../../models/shots.models";
 import {
+  selectColorByFreq,
   selectCompareShotSearchIsError, selectFrequencyShotSearchError, selectFrequencyShotSearchIsError,
   selectZonedShot1Statistics, selectZonedShot2Statistics,
   selectZonedShots1, selectZonedShots2
@@ -28,14 +29,20 @@ import {
       <options [source]="this._source2"></options>
 
       <button class="search-button" (click)="search()">Search</button>
-      <p style="text-align: center">*color is based on difference in PPS</p>
+      <p style="text-align: center">
+        <color-select></color-select>
+      </p>
 
       <br>
       <div class="shot-stats-container">
         <stats-totals-component class="shot-stats" [stats]="(this._stats1 | async)"></stats-totals-component>
       </div>
       <div>
-        <compare-shot-chart class="shot-chart" [shots1]="(this._shots1 | async)" [shots2]="(this._shots2 | async)"></compare-shot-chart>
+        <compare-shot-chart class="shot-chart" 
+                            [shots1]="(this._shots1 | async)" 
+                            [shots2]="(this._shots2 | async)"
+                            [color]="(this._colorByFreq | async)"
+        ></compare-shot-chart>
       </div>
       <div class="shot-stats-container-right">
         <stats-totals-component class="shot-stats" [stats]="(this._stats2 | async)"></stats-totals-component>
@@ -61,6 +68,7 @@ export class CompareShotChartComponent implements OnInit{
   _stats1: Observable<ShotStatisticsContainer>;
   _shots2: Observable<Array<ZonedShot>>;
   _stats2: Observable<ShotStatisticsContainer>;
+  _colorByFreq: Observable<boolean>;
 
   constructor(
     private store: Store<State>,
@@ -103,6 +111,8 @@ export class CompareShotChartComponent implements OnInit{
 
     this._shots1 = selectZonedShots1(this.store);
     this._shots2 = selectZonedShots2(this.store);
+
+    this._colorByFreq = selectColorByFreq(this.store);
 
     this._loading = selectPageLoaded(this.store);
     this._done_loading = selectPageLoaded(this.store).map(v => !v);

@@ -1,6 +1,23 @@
 import * as searchActions from "../actions/search.action";
 import {CompareShotResponse, FrequencyShotResponse, RawShotsResponse} from "../models/response.models";
-import {SearchInProgress, StoreCompareShots, StoreFrequencyShots, StoreRawShots} from "../actions/search.action";
+import {
+  ColorByFrequency,
+  SearchInProgress,
+  StoreCompareShots,
+  StoreFrequencyShots,
+  StoreRawShots
+} from "../actions/search.action";
+
+export function setColorByFreq(state: boolean = false, action: ColorByFrequency): boolean {
+  switch (action.type) {
+    case searchActions.COLOR_BY_FREQUENCY: {
+      return action.payload;
+    }
+    default: {
+      return state;
+    }
+  }
+}
 
 export function setSearchInProgress(state: boolean = false, action: SearchInProgress): boolean {
   switch (action.type) {

@@ -25,6 +25,7 @@ export class CompareShotsComponent implements OnInit {
   scaleYPoint: any;
   width: number;
   height: number;
+  colorByFreq: boolean;
 
   constructor(private store: Store<State>) {
 
@@ -39,12 +40,25 @@ export class CompareShotsComponent implements OnInit {
   @Input("shots1")
   set shots1(shotInput: Array<ZonedShot>) {
     this._shots1 = shotInput;
+    if (this.svg != null && this._shots1 != null && this._shots2 != null && this._shots1.length > 0 && this._shots2.length > 0) {
+      this.clearShots();
+      this.drawShots();
+    }
   }
 
   @Input("shots2")
   set shots2(shotInput: Array<ZonedShot>) {
     this._shots2 = shotInput;
-    if (this.svg != null && this._shots1 != null && this._shots2 != null) {
+    if (this.svg != null && this._shots1 != null && this._shots2 != null && this._shots1.length > 0 && this._shots2.length > 0) {
+      this.clearShots();
+      this.drawShots();
+    }
+  }
+
+  @Input("color")
+  set color(colorByFreq: boolean) {
+    this.colorByFreq = colorByFreq;
+    if (this.svg != null && this._shots1 != null && this._shots2 != null && this._shots1.length > 0 && this._shots2.length > 0) {
       this.clearShots();
       this.drawShots();
     }
@@ -153,19 +167,6 @@ export class CompareShotsComponent implements OnInit {
       .attr("text-anchor", "middle")
       .text(function() {return "Freq2: " + freq2 + "%"});
 
-
-    // text.append("tspan")
-    //   .attr("dy", "1.5em")
-    //   .attr("x", this.scaleXPoint(x+(rectWidth/2)))
-    //   .attr("text-anchor", "middle")
-    //   .text(function() {return "Shots: " + shot1.shotAttempts.toLocaleString()});
-    //
-    // text.append("tspan")
-    //   .attr("dy", "1.75em")
-    //   .attr("x", this.scaleXPoint(x+(rectWidth/2)))
-    //   .attr("text-anchor", "middle")
-    //   .text(function() {return "Made: " + shot1.shotMade.toLocaleString()});
-
   };
 
   private drawMidArc = (shot1: ZonedShot, shot2: ZonedShot, theta1: number, theta2: number, innerRad: number, outerRad: number): void => {
@@ -190,7 +191,7 @@ export class CompareShotsComponent implements OnInit {
     this.svg
       .append("path")
       .attr("d", arc)
-      .attr("fill", this.frequencyToColor(shot1, shot2))
+      .attr("fill", this.chooseColor(shot1, shot2))
       .attr('pointer-events', 'all')
       .attr('stroke', 'black')
       .style("opacity", 0.3)
@@ -217,7 +218,7 @@ export class CompareShotsComponent implements OnInit {
       .attr("cx", this.scaleXPoint(0))
       .attr("cy", this.scaleYPoint(0))
       .attr("r", this.scaleX(40))
-      .attr("fill", this.frequencyToColor(shot1, shot2))
+      .attr("fill", this.chooseColor(shot1, shot2))
       .attr('pointer-events', 'all')
       .attr('stroke', 'black')
       .attr('id', "SHOT")
@@ -243,7 +244,7 @@ export class CompareShotsComponent implements OnInit {
       .attr("y", this.scaleYPoint(-47.5))
       .attr("width", this.scaleX(30))
       .attr("height", this.scaleY(140))
-      .attr("fill", this.frequencyToColor(shot1, shot2))
+      .attr("fill", this.chooseColor(shot1, shot2))
       .attr('stroke', 'black')
       .attr('id', "SHOT")
       .style("opacity", 0.3);
@@ -269,7 +270,7 @@ export class CompareShotsComponent implements OnInit {
       .datum(adjusted)
       .append("path")
       .attr("d", d3Shape.line())
-      .attr("fill", this.frequencyToColor(shot1, shot2))
+      .attr("fill", this.chooseColor(shot1, shot2))
       .attr('stroke', 'red')
       .attr('id', "SHOT")
       .style("opacity", 0.3);
@@ -476,21 +477,39 @@ export class CompareShotsComponent implements OnInit {
 
   };
 
+  private chooseColor = (shot1: ZonedShot,shot2: ZonedShot): string => {
+    if (this.colorByFreq) {
+      return this.frequencyToColor(shot1, shot2)
+    } else {
+      return this.ppsToColor(shot1, shot2)
+    }
+  };
+
   private frequencyToColor = (shot1: ZonedShot,shot2: ZonedShot): string => {
     const freq1 = this.calculateFreq(shot1);
     const freq2 = this.calculateFreq(shot2);
 
+    const diff = 100 * (freq1 - freq2);
+    return d3Color.interpolateRdYlGn((diff/5.0)+.5);
+  };
+
+  private ppsToColor = (shot1: ZonedShot,shot2: ZonedShot): string => {
+    const freq1 = this.calculatePPS(shot1);
+    const freq2 = this.calculatePPS(shot2);
+
     const diff = freq1 - freq2;
 
-    if (diff > 0) {
-      return d3Color.interpolateRdYlGn(0.5 + (diff*2));
-    } else {
-      return d3Color.interpolateRdYlGn(0.5 + (diff*2));
-    }
-
+    return d3Color.interpolateRdYlGn(0.5 + (diff*2));
   };
 
   private calculateFreq = (shot: ZonedShot): number => {
+    if (shot != null && shot.shotAttempts > 0) {
+      return shot.frequency
+    }
+    return 0.0
+  };
+
+  private calculatePPS = (shot: ZonedShot): number => {
   if (shot != null && shot.shotAttempts > 0) {
     return (shot.shotMade * shot.shotValue) / shot.shotAttempts
   }

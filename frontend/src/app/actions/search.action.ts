@@ -15,6 +15,15 @@ export const STORE_FREQUENCY_SHOTS = 'Store Frequency Shots';
 
 export const STORE_COMPARE_SHOTS = 'Store Compare Shots';
 
+export const COLOR_BY_FREQUENCY = "Color By Frequency";
+
+export class ColorByFrequency implements Action {
+  readonly type = COLOR_BY_FREQUENCY;
+
+  constructor(public payload: boolean) {
+  }
+}
+
 export class SearchInProgress implements Action {
   readonly type = SEARCH_IN_PROGRESS;
 
@@ -74,4 +83,5 @@ export type Actions = StoreCompareShots |
   | CompareShotSearch
   | FrequencyShotSearch
   | RawShotSearch
-  | SearchInProgress;
+  | SearchInProgress
+  | ColorByFrequency;

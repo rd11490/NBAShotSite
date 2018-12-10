@@ -18,7 +18,13 @@ import {OffensePlayersOffSelectorComponent} from "./app-area/options/offense_pla
 import {DefensePlayersOffSelectorComponent} from "./app-area/options/defense_players_off_selector.component";
 import {DefensePlayersOnSelectorComponent} from "./app-area/options/defense_players_on_selector.component";
 import {MatExpansionModule} from '@angular/material/expansion';
-import {MatDatepickerModule, MatFormFieldModule, MatInputModule, MatNativeDateModule} from "@angular/material";
+import {
+  MatDatepickerModule,
+  MatFormFieldModule,
+  MatInputModule,
+  MatNativeDateModule,
+  MatRadioModule
+} from "@angular/material";
 import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
 import {DefenseTeamSelectorComponent} from "./app-area/options/defense_team_selector.component";
 import {OffenseTeamSelectorComponent} from "./app-area/options/offense_team_selector.component";
@@ -27,6 +33,7 @@ import {InitializeEffects} from "./effects/Search";
 import {EffectsModule} from "@ngrx/effects";
 import {HomeComponent} from "./app-area/pages/home.component";
 import {
+  setColorByFreq,
   setCompareShots,
   setFrequencyShots,
   setRawShots,
@@ -43,6 +50,7 @@ import {SeasonTypeSelectorComponent} from "./app-area/options/season_type_select
 import {NgModule} from "@angular/core";
 import {PeriodSelectorComponent} from "./app-area/options/period_selector.component";
 import {CompareShotsComponent} from "./app-area/shotcharts/compareshots.component";
+import {ColorSelectorComponent} from "./app-area/color_selector.component";
 
 
 @NgModule({
@@ -59,6 +67,7 @@ import {CompareShotsComponent} from "./app-area/shotcharts/compareshots.componen
     MatInputModule,
     MatDatepickerModule,
     MatNativeDateModule,
+    MatRadioModule,
     StoreModule.forRoot({
       options: optionsReducer,
       players: setPlayersReducer,
@@ -67,7 +76,8 @@ import {CompareShotsComponent} from "./app-area/shotcharts/compareshots.componen
       rawShotChartResponse: setRawShots,
       frequencyChartResponse: setFrequencyShots,
       compareShotResponse: setCompareShots,
-      searchInProgress: setSearchInProgress
+      searchInProgress: setSearchInProgress,
+      colorByFreq: setColorByFreq
     }),
     EffectsModule.forRoot([
       InitializeEffects
@@ -79,7 +89,8 @@ import {CompareShotsComponent} from "./app-area/shotcharts/compareshots.componen
     MatFormFieldModule,
     MatDatepickerModule,
     MatNativeDateModule,
-    MatInputModule
+    MatInputModule,
+    MatRadioModule
   ],
   declarations: [
     AppComponent,
@@ -105,7 +116,8 @@ import {CompareShotsComponent} from "./app-area/shotcharts/compareshots.componen
     StartDateSelectorComponent,
     EndDateSelectorComponent,
     PeriodSelectorComponent,
-    CompareShotsComponent
+    CompareShotsComponent,
+    ColorSelectorComponent
   ],
   providers: [ ShotchartService ],
   bootstrap: [ AppComponent ]
