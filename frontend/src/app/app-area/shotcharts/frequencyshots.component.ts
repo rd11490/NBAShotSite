@@ -24,6 +24,8 @@ export class FrequencyShotsComponent implements OnInit {
   scaleYPoint: any;
   width: number;
   height: number;
+  colorByFreq: boolean;
+
 
   constructor(private store: Store<State>) {
 
@@ -44,11 +46,20 @@ export class FrequencyShotsComponent implements OnInit {
     }
   }
 
+  @Input("color")
+  set color(colorByFreq: boolean) {
+    this.colorByFreq = colorByFreq;
+    if (this.svg != null && this._shots != null && this._shots.length > 0) {
+      this.clearShots();
+      this.drawShots();
+    }
+  }
+
   private clearShots = (): void => {
     this.svg.selectAll("#SHOT").remove()
   };
 
-  private drawText = (x:number, y:number, shot: ZonedShot): void => {
+  private drawText = (x: number, y: number, shot: ZonedShot): void => {
     const rectWidth = 80;
     const rectHeight = 20;
     this.svg
@@ -61,8 +72,7 @@ export class FrequencyShotsComponent implements OnInit {
       .attr('id', "SHOT")
       .style("opacity", 1.0);
 
-    var text = this.svg.
-    append('text')
+    var text = this.svg.append('text')
       .attr('x', this.scaleXPoint(x))
       .attr('y', this.scaleYPoint(y))
       .attr('fill', 'white')
@@ -76,18 +86,22 @@ export class FrequencyShotsComponent implements OnInit {
 
     text.append("tspan")
       .attr("dy", "1em")
-      .attr("x", this.scaleXPoint(x+(rectWidth/2)))
+      .attr("x", this.scaleXPoint(x + (rectWidth / 2)))
       .attr("text-anchor", "middle")
-      .text(function() {return "PPS: " + pps + " Freq: " + (100.0*shot.frequency).toFixed(2) + "%"});
+      .text(function () {
+        return "PPS: " + pps + " Freq: " + (100.0 * shot.frequency).toFixed(2) + "%"
+      });
 
     text.append("tspan")
       .attr("dy", "1.25em")
-      .attr("x", this.scaleXPoint(x+(rectWidth/2)))
+      .attr("x", this.scaleXPoint(x + (rectWidth / 2)))
       .attr("text-anchor", "middle")
-      .text(function() {return "Shots: " + shot.shotAttempts.toLocaleString() + " Made: " + shot.shotMade.toLocaleString()});
+      .text(function () {
+        return "Shots: " + shot.shotAttempts.toLocaleString() + " Made: " + shot.shotMade.toLocaleString()
+      });
   };
 
-  private drawCornerText = (x:number, y:number, shot: ZonedShot): void => {
+  private drawCornerText = (x: number, y: number, shot: ZonedShot): void => {
     const rectWidth = 40;
     const rectHeight = 40;
     this.svg
@@ -100,8 +114,7 @@ export class FrequencyShotsComponent implements OnInit {
       .attr('id', "SHOT")
       .style("opacity", 1.0);
 
-    var text = this.svg.
-    append('text')
+    var text = this.svg.append('text')
       .attr('x', this.scaleXPoint(x))
       .attr('y', this.scaleYPoint(y))
       .attr('fill', 'white')
@@ -115,28 +128,36 @@ export class FrequencyShotsComponent implements OnInit {
 
     text.append("tspan")
       .attr("dy", "1em")
-      .attr("x", this.scaleXPoint(x+(rectWidth/2)))
+      .attr("x", this.scaleXPoint(x + (rectWidth / 2)))
       .attr("text-anchor", "middle")
-      .text(function() {return "PPS: " + pps });
+      .text(function () {
+        return "PPS: " + pps
+      });
 
     text.append("tspan")
       .attr("dy", "1.25em")
-      .attr("x", this.scaleXPoint(x+(rectWidth/2)))
+      .attr("x", this.scaleXPoint(x + (rectWidth / 2)))
       .attr("text-anchor", "middle")
-      .text(function() {return "Freq: " + (100.0*shot.frequency).toFixed(2) + "%"});
+      .text(function () {
+        return "Freq: " + (100.0 * shot.frequency).toFixed(2) + "%"
+      });
 
 
     text.append("tspan")
       .attr("dy", "1.5em")
-      .attr("x", this.scaleXPoint(x+(rectWidth/2)))
+      .attr("x", this.scaleXPoint(x + (rectWidth / 2)))
       .attr("text-anchor", "middle")
-      .text(function() {return "Shots: " + shot.shotAttempts.toLocaleString()});
+      .text(function () {
+        return "Shots: " + shot.shotAttempts.toLocaleString()
+      });
 
     text.append("tspan")
       .attr("dy", "1.75em")
-      .attr("x", this.scaleXPoint(x+(rectWidth/2)))
+      .attr("x", this.scaleXPoint(x + (rectWidth / 2)))
       .attr("text-anchor", "middle")
-      .text(function() {return "Made: " + shot.shotMade.toLocaleString()});
+      .text(function () {
+        return "Made: " + shot.shotMade.toLocaleString()
+      });
 
   };
 
@@ -162,13 +183,13 @@ export class FrequencyShotsComponent implements OnInit {
     this.svg
       .append("path")
       .attr("d", arc)
-      .attr("fill", this.frequencyToColor(shot))
+      .attr("fill", this.chooseColor(shot))
       .attr('pointer-events', 'all')
       .attr('stroke', 'black')
       .style("opacity", 0.3)
       .attr('id', "SHOT")
       .attr("transform", "translate(" + this.scaleXPoint(0) + "," + this.scaleYPoint(0) + ")");
-    };
+  };
 
   private drawRestricted = (shot: ZonedShot) => {
     //bounding
@@ -189,7 +210,7 @@ export class FrequencyShotsComponent implements OnInit {
       .attr("cx", this.scaleXPoint(0))
       .attr("cy", this.scaleYPoint(0))
       .attr("r", this.scaleX(40))
-      .attr("fill", this.frequencyToColor(shot))
+      .attr("fill", this.chooseColor(shot))
       .attr('pointer-events', 'all')
       .attr('stroke', 'black')
       .attr('id', "SHOT")
@@ -215,7 +236,7 @@ export class FrequencyShotsComponent implements OnInit {
       .attr("y", this.scaleYPoint(-47.5))
       .attr("width", this.scaleX(30))
       .attr("height", this.scaleY(140))
-      .attr("fill", this.frequencyToColor(shot))
+      .attr("fill", this.chooseColor(shot))
       .attr('stroke', 'black')
       .attr('id', "SHOT")
       .style("opacity", 0.3);
@@ -241,7 +262,7 @@ export class FrequencyShotsComponent implements OnInit {
       .datum(adjusted)
       .append("path")
       .attr("d", d3Shape.line())
-      .attr("fill", this.frequencyToColor(shot))
+      .attr("fill", this.chooseColor(shot))
       .attr('stroke', 'red')
       .attr('id', "SHOT")
       .style("opacity", 0.3);
@@ -387,12 +408,164 @@ export class FrequencyShotsComponent implements OnInit {
 
   };
 
-  private frequencyToColor = (shot: ZonedShot): string => {
-    if (shot != null && shot.shotAttempts > 0) {
-      return d3Color.interpolateRdYlGn((shot.shotMade * shot.shotValue) / shot.shotAttempts / 2);
+  private chooseColor = (shot: ZonedShot): string => {
+    if (this.colorByFreq) {
+      return this.frequencyToColor(shot)
+    } else {
+      return this.ppsToColor(shot)
     }
-    return 'none'
   };
+
+  private frequencyToColor = (shot: ZonedShot): string => {
+    const freq = this.calculateFreq(shot);
+    if (shot == null || shot.shotAttempts == 0) {
+      return 'white'
+    }
+
+    switch (shot.bin) {
+      case 'RestrictedArea' : {
+        return d3Color.interpolateRdYlGn(this.normalizeWithRange(freq, 25.0, 35.0));
+      }
+      case 'Left11FT': {
+        return d3Color.interpolateRdYlGn(this.normalizeWithRange(freq, 4.0, 8.0));
+      }
+      case 'Right11FT': {
+        return d3Color.interpolateRdYlGn(this.normalizeWithRange(freq, 4.0, 8.0));
+      }
+      case 'Left18FT': {
+        return d3Color.interpolateRdYlGn(this.normalizeWithRange(freq, 2.0, 7.0));
+      }
+      case 'Right18FT': {
+        return d3Color.interpolateRdYlGn(this.normalizeWithRange(freq, 2.0, 7.0));
+      }
+      case 'Left23FT': {
+        return d3Color.interpolateRdYlGn(this.normalizeWithRange(freq, 1.0, 6.0));
+      }
+      case 'Right23FT': {
+        return d3Color.interpolateRdYlGn(this.normalizeWithRange(freq, 1.0, 6.0));
+      }
+      case 'LeftCorner': {
+        return d3Color.interpolateRdYlGn(this.normalizeWithRange(freq, 3.0, 6.0));
+      }
+      case 'RightCorner': {
+        return d3Color.interpolateRdYlGn(this.normalizeWithRange(freq, 3.0, 6.0));
+      }
+      case 'RightBaseline11FT': {
+        return d3Color.interpolateRdYlGn(this.normalizeWithRange(freq, 0.0, 3.0));
+      }
+      case 'LeftBaseline11FT': {
+        return d3Color.interpolateRdYlGn(this.normalizeWithRange(freq, 0.0, 3.0));
+      }
+      case 'RightBaseline18FT': {
+        return d3Color.interpolateRdYlGn(this.normalizeWithRange(freq, 0.0, 3.0));
+      }
+      case 'LeftBaseline18FT': {
+        return d3Color.interpolateRdYlGn(this.normalizeWithRange(freq, 0.0, 3.0));
+      }
+      case 'RightBaseline23FT': {
+        return d3Color.interpolateRdYlGn(this.normalizeWithRange(freq, 0.0, 1.0));
+      }
+      case 'LeftBaseline23FT': {
+        return d3Color.interpolateRdYlGn(this.normalizeWithRange(freq, 0.0, 1.0));
+      }
+      case 'Right27FT': {
+        return d3Color.interpolateRdYlGn(this.normalizeWithRange(freq, 5.0, 15.0));
+      }
+      case 'Left27FT': {
+        return d3Color.interpolateRdYlGn(this.normalizeWithRange(freq, 5.0, 15.0));
+      }
+      case 'RightLong3': {
+        return d3Color.interpolateRdYlGn(this.normalizeWithRange(freq, 1.0, 3.0));
+      }
+      case 'LeftLong3':
+      default: {
+        return d3Color.interpolateRdYlGn(this.normalizeWithRange(freq, 1.0, 3.0));
+      }
+    }
+  };
+
+  private normalizeWithRange = (value: number, min: number, max: number): number => {
+    return (value - min) / (max - min)
+  }
+
+  private ppsToColor = (shot: ZonedShot): string => {
+    const pps = this.calculatePPS(shot);
+    if (shot == null || shot.shotAttempts == 0) {
+      return 'white'
+    }
+
+    switch (shot.bin) {
+      case 'RestrictedArea' : {
+        return d3Color.interpolateRdYlGn(this.normalizeWithRange(pps, 1.0, 1.5));
+      }
+      case 'Left11FT':
+      case 'Right11FT': {
+        return d3Color.interpolateRdYlGn(this.normalizeWithRange(pps, 0.75, 1.0));
+      }
+      case 'Left18FT':
+      case 'Right18FT': {
+        return d3Color.interpolateRdYlGn(this.normalizeWithRange(pps, 0.75, 1.0));
+      }
+      case 'Left23FT': {
+        return d3Color.interpolateRdYlGn(this.normalizeWithRange(pps, 0.75, 1.0));
+      }
+      case 'Right23FT': {
+        return d3Color.interpolateRdYlGn(this.normalizeWithRange(pps, 0.75, 1.0));
+      }
+      case 'LeftCorner': {
+        return d3Color.interpolateRdYlGn(this.normalizeWithRange(pps, 1.0, 1.25));
+      }
+      case 'RightCorner': {
+        return d3Color.interpolateRdYlGn(this.normalizeWithRange(pps, 1.0, 1.25));
+      }
+      case 'RightBaseline11FT': {
+        return d3Color.interpolateRdYlGn(this.normalizeWithRange(pps, 0.5, 1.0));
+      }
+      case 'LeftBaseline11FT': {
+        return d3Color.interpolateRdYlGn(this.normalizeWithRange(pps, 0.5, 1.0));
+      }
+      case 'RightBaseline18FT': {
+        return d3Color.interpolateRdYlGn(this.normalizeWithRange(pps, 0.5, 1.0));
+      }
+      case 'LeftBaseline18FT': {
+        return d3Color.interpolateRdYlGn(this.normalizeWithRange(pps, 0.5, 1.0));
+      }
+      case 'RightBaseline23FT': {
+        return d3Color.interpolateRdYlGn(this.normalizeWithRange(pps, 0.5, 1.0));
+      }
+      case 'LeftBaseline23FT': {
+        return d3Color.interpolateRdYlGn(this.normalizeWithRange(pps, 0.5, 1.0));
+      }
+      case 'Right27FT': {
+        return d3Color.interpolateRdYlGn(this.normalizeWithRange(pps, .75, 1.25));
+      }
+      case 'Left27FT': {
+        return d3Color.interpolateRdYlGn(this.normalizeWithRange(pps, .75, 1.25));
+      }
+      case 'RightLong3': {
+        return d3Color.interpolateRdYlGn(this.normalizeWithRange(pps, 0.5, 1.25));
+      }
+      case 'LeftLong3':
+      default: {
+        return d3Color.interpolateRdYlGn(this.normalizeWithRange(pps, 0.5, 1.25));
+      }
+    }
+  };
+
+  private calculateFreq = (shot: ZonedShot): number => {
+    if (shot != null && shot.shotAttempts > 0) {
+      return shot.frequency * 100
+    }
+    return 0.0
+  };
+
+  private calculatePPS = (shot: ZonedShot): number => {
+    if (shot != null && shot.shotAttempts > 0) {
+      return (shot.shotMade * shot.shotValue) / shot.shotAttempts
+    }
+    return 0.0
+  };
+
 
   private drawCourt = (): void => {
     // Draw hoop

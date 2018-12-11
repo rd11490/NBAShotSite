@@ -9,6 +9,7 @@ import {selectHash} from "../../selectors/options.selectors";
 import {selectFrequencyResponseSearchActions, selectPageLoaded} from "../../selectors/initial.selectors";
 import {ZonedShot} from "../../models/shots.models";
 import {
+  selectColorByFreq,
   selectFrequencyShotSearchError,
   selectFrequencyShotSearchIsError,
   selectZonedShots, selectZonedShotStatistics
@@ -26,12 +27,15 @@ import {SearchError, ShotStatisticsContainer} from "../../models/response.models
     <div [hidden]="(this._done_loading | async)">
       <options [source]="this._source"></options>
       <button class="search-button" (click)="search()">Search</button>
+      <p style="text-align: center">
+        <color-select></color-select>
+      </p>
       <br>
       <div class="shot-stats-container">
         <stats-totals-component class="shot-stats" [stats]="(this._stats | async)"></stats-totals-component>
       </div>
       <div>
-        <frequency-shot-chart class="shot-chart" [shots]="(this._shots | async)"></frequency-shot-chart>
+        <frequency-shot-chart class="shot-chart" [shots]="(this._shots | async)" [color]="(this._colorByFreq | async)"></frequency-shot-chart>
       </div>
     </div>
     <div [hidden]="(this._loading | async)">
@@ -50,6 +54,7 @@ export class FrequencyShotChartComponent implements OnInit {
   _searchFailure: Observable<boolean>;
   _searchFailureMessage: Observable<string>;
   _stats: Observable<ShotStatisticsContainer>;
+  _colorByFreq: Observable<boolean>;
 
   constructor(private store: Store<State>,
               private route: ActivatedRoute,
@@ -88,6 +93,7 @@ export class FrequencyShotChartComponent implements OnInit {
     this._done_loading = selectPageLoaded(this.store).map(v => !v);
 
     this._stats = selectZonedShotStatistics(this.store);
+    this._colorByFreq = selectColorByFreq(this.store);
 
     this._searchFailure = selectFrequencyShotSearchIsError(this.store).map(v => !v);
     this._searchFailureMessage = selectFrequencyShotSearchError(this.store).map((v: SearchError) => {
