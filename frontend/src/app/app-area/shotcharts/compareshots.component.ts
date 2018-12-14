@@ -489,7 +489,7 @@ export class CompareShotsComponent implements OnInit {
     const freq1 = this.calculateFreq(shot1);
     const freq2 = this.calculateFreq(shot2);
 
-    const diff = 100 * (freq1 - freq2);
+    const diff = 100 * (freq2 - freq1);
     return d3Color.interpolateRdYlGn((diff/5.0)+.5);
   };
 
@@ -497,7 +497,7 @@ export class CompareShotsComponent implements OnInit {
     const pps1 = this.calculatePPS(shot1);
     const pps2 = this.calculatePPS(shot2);
 
-    const diff = pps1 - pps2;
+    const diff = pps2 - pps1;
 
     return d3Color.interpolateRdYlGn(0.5 + (diff*2));
   };
