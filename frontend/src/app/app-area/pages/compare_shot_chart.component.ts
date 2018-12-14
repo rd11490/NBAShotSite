@@ -6,7 +6,7 @@ import {CompareShotSearch, SearchInProgress, StoreCompareShots} from "../../acti
 import {ActivatedRoute, Router} from "@angular/router";
 import {SetHash} from "../../actions/options.action";
 import {selectCompareResponseSearchActions, selectPageLoaded} from "../../selectors/initial.selectors";
-import {selectHash} from "../../selectors/options.selectors";
+import {selectHash, selectDescription} from "../../selectors/options.selectors";
 import {SearchError, ShotStatisticsContainer} from "../../models/response.models";
 import {Observable} from "rxjs/Observable";
 import {ZonedShot} from "../../models/shots.models";
@@ -35,16 +35,18 @@ import {
 
       <br>
       <div class="shot-stats-container">
+        <div style="max-width: 150px;">{{ _description1 | async }}</div>
         <stats-totals-component class="shot-stats" [stats]="(this._stats1 | async)"></stats-totals-component>
       </div>
       <div>
-        <compare-shot-chart class="shot-chart" 
-                            [shots1]="(this._shots1 | async)" 
+        <compare-shot-chart class="shot-chart"
+                            [shots1]="(this._shots1 | async)"
                             [shots2]="(this._shots2 | async)"
                             [color]="(this._colorByFreq | async)"
         ></compare-shot-chart>
       </div>
       <div class="shot-stats-container-right">
+        <div style="max-width: 150px;">{{ _description2 | async }}</div>
         <stats-totals-component class="shot-stats" [stats]="(this._stats2 | async)"></stats-totals-component>
       </div>
     </div>
@@ -68,6 +70,8 @@ export class CompareShotChartComponent implements OnInit{
   _stats1: Observable<ShotStatisticsContainer>;
   _shots2: Observable<Array<ZonedShot>>;
   _stats2: Observable<ShotStatisticsContainer>;
+  _description1: Observable<string>;
+  _description2: Observable<string>;
   _colorByFreq: Observable<boolean>;
 
   constructor(
@@ -88,6 +92,10 @@ export class CompareShotChartComponent implements OnInit{
       store.dispatch(new SetHash(hash, this._source2));
       this.searchWithHash();
     }
+
+    this._description1 = selectDescription(this.store, this._source1);
+
+    this._description2 = selectDescription(this.store, this._source2);
 
     selectCompareResponseSearchActions(this.store)
       .subscribe((actions) => {
