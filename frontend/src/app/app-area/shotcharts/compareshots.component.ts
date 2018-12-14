@@ -494,10 +494,10 @@ export class CompareShotsComponent implements OnInit {
   };
 
   private ppsToColor = (shot1: ZonedShot,shot2: ZonedShot): string => {
-    const freq1 = this.calculatePPS(shot1);
-    const freq2 = this.calculatePPS(shot2);
+    const pps1 = this.calculatePPS(shot1);
+    const pps2 = this.calculatePPS(shot2);
 
-    const diff = freq1 - freq2;
+    const diff = pps1 - pps2;
 
     return d3Color.interpolateRdYlGn(0.5 + (diff*2));
   };

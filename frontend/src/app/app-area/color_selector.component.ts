@@ -8,7 +8,7 @@ import {State} from "../app.state";
 @Component({
   selector: 'color-select',
   template: `
-    Color is based on difference in: 
+    Color is based on : 
     <mat-radio-group class="color-radio-group"
                      (change)="selectColor($event)">
       <mat-radio-button class="color-radio-button" [value]='true' color="warn">
