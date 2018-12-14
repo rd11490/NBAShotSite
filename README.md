@@ -1,6 +1,6 @@
 # NBAShotSite
-Repo for shot chart compare web app
+## Shot chart analysis web application `nbashotcharts.com`
 
-frontend: Self evident - working on web app   
+frontend: Angular web app with NGRX
 
 serverless_shot_compare: AWS Lambda with API Gateway   
