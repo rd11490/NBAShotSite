@@ -8,5 +8,7 @@ Creds.json
 frontend/out-tsc
 serverless_shot_compare/.idea/libraries
 serverless_shot_compare/.idea
-serverless_shot_compare/project
+serverless_shot_compare/project/target
+serverless_shot_compare/project/project
+
 frontend/dist
