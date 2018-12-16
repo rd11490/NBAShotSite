@@ -15,6 +15,9 @@ export const selectColorByFreq = (store: Store<State>) : Observable<boolean> => 
   return store.select(state => state.colorByFreq);
 };
 
+export const selectInvertColor = (store: Store<State>) : Observable<boolean> => {
+  return store.select(state => state.invertColor);
+};
 export const selectRawShotResponse = (store: Store<State>): Observable<RawShotsResponse> => {
   return store.select(state => state.rawShotChartResponse);
 };

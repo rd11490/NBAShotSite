@@ -12,7 +12,7 @@ import * as d3Color from 'd3-scale-chromatic';
 @Component({
   selector: 'frequency-shot-chart',
   template: `
-    <svg class="shot-chart" width="750" height="705"></svg>
+    <svg class="shot-chart" id="shot-chart" width="750" height="705"></svg>
   `,
   styleUrls: ['../../css/general.css']
 })
@@ -25,6 +25,7 @@ export class FrequencyShotsComponent implements OnInit {
   width: number;
   height: number;
   colorByFreq: boolean;
+  invertColor: boolean;
 
 
   constructor(private store: Store<State>) {
@@ -49,6 +50,15 @@ export class FrequencyShotsComponent implements OnInit {
   @Input("color")
   set color(colorByFreq: boolean) {
     this.colorByFreq = colorByFreq;
+    if (this.svg != null && this._shots != null && this._shots.length > 0) {
+      this.clearShots();
+      this.drawShots();
+    }
+  }
+
+  @Input("invertColor")
+  set invert(invert: boolean) {
+    this.invertColor = invert;
     if (this.svg != null && this._shots != null && this._shots.length > 0) {
       this.clearShots();
       this.drawShots();
@@ -485,8 +495,8 @@ export class FrequencyShotsComponent implements OnInit {
   };
 
   private normalizeWithRange = (value: number, min: number, max: number): number => {
-    return (value - min) / (max - min)
-  }
+    return this.invertColor ? 1.0 - (value - min) / (max - min) : (value - min) / (max - min)
+  };
 
   private ppsToColor = (shot: ZonedShot): string => {
     const pps = this.calculatePPS(shot);
@@ -721,7 +731,7 @@ export class FrequencyShotsComponent implements OnInit {
   };
 
   private initSvg = (): void => {
-    this.svg = d3Select.select('svg');
+    this.svg = d3Select.select('#shot-chart');
     this.width = +this.svg.attr('width');
     this.height = +this.svg.attr('height');
     this.scaleXPoint = d3Scale.scaleLinear().domain([-250, 250]).range([0, this.width]);

@@ -12,6 +12,7 @@ export interface State {
   searchInProgress: boolean;
   searchError: SearchError;
   colorByFreq: boolean;
+  invertColor: boolean;
 }
 export interface Options {
   hash: string;

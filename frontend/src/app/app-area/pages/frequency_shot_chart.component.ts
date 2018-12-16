@@ -11,7 +11,7 @@ import {ZonedShot} from "../../models/shots.models";
 import {
   selectColorByFreq,
   selectFrequencyShotSearchError,
-  selectFrequencyShotSearchIsError,
+  selectFrequencyShotSearchIsError, selectInvertColor,
   selectZonedShots, selectZonedShotStatistics
 } from "../../selectors/shotchart.selectors";
 import {Observable} from "rxjs/Observable";
@@ -35,7 +35,10 @@ import {SearchError, ShotStatisticsContainer} from "../../models/response.models
         <stats-totals-component class="shot-stats" [stats]="(this._stats | async)"></stats-totals-component>
       </div>
       <div>
-        <frequency-shot-chart class="shot-chart" [shots]="(this._shots | async)" [color]="(this._colorByFreq | async)"></frequency-shot-chart>
+        <frequency-shot-chart class="shot-chart" 
+                              [shots]="(this._shots | async)" 
+                              [color]="(this._colorByFreq | async)" 
+                              [invertColor]="(this._invertColor | async)"></frequency-shot-chart>
       </div>
     </div>
     <div [hidden]="(this._loading | async)">
@@ -55,6 +58,7 @@ export class FrequencyShotChartComponent implements OnInit {
   _searchFailureMessage: Observable<string>;
   _stats: Observable<ShotStatisticsContainer>;
   _colorByFreq: Observable<boolean>;
+  _invertColor: Observable<boolean>;
 
   constructor(private store: Store<State>,
               private route: ActivatedRoute,
@@ -94,6 +98,7 @@ export class FrequencyShotChartComponent implements OnInit {
 
     this._stats = selectZonedShotStatistics(this.store);
     this._colorByFreq = selectColorByFreq(this.store);
+    this._invertColor = selectInvertColor(this.store);
 
     this._searchFailure = selectFrequencyShotSearchIsError(this.store).map(v => !v);
     this._searchFailureMessage = selectFrequencyShotSearchError(this.store).map((v: SearchError) => {

@@ -19,6 +19,7 @@ import {DefensePlayersOffSelectorComponent} from "./app-area/options/defense_pla
 import {DefensePlayersOnSelectorComponent} from "./app-area/options/defense_players_on_selector.component";
 import {MatExpansionModule} from '@angular/material/expansion';
 import {
+  MatCheckboxModule,
   MatDatepickerModule,
   MatFormFieldModule,
   MatInputModule,
@@ -35,7 +36,7 @@ import {HomeComponent} from "./app-area/pages/home.component";
 import {
   setColorByFreq,
   setCompareShots,
-  setFrequencyShots,
+  setFrequencyShots, setInvertColor,
   setRawShots,
   setSearchInProgress
 } from "./reducers/shotchart.reducers";
@@ -68,6 +69,7 @@ import {ColorSelectorComponent} from "./app-area/color_selector.component";
     MatDatepickerModule,
     MatNativeDateModule,
     MatRadioModule,
+    MatCheckboxModule,
     StoreModule.forRoot({
       options: optionsReducer,
       players: setPlayersReducer,
@@ -77,7 +79,8 @@ import {ColorSelectorComponent} from "./app-area/color_selector.component";
       frequencyChartResponse: setFrequencyShots,
       compareShotResponse: setCompareShots,
       searchInProgress: setSearchInProgress,
-      colorByFreq: setColorByFreq
+      colorByFreq: setColorByFreq,
+      invertColor: setInvertColor
     }),
     EffectsModule.forRoot([
       InitializeEffects
@@ -90,7 +93,8 @@ import {ColorSelectorComponent} from "./app-area/color_selector.component";
     MatDatepickerModule,
     MatNativeDateModule,
     MatInputModule,
-    MatRadioModule
+    MatRadioModule,
+    MatCheckboxModule
   ],
   declarations: [
     AppComponent,

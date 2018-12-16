@@ -11,7 +11,7 @@ import {SearchError, ShotStatisticsContainer} from "../../models/response.models
 import {Observable} from "rxjs/Observable";
 import {ZonedShot} from "../../models/shots.models";
 import {
-  selectColorByFreq,
+  selectColorByFreq, selectInvertColor,
   selectCompareShotSearchIsError, selectFrequencyShotSearchError, selectFrequencyShotSearchIsError,
   selectZonedShot1Statistics, selectZonedShot2Statistics,
   selectZonedShots1, selectZonedShots2
@@ -43,6 +43,7 @@ import {
                             [shots1]="(this._shots1 | async)"
                             [shots2]="(this._shots2 | async)"
                             [color]="(this._colorByFreq | async)"
+                            [invertColor]="(this._invertColor | async)"
         ></compare-shot-chart>
       </div>
       <div class="shot-stats-container-right">
@@ -73,6 +74,7 @@ export class CompareShotChartComponent implements OnInit{
   _description1: Observable<string>;
   _description2: Observable<string>;
   _colorByFreq: Observable<boolean>;
+  _invertColor: Observable<boolean>;
 
   constructor(
     private store: Store<State>,
@@ -121,6 +123,8 @@ export class CompareShotChartComponent implements OnInit{
     this._shots2 = selectZonedShots2(this.store);
 
     this._colorByFreq = selectColorByFreq(this.store);
+    this._invertColor = selectInvertColor(this.store);
+
 
     this._loading = selectPageLoaded(this.store);
     this._done_loading = selectPageLoaded(this.store).map(v => !v);

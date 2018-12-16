@@ -1,12 +1,23 @@
 import * as searchActions from "../actions/search.action";
 import {CompareShotResponse, FrequencyShotResponse, RawShotsResponse} from "../models/response.models";
 import {
-  ColorByFrequency,
+  ColorByFrequency, InvertColor,
   SearchInProgress,
   StoreCompareShots,
   StoreFrequencyShots,
   StoreRawShots
 } from "../actions/search.action";
+
+export function setInvertColor(state: boolean = false, action: InvertColor): boolean {
+  switch (action.type) {
+    case searchActions.INVERT_COLOR: {
+      return action.payload;
+    }
+    default: {
+      return state;
+    }
+  }
+}
 
 export function setColorByFreq(state: boolean = false, action: ColorByFrequency): boolean {
   switch (action.type) {

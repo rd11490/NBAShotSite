@@ -12,7 +12,7 @@ import * as d3Color from 'd3-scale-chromatic';
 @Component({
   selector: 'compare-shot-chart',
   template: `
-    <svg class="shot-chart" width="750" height="705"></svg>
+    <svg class="shot-chart" id="shot-chart" width="750" height="705"></svg>
   `,
   styleUrls: ['../../css/general.css']
 })
@@ -26,6 +26,7 @@ export class CompareShotsComponent implements OnInit {
   width: number;
   height: number;
   colorByFreq: boolean;
+  invertColor: boolean;
 
   constructor(private store: Store<State>) {
 
@@ -64,7 +65,18 @@ export class CompareShotsComponent implements OnInit {
     }
   }
 
+  @Input("invertColor")
+  set invert(invert: boolean) {
+    this.invertColor = invert;
+    if (this.svg != null && this._shots1 != null && this._shots2 != null && this._shots1.length > 0 && this._shots2.length > 0) {
+      this.clearShots();
+      this.drawShots();
+    }
+  }
+
+
   private clearShots = (): void => {
+    console.log("clear!")
     this.svg.selectAll("#SHOT").remove()
   };
 
@@ -489,7 +501,8 @@ export class CompareShotsComponent implements OnInit {
     const freq1 = this.calculateFreq(shot1);
     const freq2 = this.calculateFreq(shot2);
 
-    const diff = 100 * (freq1 - freq2);
+    const diff = this.invertColor ? freq2 - freq1 : freq1 - freq2;
+
     return d3Color.interpolateRdYlGn((diff/5.0)+.5);
   };
 
@@ -497,14 +510,14 @@ export class CompareShotsComponent implements OnInit {
     const pps1 = this.calculatePPS(shot1);
     const pps2 = this.calculatePPS(shot2);
 
-    const diff = pps1 - pps2;
+    const diff = this.invertColor ? pps2 - pps1 : pps1 - pps2;
 
     return d3Color.interpolateRdYlGn(0.5 + (diff*2));
   };
 
   private calculateFreq = (shot: ZonedShot): number => {
     if (shot != null && shot.shotAttempts > 0) {
-      return shot.frequency
+      return shot.frequency * 100
     }
     return 0.0
   };
@@ -670,7 +683,7 @@ export class CompareShotsComponent implements OnInit {
   };
 
   private initSvg = (): void => {
-    this.svg = d3Select.select('svg');
+    this.svg = d3Select.select('#shot-chart');
     this.width = +this.svg.attr('width');
     this.height = +this.svg.attr('height');
     this.scaleXPoint = d3Scale.scaleLinear().domain([-250, 250]).range([0, this.width]);
