@@ -1,9 +1,14 @@
 import * as searchActions from "../actions/search.action";
-import {CompareShotResponse, FrequencyShotResponse, RawShotsResponse} from "../models/response.models";
+import {
+  CompareShotResponse,
+  FourFactorsResponse,
+  FrequencyShotResponse,
+  RawShotsResponse
+} from "../models/response.models";
 import {
   ColorByFrequency, InvertColor,
   SearchInProgress,
-  StoreCompareShots,
+  StoreCompareShots, StoreFourFactors,
   StoreFrequencyShots,
   StoreRawShots
 } from "../actions/search.action";
@@ -73,3 +78,14 @@ export function setCompareShots(state: CompareShotResponse = undefined, action: 
     }
   }
 };
+
+export function setFourFactors(state: FourFactorsResponse = undefined, action: StoreFourFactors): FourFactorsResponse {
+  switch (action.type) {
+    case searchActions.STORE_FOUR_FACTORS: {
+      return action.payload;
+    }
+    default: {
+      return state;
+    }
+  }
+}

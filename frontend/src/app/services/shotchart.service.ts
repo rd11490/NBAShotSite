@@ -1,6 +1,6 @@
 import {HttpClient, HttpHeaders} from "@angular/common/http";
 import {
-  CompareShotResponse,
+  CompareShotResponse, FourFactorsResponse,
   FrequencyShotResponse,
   PlayerNameResponse,
   RawShotsResponse,
@@ -9,7 +9,7 @@ import {
 } from "../models/response.models";
 import {Observable} from "rxjs/Observable";
 import {Injectable} from "@angular/core";
-import {ShotCompareRequest, ShotRequest} from "../models/options.models";
+import {FourFactorsRequest, ShotCompareRequest, ShotRequest} from "../models/options.models";
 
 const BASE_URL: string = "https://7enmqppfr7.execute-api.us-east-1.amazonaws.com/dev";
 
@@ -65,6 +65,16 @@ export class ShotchartService {
         searchError: {isError: true, message: 'Search Failure: Please Try Again'},
         params: undefined,
         data: undefined
+      })
+    })
+  }
+
+  getFourFactors(params: FourFactorsRequest): Observable<FourFactorsResponse> {
+    return this.http.post<FourFactorsResponse>(buildUrl('/fourfactors'), params, httpOptions).catch(err => {
+      return Observable.of({
+        searchError: {isError: true, message: 'Search Failure: Please Try Again'},
+        params: undefined,
+        fourFactors: undefined
       })
     })
   }

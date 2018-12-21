@@ -2,10 +2,48 @@ package datamodel
 
 import storage.PostgresClient
 
+final case class FourFactorsRequest(hash: Option[String],
+                                    params: Option[FourFactorsRequestParams])
+
+final case class FourFactorsRequestParams(seasons: Option[Seq[String]] = None,
+                                          players: Option[Seq[Int]] = None,
+                                          teams: Option[Seq[Int]] = None) {
+  def toWhereClause: Seq[String] = {
+    Seq(seasons.flatMap(seasonWhere),
+        players.flatMap(playersWhere),
+        teams.flatMap(teamsWhere)).flatten
+  }
+
+  private def seasonWhere(seasons: Seq[String]): Option[String] =
+    if (seasons.nonEmpty) {
+      Some(seasons.map(v => s"""season = '$v'""").mkString("(", " OR ", ")"))
+    } else {
+      None
+    }
+
+  private def playersWhere(players: Seq[Int]): Option[String] = {
+    if (players.nonEmpty) {
+      Some(players.map(v => s"playerid = $v").mkString("(", " OR ", ")"))
+    } else {
+      None
+    }
+  }
+
+  private def teamsWhere(teams: Seq[Int]): Option[String] = {
+    if (teams.nonEmpty) {
+      Some(teams.map(v => s"teamid = $v").mkString("(", " OR ", ")"))
+    } else {
+      None
+    }
+  }
+}
+
 final case class RawShotRequest(hash: Option[String],
                                 params: Option[ShotRequest])
+
 final case class FrequencyShotRequest(hash: Option[String],
                                       params: Option[ShotRequest])
+
 final case class CompareShotRequest(hash: Option[String],
                                     params: Option[ShotCompareRequest])
 

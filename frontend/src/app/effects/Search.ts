@@ -1,5 +1,13 @@
 import {Injectable} from "@angular/core";
-import {CompareOptions1, CompareOptions2, FrequencyOptions, Options, RawOptions, State} from "../app.state";
+import {
+  CompareOptions1,
+  CompareOptions2,
+  FourFactorsOptions,
+  FrequencyOptions,
+  Options,
+  RawOptions,
+  State
+} from "../app.state";
 import {Action, Store} from "@ngrx/store";
 import {ShotchartService} from "../services/shotchart.service";
 import {Observable} from "rxjs/Observable";
@@ -8,10 +16,12 @@ import {GetPlayers, GetSeasons, GetTeams, SetPlayers, SetSeasons, SetTeams} from
 import * as searchActions from "../actions/search.action";
 import {
   CompareShotSearch,
+  FourFactorsSearch,
   FrequencyShotSearch,
   RawShotSearch,
   SearchInProgress,
   StoreCompareShots,
+  StoreFourFactors,
   StoreFrequencyShots,
   StoreRawShots
 } from "../actions/search.action";
@@ -21,8 +31,13 @@ import 'rxjs/add/operator/switchMap';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/withLatestFrom';
 import {selectPlayers, selectSeasons, selectTeams} from "../selectors/initial.selectors";
-import {PlayerId, ShotParams, TeamId} from "../models/options.models";
-import {CompareShotResponse, FrequencyShotResponse, RawShotsResponse} from "../models/response.models";
+import {FourFactorsParams, PlayerId, ShotParams, TeamId} from "../models/options.models";
+import {
+  CompareShotResponse,
+  FourFactorsResponse,
+  FrequencyShotResponse,
+  RawShotsResponse
+} from "../models/response.models";
 
 
 @Injectable()
@@ -152,6 +167,33 @@ export class InitializeEffects {
   };
 
   @Effect()
+  fourFactorsEffect = (): Observable<Action> =>
+    this.actions
+      .ofType(searchActions.FOUR_FACTORS_SEARCH)
+      .withLatestFrom(this.store)
+      .mergeMap(this.callFourFactorsService)
+      .map(response => {
+        return new StoreFourFactors(response);
+      });
+
+
+  private callFourFactorsService = (value: [FourFactorsSearch, State]): Observable<FourFactorsResponse> => {
+    const options = value[1].fourFactorsOptions;
+    const params = {
+      hash: options.hash,
+      params: toFourFactorsParams(options)
+    };
+
+    return this.playersService.getFourFactors(params);
+  };
+
+  @Effect()
+  fourFactorsSearchComplete = (): Observable<Action> =>
+    this.actions
+      .ofType(searchActions.STORE_FOUR_FACTORS)
+      .map(v => new SearchInProgress(false));
+
+  @Effect()
   freqSearchComplete = (): Observable<Action> =>
     this.actions
       .ofType(searchActions.STORE_FREQUENCY_SHOTS)
@@ -170,6 +212,17 @@ export class InitializeEffects {
       .map(v => new SearchInProgress(false));
 
 }
+
+const toFourFactorsParams = (storedParams: FourFactorsOptions): FourFactorsParams => {
+  const player = storedParams.players ? storedParams.players.map(v => v.id) : undefined;
+  const teams = storedParams.teams ? storedParams.teams.map(v => v.teamId) : undefined;
+
+  return {
+    players: player,
+    teams: teams,
+    seasons: storedParams.seasons
+  };
+};
 
 const toShotParams = (storedParams: Options): ShotParams => {
   const shooter = storedParams.shooter ? storedParams.shooter.map(v => v.id) : undefined;

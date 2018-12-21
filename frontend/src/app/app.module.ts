@@ -23,8 +23,9 @@ import {
   MatDatepickerModule,
   MatFormFieldModule,
   MatInputModule,
-  MatNativeDateModule,
-  MatRadioModule
+  MatNativeDateModule, MatPaginatorModule,
+  MatRadioModule, MatSortModule,
+  MatTableModule
 } from "@angular/material";
 import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
 import {DefenseTeamSelectorComponent} from "./app-area/options/defense_team_selector.component";
@@ -35,7 +36,7 @@ import {EffectsModule} from "@ngrx/effects";
 import {HomeComponent} from "./app-area/pages/home.component";
 import {
   setColorByFreq,
-  setCompareShots,
+  setCompareShots, setFourFactors,
   setFrequencyShots, setInvertColor,
   setRawShots,
   setSearchInProgress
@@ -52,6 +53,13 @@ import {NgModule} from "@angular/core";
 import {PeriodSelectorComponent} from "./app-area/options/period_selector.component";
 import {CompareShotsComponent} from "./app-area/shotcharts/compareshots.component";
 import {ColorSelectorComponent} from "./app-area/color_selector.component";
+import {fourFactorsOptionsReducer} from "./reducers/fourfactors_options.reducers";
+import {FourFactorsComponent} from "./app-area/pages/four_factors.component";
+import {FourFactorsOptionsComponent} from "./app-area/fourfactors_options/fourfactors_options.component";
+import {FourFactorsPlayerSelectorComponent} from "./app-area/fourfactors_options/fourfactors_players_selector.component";
+import {FourFactorsTeamsSelectorComponent} from "./app-area/fourfactors_options/fourfactors_teams_selector.component";
+import {FourFactorsSeasonSelectorComponent} from "./app-area/fourfactors_options/fourfactors_season_selector.component";
+import {FourFactorsTableComponent} from "./app-area/tables/fourfactors_tables.component";
 
 
 @NgModule({
@@ -70,14 +78,19 @@ import {ColorSelectorComponent} from "./app-area/color_selector.component";
     MatNativeDateModule,
     MatRadioModule,
     MatCheckboxModule,
+    MatTableModule,
+    MatSortModule,
+    MatPaginatorModule,
     StoreModule.forRoot({
       options: optionsReducer,
+      fourFactorsOptions: fourFactorsOptionsReducer,
       players: setPlayersReducer,
       teams: setTeamsReducer,
       seasons: setSeasonsReducer,
       rawShotChartResponse: setRawShots,
       frequencyChartResponse: setFrequencyShots,
       compareShotResponse: setCompareShots,
+      fourFactorsResponse: setFourFactors,
       searchInProgress: setSearchInProgress,
       colorByFreq: setColorByFreq,
       invertColor: setInvertColor
@@ -94,7 +107,10 @@ import {ColorSelectorComponent} from "./app-area/color_selector.component";
     MatNativeDateModule,
     MatInputModule,
     MatRadioModule,
-    MatCheckboxModule
+    MatCheckboxModule,
+    MatTableModule,
+    MatSortModule,
+    MatPaginatorModule
   ],
   declarations: [
     AppComponent,
@@ -121,7 +137,13 @@ import {ColorSelectorComponent} from "./app-area/color_selector.component";
     EndDateSelectorComponent,
     PeriodSelectorComponent,
     CompareShotsComponent,
-    ColorSelectorComponent
+    ColorSelectorComponent,
+    FourFactorsComponent,
+    FourFactorsOptionsComponent,
+    FourFactorsPlayerSelectorComponent,
+    FourFactorsTeamsSelectorComponent,
+    FourFactorsSeasonSelectorComponent,
+    FourFactorsTableComponent
   ],
   providers: [ ShotchartService ],
   bootstrap: [ AppComponent ]

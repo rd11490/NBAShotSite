@@ -22,9 +22,7 @@ object ParamsHandler {
   }
 
   private[endpoints] def toCachedParams[T](params: T): Seq[CacheParams] = {
-    println("To Cached Params")
     val id = params.hashCode().toString
-    println(Extraction.decompose(params))
     Seq(CacheParams(id, Extraction.decompose(params)))
   }
 
@@ -50,7 +48,6 @@ object ParamsHandler {
   }
 
   def handleFrequencyParams(request: FrequencyShotRequest): FrequencyShotRequest = {
-    println("Handling params")
     storeFrequencyParams(request)
     val params = extractFrequencyParams(request)
     val id = params.hashCode().toString
@@ -64,7 +61,6 @@ object ParamsHandler {
   }
 
   private def storeFrequencyParams(request: FrequencyShotRequest): Unit = {
-    println("Storing params")
     request.params.foreach(params => {
       try {
         val cachedParams = toCachedParams(params)
@@ -113,5 +109,34 @@ object ParamsHandler {
       CacheParams.apply,
       s"primarykey = '$hash'")
       .map(_.headOption.flatMap(_.params.extractOpt[ShotCompareRequest])).await()
+  }
+
+
+  def handleFourFactorsParams(request: FourFactorsRequest): FourFactorsRequest = {
+    storeFourFactorsParams(request)
+    val params = extractFourFactorsParams(request)
+    val id = params.hashCode().toString
+    FourFactorsRequest(Some(id), Some(params))
+  }
+
+  private def extractFourFactorsParams(request: FourFactorsRequest): FourFactorsRequestParams = {
+    request.hash.flatMap(getFourFactorsParamsFromCache)
+      .getOrElse(request.params
+        .getOrElse(FourFactorsRequestParams()))
+  }
+
+  private def storeFourFactorsParams(request: FourFactorsRequest): Unit = {
+    request.params.foreach(params => {
+      val cachedParams = toCachedParams(params)
+      PostgresClient.insertInto[CacheParams](NBATables.four_factors_cache_table, cachedParams)
+    })
+  }
+
+  private def getFourFactorsParamsFromCache(hash: String): Option[FourFactorsRequestParams] = {
+    PostgresClient.selectFrom(
+      NBATables.four_factors_cache_table,
+      CacheParams.apply,
+      s"primarykey = '$hash'")
+      .map(_.headOption.flatMap(_.params.extractOpt[FourFactorsRequestParams])).await()
   }
 }

@@ -35,7 +35,7 @@ import {
 
       <br>
       <div class="shot-stats-container">
-        <div style="max-width: 150px;">{{ _description1 | async }}</div>
+        <div style="max-width: 150px;">Shots 1:</div>
         <stats-totals-component class="shot-stats" [stats]="(this._stats1 | async)"></stats-totals-component>
       </div>
       <div>
@@ -47,7 +47,7 @@ import {
         ></compare-shot-chart>
       </div>
       <div class="shot-stats-container-right">
-        <div style="max-width: 150px;">{{ _description2 | async }}</div>
+        <div style="max-width: 150px;">Shots 2:</div>
         <stats-totals-component class="shot-stats" [stats]="(this._stats2 | async)"></stats-totals-component>
       </div>
     </div>

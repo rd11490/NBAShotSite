@@ -87,9 +87,6 @@ object ShotZone {
       }
     } catch {
       case t: Throwable =>
-        println(x)
-        println(y)
-        print(value)
         throw t
     }
   }

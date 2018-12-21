@@ -1,14 +1,14 @@
-import {Component, Input, OnInit, ViewChild} from '@angular/core';
+import {Component, OnInit, ViewChild} from '@angular/core';
 import {Store} from "@ngrx/store";
 import {State} from "../../app.state";
-import * as OptionActions from './../../actions/options.action'
-import * as OptionSelectors from './../../selectors/options.selectors'
+import * as OptionActions from './../../actions/fourfactors_options.action'
+import * as OptionSelectors from './../../selectors/fourfactors_options.selectors'
 import {Observable} from "rxjs/Observable";
 import * as InitialSelectors from "../../selectors/initial.selectors";
-import {NgOption, NgSelectComponent} from "@ng-select/ng-select";
+import {NgSelectComponent} from "@ng-select/ng-select";
 
 @Component({
-  selector: 'season-select',
+  selector: 'fourfactors-season-select',
   template: `
     <div>
       Seasons
@@ -22,9 +22,8 @@ import {NgOption, NgSelectComponent} from "@ng-select/ng-select";
   `,
   styleUrls: ['../../css/general.css']
 })
-export class SeasonSelectorComponent implements OnInit {
+export class FourFactorsSeasonSelectorComponent implements OnInit {
 
-  _source: string;
   seasons: Observable<Array<string>>;
 
   constructor(private store: Store<State>) {
@@ -33,9 +32,9 @@ export class SeasonSelectorComponent implements OnInit {
 
   ngOnInit(): void {
     this.seasons = InitialSelectors.selectSeasons(this.store);
-    OptionSelectors.selectSeason(this.store, this._source).subscribe(seasons => {
-      if (seasons != null) {
-        seasons.forEach(season => {
+    OptionSelectors.selectSeasons(this.store).subscribe(selectedSeasons => {
+      if (selectedSeasons != null) {
+        selectedSeasons.forEach(season => {
           if (this.ngSelect.selectedItems.filter(v => v.value == season).length < 1) {
             this.ngSelect.select({
               name: [season],
@@ -51,13 +50,8 @@ export class SeasonSelectorComponent implements OnInit {
   @ViewChild(NgSelectComponent)
   ngSelect: NgSelectComponent;
 
-  @Input("source")
-  set source(source: string) {
-    this._source = source;
-  }
-
   selectSeason(season: Array<string>) {
-    this.store.dispatch(new OptionActions.SetSeason(season, this._source));
+    this.store.dispatch(new OptionActions.SetSeasons(season));
   }
 
 }

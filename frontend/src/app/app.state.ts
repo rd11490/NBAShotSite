@@ -1,19 +1,28 @@
 import {PlayerId, TeamId} from "./models/options.models";
-import {CompareShotResponse, FrequencyShotResponse, RawShotsResponse, SearchError} from "./models/response.models";
+import {
+  CompareShotResponse,
+  FourFactorsResponse,
+  FrequencyShotResponse,
+  RawShotsResponse,
+  SearchError
+} from "./models/response.models";
 
 export interface State {
   options: Map<string, Options>;
+  fourFactorsOptions: FourFactorsOptions;
   players: Array<PlayerId>;
   teams: Array<TeamId>;
   seasons: Array<string>;
   rawShotChartResponse: RawShotsResponse;
   frequencyChartResponse: FrequencyShotResponse;
   compareShotResponse: CompareShotResponse;
+  fourFactorsResponse: FourFactorsResponse;
   searchInProgress: boolean;
   searchError: SearchError;
   colorByFreq: boolean;
   invertColor: boolean;
 }
+
 export interface Options {
   hash: string;
   shooter: Array<PlayerId>;
@@ -35,6 +44,13 @@ export interface Options {
   startDate: number;
   endDate: number;
 
+}
+
+export interface FourFactorsOptions {
+  hash: string;
+  players: Array<PlayerId>;
+  seasons: Array<string>;
+  teams: Array<TeamId>;
 }
 
 export const RawOptions: string = "RAW";

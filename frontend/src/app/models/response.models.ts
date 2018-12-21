@@ -1,5 +1,12 @@
-import {PlayerId, ShotCompareRequest, ShotRequest, TeamId} from "./options.models";
+import {FourFactorsRequest, PlayerId, ShotCompareRequest, ShotRequest, TeamId} from "./options.models";
 import {RawShot, ZonedShot} from "./shots.models";
+import {RealAdjustedFourFactors} from "./fourfactors.models";
+
+export class FourFactorsResponse {
+  params: FourFactorsRequest;
+  fourFactors: Array<RealAdjustedFourFactors>;
+  searchError?: SearchError;
+}
 
 export class PlayerNameResponse {
   names: Array<PlayerId>;

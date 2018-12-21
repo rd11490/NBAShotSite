@@ -55,6 +55,7 @@ provider:
 package:
   artifact: target/scala-2.12/nbashotsite.jar
 
+
 functions:
   players:
       handler: endpoints.PlayerInfoHandler::handle
@@ -91,6 +92,13 @@ functions:
               method: post
               path: /addraws
 
+  addfourfactors:
+          handler: endpoints.FourFactorsAdderHandler::handle
+          events:
+            - http:
+                method: post
+                path: /addfourfactors
+
   addplayers:
           handler: endpoints.PlayerInfoAdderHandler::handle
           events:
@@ -119,3 +127,9 @@ functions:
           - http:
               method: post
               path: /compare
+  fourfactors:
+        handler: endpoints.FourFactorsHandler::handle
+        events:
+          - http:
+              method: post
+              path: /fourfactors

@@ -7,6 +7,7 @@ import {GetPlayers, GetSeasons, GetTeams} from "../../actions/initial.action";
   selector: 'loading-component',
   template: `  
     <h1>Loading...</h1>
+    If you spend more than 30 seconds loading, please reload the page
     `,
   styleUrls: ['../../css/general.css']
 })

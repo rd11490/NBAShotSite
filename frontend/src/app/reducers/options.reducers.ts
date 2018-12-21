@@ -54,7 +54,7 @@ class InitialOptions implements Options {
   }
 }
 
-export const initialState: Map<string, Options> =
+const initialState: Map<string, Options> =
   new Map<string, Options>()
     .set(RawOptions, new InitialOptions())
     .set(FrequencyOptions, new InitialOptions())
@@ -107,7 +107,6 @@ export function optionsReducer(options: Map<string, Options> = initialState, act
     }
     default: {
       return options;
-
     }
   }
 };

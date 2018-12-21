@@ -246,7 +246,7 @@ object PostgresClient {
     }
 
   private def trace[T](stmt: T): T = {
-    println(stmt)
+//    println(stmt)
     stmt
   }
 }

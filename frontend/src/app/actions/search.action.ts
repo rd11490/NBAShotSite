@@ -1,5 +1,11 @@
 import {Action} from '@ngrx/store'
-import {CompareShotResponse, FrequencyShotResponse, RawShotsResponse, SearchError} from "../models/response.models";
+import {
+  CompareShotResponse,
+  FourFactorsResponse,
+  FrequencyShotResponse,
+  RawShotsResponse,
+  SearchError
+} from "../models/response.models";
 
 export const SEARCH_IN_PROGRESS = 'Search In Progress';
 
@@ -14,6 +20,10 @@ export const STORE_RAW_SHOTS = 'Store Raw Shots';
 export const STORE_FREQUENCY_SHOTS = 'Store Frequency Shots';
 
 export const STORE_COMPARE_SHOTS = 'Store Compare Shots';
+
+export const FOUR_FACTORS_SEARCH = 'Four Factors Search';
+
+export const STORE_FOUR_FACTORS = 'Store Four Factors';
 
 export const COLOR_BY_FREQUENCY = "Color By Frequency";
 
@@ -37,6 +47,22 @@ export class SearchInProgress implements Action {
   readonly type = SEARCH_IN_PROGRESS;
 
   constructor(public payload: boolean) {
+  }
+
+}
+
+export class FourFactorsSearch implements Action {
+  readonly type = FOUR_FACTORS_SEARCH;
+
+  constructor() {
+  }
+
+}
+
+export class StoreFourFactors implements Action {
+  readonly type = STORE_FOUR_FACTORS;
+
+  constructor(public payload: FourFactorsResponse) {
   }
 
 }
@@ -88,6 +114,7 @@ export class StoreCompareShots implements Action {
 
 export type Actions = StoreCompareShots |
   StoreFrequencyShots
+  | FourFactorsSearch
   | StoreRawShots
   | CompareShotSearch
   | FrequencyShotSearch

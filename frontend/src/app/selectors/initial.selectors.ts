@@ -1,5 +1,12 @@
-import {CompareOptions1, CompareOptions2, FrequencyOptions, RawOptions, State} from "../app.state";
-import {PlayerId, ShotCompareRequest, ShotParams, ShotRequest, TeamId} from "../models/options.models";
+import {CompareOptions1, CompareOptions2, FourFactorsOptions, FrequencyOptions, RawOptions, State} from "../app.state";
+import {
+  FourFactorsParams, FourFactorsRequest,
+  PlayerId,
+  ShotCompareRequest,
+  ShotParams,
+  ShotRequest,
+  TeamId
+} from "../models/options.models";
 import {Action, Store} from "@ngrx/store";
 import {Observable} from 'rxjs/Rx';
 import {
@@ -16,6 +23,9 @@ import {
 } from "../actions/options.action";
 import 'rxjs/add/observable/combineLatest';
 import * as shotchartSelectors from './shotchart.selectors';
+import * as fourFactorsSelectors from './fourfactors.selectors';
+import * as fourFactorsOptions from '../actions/fourfactors_options.action';
+
 
 
 export const selectPlayers = (store: Store<State>): Observable<Array<PlayerId>> => {
@@ -40,6 +50,22 @@ export const selectPageLoaded = (store: Store<State>): Observable<boolean> => {
     .map(value => {
       const [players, teams, seasons, searchInProgress]: [Array<PlayerId>, Array<TeamId>, Array<string>, boolean] = value;
       return players.length > 0 && teams.length > 0 && seasons.length > 0 && !searchInProgress
+    })
+};
+
+export const selectFourFactorsResponseSearchActions = (store: Store<State>): Observable<Array<Action>> => {
+  return fourFactorsSelectors.selectFourFactorsParams(store)
+    .combineLatest(
+      selectPlayers(store),
+      selectTeams(store),
+      selectSeasons(store)).map(v => {
+      const [params, players, teams, seasons]: [FourFactorsRequest, Array<PlayerId>, Array<TeamId>, Array<string>] = v;
+      if (params != null) {
+        const arr = fourFactorsParamsToActions(new Array<Action>(), params.params, players, teams);
+        arr.push(new fourFactorsOptions.SetHash(params.hash));
+        return arr;
+      }
+      return [];
     })
 };
 
@@ -97,6 +123,17 @@ export const selectCompareResponseSearchActions = (store: Store<State>): Observa
     })
 };
 
+const fourFactorsParamsToActions = (arr: Array<Action>, params: FourFactorsParams, players: Array<PlayerId>, teams: Array<TeamId>): Array<Action> => {
+  const player = findPlayers(params.players, players);
+  const team = findTeams(params.teams, teams);
+
+  arr.push(new fourFactorsOptions.SetPlayers(player));
+  arr.push(new fourFactorsOptions.SetSeasons(params.seasons));
+  arr.push(new fourFactorsOptions.SetTeams(team));
+
+  return arr;
+};
+
 const paramsToActions = (arr: Array<Action>, loc: string, params: ShotParams, players: Array<PlayerId>, teams: Array<TeamId>): Array<Action> => {
   const shooter = findPlayers(params.shooter, players);
   const offenseTeamId = findTeam(params.offenseTeamId, teams);
@@ -131,11 +168,20 @@ const paramsToActions = (arr: Array<Action>, loc: string, params: ShotParams, pl
 };
 
 const findPlayer = (id: number, players: Array<PlayerId>): PlayerId => players.find(v => v.id === id);
-const findTeam = (id: number, teams: Array<TeamId>): TeamId => teams.find(v => v.teamId === id);
 const findPlayers = (ids: Array<number>, players: Array<PlayerId>) => {
   if (ids != null) {
     return ids
       .map(p => findPlayer(p, players))
+      .filter(v => v != null);
+  } else {
+    return []
+  }
+};
+const findTeam = (id: number, teams: Array<TeamId>): TeamId => teams.find(v => v.teamId === id);
+const findTeams = (ids: Array<number>, teams: Array<TeamId>) => {
+  if (ids != null) {
+    return ids
+      .map(p => findTeam(p, teams))
       .filter(v => v != null);
   } else {
     return []

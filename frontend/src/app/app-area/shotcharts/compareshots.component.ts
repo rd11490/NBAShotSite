@@ -76,7 +76,6 @@ export class CompareShotsComponent implements OnInit {
 
 
   private clearShots = (): void => {
-    console.log("clear!")
     this.svg.selectAll("#SHOT").remove()
   };
 

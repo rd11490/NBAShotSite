@@ -1,6 +1,8 @@
 package endpoints
 import datamodel.{FrequencyShotRequest, ShotRequest}
 import shotselect.ShotSelect
+import storage.PostgresClient
+import storage.tables.NBATables
 import utils.TestSpec
 
 import scala.concurrent.{ExecutionContext, ExecutionContextExecutor}
@@ -10,10 +12,7 @@ class SelectSpec  extends TestSpec {
     implicit val context: ExecutionContextExecutor = ExecutionContext.global
     import utils.RichFuture._
 
-//    val request = ShotRequest(shooter = Some(1628369), season = Some("2014-15"))
-//
-//    val out = ShotSelect.selectZonedShots(request).await()
-//    println(out)
+//    PostgresClient.createTable(NBATables.real_adjusted_four_factors)
   }
 }
 

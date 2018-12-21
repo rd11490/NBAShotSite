@@ -10,7 +10,6 @@ import org.json4s.{DefaultFormats, Formats}
 import shotselect.ShotSelect
 
 import scala.concurrent.{ExecutionContext, Future}
-import org.json4s.jackson.Serialization.{read, write}
 
 
 class ShotFrequencyHandler extends Proxy[FrequencyShotRequest, ZonedShotsResponse] {
@@ -22,13 +21,9 @@ class ShotFrequencyHandler extends Proxy[FrequencyShotRequest, ZonedShotsRespons
   override def handle(input: proxy.ProxyRequest[FrequencyShotRequest],
                       c: Context): Either[Throwable, ProxyResponse[ZonedShotsResponse]] = {
     val response = input.body.map(v => {
-      println("Parsing Body")
-      println(v)
       val shotParams = ParamsHandler.handleFrequencyParams(v)
       ShotFrequencyHandler.selectShots(shotParams).await
     })
-    println("Response")
-    response.foreach(v => println(write(v)))
     APIResponse.response(response)
   }
 }

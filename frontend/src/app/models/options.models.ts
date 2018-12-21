@@ -40,3 +40,13 @@ export class ShotCompareParams {
   shots2: ShotParams;
 }
 
+export class FourFactorsRequest {
+  hash: string;
+  params: FourFactorsParams;
+}
+
+export class FourFactorsParams {
+  players?: Array<number>;
+  seasons?: Array<string>;
+  teams?: Array<number>;
+}
