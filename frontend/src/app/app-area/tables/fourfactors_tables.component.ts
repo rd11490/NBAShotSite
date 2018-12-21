@@ -7,10 +7,6 @@ import {MatPaginator, MatSort, MatTableDataSource} from '@angular/material';
   selector: 'four_factors_table',
   template: `
     <div>
-      <mat-form-field>
-        <input matInput (keyup)='applyFilter($event.target.value)' placeholder='Filter'>
-      </mat-form-field>
-
       <mat-table #table [dataSource]='this.dataSource' matSort>
 
         <ng-container matColumnDef='playerName'>
@@ -257,9 +253,5 @@ export class FourFactorsTableComponent  implements OnInit {
   @Input('displayColumns')
   set displayColumns(displayColumns: Array<string>) {
     this.displayedColumns = displayColumns
-  }
-
-  applyFilter(filterValue: string) {
-    this.dataSource.filter = filterValue.trim().toLowerCase();
   }
 }

@@ -9,13 +9,7 @@ import {selectOptionDescription} from "../../selectors/fourfactors_options.selec
 
 @Component({
   selector: 'four-factors-options',
-  template: `
-    <mat-expansion-panel>
-      <mat-expansion-panel-header>
-        <mat-panel-description>
-          <span style="width: 100%;text-align: center">{{this._description | async}}</span>
-        </mat-panel-description>
-      </mat-expansion-panel-header>
+  template: `    
       <div>
         <div class="option-line">
           <div class="option-three"><fourfactors-players-select></fourfactors-players-select></div>
@@ -23,8 +17,6 @@ import {selectOptionDescription} from "../../selectors/fourfactors_options.selec
           <div class="option-three"><fourfactors-season-select></fourfactors-season-select></div>
         </div>
       </div>
-    </mat-expansion-panel>
-
   `,
   styleUrls: ['../../css/general.css']
 })

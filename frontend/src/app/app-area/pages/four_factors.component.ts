@@ -24,6 +24,7 @@ import {selectHash} from "../../selectors/fourfactors_options.selectors";
       <h1 style="color:red;">{{(this._searchFailureMessage | async)}}</h1>
     </div>
     <div [hidden]="(this._done_loading | async)">
+      <h6>Select players, seasons, and/or teams then click "Search" to filter the table</h6>
       <four-factors-options></four-factors-options>
       <button class="search-button" (click)="search()">Search</button>
       <br>
@@ -99,7 +100,11 @@ export class FourFactorsComponent implements OnInit {
     if (hash != null) {
       this.store.dispatch(new SetHash(hash));
       this.searchWithHash();
+    } else {
+      this.search();
     }
+
+
 
     selectFourFactorsResponseSearchActions(this.store)
       .subscribe((actions) => {
@@ -141,8 +146,8 @@ export class FourFactorsComponent implements OnInit {
 
         })
       }
-    })
-  }
+    });
+    }
 
   search = (): void => {
     this.store.dispatch(new SetHash(undefined));
