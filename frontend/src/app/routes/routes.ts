@@ -13,7 +13,9 @@ const routes: Routes = [
   {path: 'frequency', component: FrequencyShotChartComponent},
   {path: 'zoned', component: FrequencyShotChartComponent},
   {path: 'compare', component: CompareShotChartComponent},
-  {path: 'fourfactors', component: FourFactorsComponent}
+  {path: 'fourfactors', component: FourFactorsComponent},
+  {path: 'rapm', component: FourFactorsComponent}
+
 ];
 
 @NgModule({

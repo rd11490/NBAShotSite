@@ -101,10 +101,9 @@ export class FourFactorsComponent implements OnInit {
       this.store.dispatch(new SetHash(hash));
       this.searchWithHash();
     } else {
-      this.search();
+      this.store.dispatch(new SetHash("-1106328546")); //TODO Update when new season rolls around
+      this.searchWithHash();
     }
-
-
 
     selectFourFactorsResponseSearchActions(this.store)
       .subscribe((actions) => {

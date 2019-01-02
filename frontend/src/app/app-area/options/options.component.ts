@@ -9,7 +9,7 @@ import {Observable} from "rxjs/Observable";
 @Component({
   selector: 'options',
   template: `
-    <mat-expansion-panel [expanded]="true">
+    <mat-expansion-panel>
       <mat-expansion-panel-header>
         <mat-panel-description>
           <span style="width: 100%;text-align: center">{{this._description | async}}</span>
