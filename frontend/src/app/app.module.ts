@@ -23,21 +23,31 @@ import {
   MatDatepickerModule,
   MatFormFieldModule,
   MatInputModule,
-  MatNativeDateModule, MatPaginatorModule,
-  MatRadioModule, MatSortModule,
-  MatTableModule
+  MatNativeDateModule,
+  MatPaginatorModule,
+  MatRadioModule,
+  MatSortModule,
+  MatTableModule, MatTabsModule
 } from "@angular/material";
 import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
 import {DefenseTeamSelectorComponent} from "./app-area/options/defense_team_selector.component";
 import {OffenseTeamSelectorComponent} from "./app-area/options/offense_team_selector.component";
-import {setPlayersReducer, setSeasonsReducer, setTeamsReducer} from "./reducers/initial.reducers";
+import {
+  setPlayersReducer,
+  setSeasons3Reducer,
+  setSeasons5Reducer,
+  setSeasonsReducer,
+  setTeamsReducer
+} from "./reducers/initial.reducers";
 import {InitializeEffects} from "./effects/Search";
 import {EffectsModule} from "@ngrx/effects";
 import {HomeComponent} from "./app-area/pages/home.component";
 import {
   setColorByFreq,
-  setCompareShots, setFourFactors,
-  setFrequencyShots, setInvertColor,
+  setCompareShots,
+  setFourFactors,
+  setFrequencyShots,
+  setInvertColor,
   setRawShots,
   setSearchInProgress
 } from "./reducers/shotchart.reducers";
@@ -60,6 +70,14 @@ import {FourFactorsPlayerSelectorComponent} from "./app-area/fourfactors_options
 import {FourFactorsTeamsSelectorComponent} from "./app-area/fourfactors_options/fourfactors_teams_selector.component";
 import {FourFactorsSeasonSelectorComponent} from "./app-area/fourfactors_options/fourfactors_season_selector.component";
 import {FourFactorsTableComponent} from "./app-area/tables/fourfactors_tables.component";
+import {CSVEffect} from "./effects/CSVEffect";
+import {DownloadCSV} from "./services/download_csv.service";
+import {FourFactorsThreeYearComponent} from "./app-area/pages/four_factors_three_year.component";
+import {FourFactorsFiveYearComponent} from "./app-area/pages/four_factors_five_year.component";
+import {FourFactorsThreeYearOptionsComponent} from "./app-area/fourfactors_options/fourfactors_options3.component";
+import {FourFactorsFiveYearOptionsComponent} from "./app-area/fourfactors_options/fourfactors_options5.component";
+import {FourFactorsFiveSeasonSelectorComponent} from "./app-area/fourfactors_options/fourfactors_season_five_year_selector.component";
+import {FourFactorsThreeSeasonSelectorComponent} from "./app-area/fourfactors_options/fourfactors_season_three_year_selector.component";
 
 
 @NgModule({
@@ -76,6 +94,7 @@ import {FourFactorsTableComponent} from "./app-area/tables/fourfactors_tables.co
     MatInputModule,
     MatDatepickerModule,
     MatNativeDateModule,
+    MatTabsModule,
     MatRadioModule,
     MatCheckboxModule,
     MatTableModule,
@@ -87,6 +106,8 @@ import {FourFactorsTableComponent} from "./app-area/tables/fourfactors_tables.co
       players: setPlayersReducer,
       teams: setTeamsReducer,
       seasons: setSeasonsReducer,
+      threeYearSeasons: setSeasons3Reducer,
+      fiveYearSeasons: setSeasons5Reducer,
       rawShotChartResponse: setRawShots,
       frequencyChartResponse: setFrequencyShots,
       compareShotResponse: setCompareShots,
@@ -96,7 +117,8 @@ import {FourFactorsTableComponent} from "./app-area/tables/fourfactors_tables.co
       invertColor: setInvertColor
     }),
     EffectsModule.forRoot([
-      InitializeEffects
+      InitializeEffects,
+      CSVEffect
     ])
   ],
   exports: [
@@ -105,12 +127,13 @@ import {FourFactorsTableComponent} from "./app-area/tables/fourfactors_tables.co
     MatFormFieldModule,
     MatDatepickerModule,
     MatNativeDateModule,
+    MatTabsModule,
     MatInputModule,
     MatRadioModule,
     MatCheckboxModule,
     MatTableModule,
     MatSortModule,
-    MatPaginatorModule
+    MatPaginatorModule,
   ],
   declarations: [
     AppComponent,
@@ -143,9 +166,18 @@ import {FourFactorsTableComponent} from "./app-area/tables/fourfactors_tables.co
     FourFactorsPlayerSelectorComponent,
     FourFactorsTeamsSelectorComponent,
     FourFactorsSeasonSelectorComponent,
-    FourFactorsTableComponent
+    FourFactorsTableComponent,
+    FourFactorsThreeYearComponent,
+    FourFactorsFiveYearComponent,
+    FourFactorsThreeYearOptionsComponent,
+    FourFactorsFiveYearOptionsComponent,
+    FourFactorsThreeSeasonSelectorComponent,
+    FourFactorsFiveSeasonSelectorComponent
+
+
   ],
-  providers: [ ShotchartService ],
-  bootstrap: [ AppComponent ]
+  providers: [ShotchartService, DownloadCSV],
+  bootstrap: [AppComponent]
 })
-export class AppModule { }
+export class AppModule {
+}

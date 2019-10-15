@@ -156,6 +156,20 @@ h1 {
   float: right;
 }
 
+.export-button {
+  background-color: #000000; /* Black */
+  border: none;
+  color: white;
+  padding: 15px 32px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 12px;
+  margin-left: 0;
+  margin-right: auto;
+
+}
+
 .shot-chart-container {
   width: 100%;
   align-items: center;

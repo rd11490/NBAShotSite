@@ -19,6 +19,7 @@ object ShotSelect {
       })
       .map(fillEmptyZonesAndStats)
 
+
   private def toShotsForReduction(shot: ShotWithPlayers)(
       implicit executionContext: ExecutionContext): ZonedShot = {
     ZonedShot(

@@ -39,6 +39,14 @@ export class ShotchartService {
     return this.http.get<SeasonsResponse>(buildUrl('/seasons'), httpOptions);
   }
 
+  getSeasons3(): Observable<SeasonsResponse> {
+    return this.http.get<SeasonsResponse>(buildUrl('/seasons3'), httpOptions);
+  }
+
+  getSeasons5(): Observable<SeasonsResponse> {
+    return this.http.get<SeasonsResponse>(buildUrl('/seasons5'), httpOptions);
+  }
+
   getRawShots(params: ShotRequest): Observable<RawShotsResponse> {
     return this.http.post<RawShotsResponse>(buildUrl('/raw'), params, httpOptions).catch(err => {
       return Observable.of({
@@ -78,6 +86,27 @@ export class ShotchartService {
       })
     })
   }
+
+  getFourFactors3Yr(params: FourFactorsRequest): Observable<FourFactorsResponse> {
+    return this.http.post<FourFactorsResponse>(buildUrl('/fourfactors3'), params, httpOptions).catch(err => {
+      return Observable.of({
+        searchError: {isError: true, message: 'Search Failure: Please Try Again'},
+        params: undefined,
+        fourFactors: undefined
+      })
+    })
+  }
+
+  getFourFactors5Yr(params: FourFactorsRequest): Observable<FourFactorsResponse> {
+    return this.http.post<FourFactorsResponse>(buildUrl('/fourfactors5'), params, httpOptions).catch(err => {
+      return Observable.of({
+        searchError: {isError: true, message: 'Search Failure: Please Try Again'},
+        params: undefined,
+        fourFactors: undefined
+      })
+    })
+  }
+
 
 
 }

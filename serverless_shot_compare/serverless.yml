@@ -78,6 +78,19 @@ functions:
                 method: get
                 path: /seasons
 
+  seasons3:
+          handler: endpoints.Season3Handler::handle
+          events:
+            - http:
+                method: get
+                path: /seasons3
+  seasons5:
+            handler: endpoints.Season5Handler::handle
+            events:
+              - http:
+                  method: get
+                  path: /seasons5
+
   raw:
       handler: endpoints.RawShotHandler::handle
       events:
@@ -133,3 +146,31 @@ functions:
           - http:
               method: post
               path: /fourfactors
+
+  addfourfactors3:
+            handler: endpoints.FourFactorsThreeYearAdderHandler::handle
+            events:
+              - http:
+                  method: post
+                  path: /addfourfactors3
+
+  addfourfactors5:
+            handler: endpoints.FourFactorsFiveYearAdderHandler::handle
+            events:
+              - http:
+                  method: post
+                  path: /addfourfactors5
+
+  fourfactors3:
+          handler: endpoints.FourFactorsThreeYearHandler::handle
+          events:
+            - http:
+                method: post
+                path: /fourfactors3
+
+  fourfactors5:
+            handler: endpoints.FourFactorsFiveYearHandler::handle
+            events:
+              - http:
+                  method: post
+                  path: /fourfactors5

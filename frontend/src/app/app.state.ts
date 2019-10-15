@@ -13,6 +13,8 @@ export interface State {
   players: Array<PlayerId>;
   teams: Array<TeamId>;
   seasons: Array<string>;
+  threeYearSeasons: Array<string>;
+  fiveYearSeasons: Array<string>;
   rawShotChartResponse: RawShotsResponse;
   frequencyChartResponse: FrequencyShotResponse;
   compareShotResponse: CompareShotResponse;

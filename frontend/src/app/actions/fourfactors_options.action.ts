@@ -7,6 +7,15 @@ export const SET_FOUR_FACTORS_PLAYERS = 'Set Four Factors Players';
 export const SET_FOUR_FACTORS_SEASONS = 'Set Four Factors Seasons';
 export const SET_FOUR_FACTORS_TEAMS = 'Set Four Factors Teams';
 
+export const DOWNLOAD_CSV = 'Download CSV';
+
+
+export class DownloadCSVAction implements Action {
+  readonly type = DOWNLOAD_CSV;
+
+  constructor() {
+  }
+}
 
 export class SetHash implements Action {
   readonly type = SET_FOUR_FACTORS_HASH;
@@ -36,4 +45,4 @@ export class SetTeams implements Action {
   }
 }
 
-export type Actions = SetHash | SetPlayers | SetSeasons | SetTeams;
+export type Actions = SetHash | SetPlayers | SetSeasons | SetTeams | DownloadCSVAction;

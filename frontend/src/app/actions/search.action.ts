@@ -22,6 +22,10 @@ export const STORE_FREQUENCY_SHOTS = 'Store Frequency Shots';
 export const STORE_COMPARE_SHOTS = 'Store Compare Shots';
 
 export const FOUR_FACTORS_SEARCH = 'Four Factors Search';
+export const FOUR_FACTORS_THREE_YEAR_SEARCH = 'Four Factors 3yr Search';
+export const FOUR_FACTORS_FIVE_YEAR_SEARCH = 'Four Factors 5yr Search';
+
+
 
 export const STORE_FOUR_FACTORS = 'Store Four Factors';
 
@@ -53,6 +57,22 @@ export class SearchInProgress implements Action {
 
 export class FourFactorsSearch implements Action {
   readonly type = FOUR_FACTORS_SEARCH;
+
+  constructor() {
+  }
+
+}
+
+export class FourFactorsThreeYearSearch implements Action {
+  readonly type = FOUR_FACTORS_THREE_YEAR_SEARCH;
+
+  constructor() {
+  }
+
+}
+
+export class FourFactorsFiveYearSearch implements Action {
+  readonly type = FOUR_FACTORS_FIVE_YEAR_SEARCH;
 
   constructor() {
   }

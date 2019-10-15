@@ -12,7 +12,15 @@ import {Action, Store} from "@ngrx/store";
 import {ShotchartService} from "../services/shotchart.service";
 import {Observable} from "rxjs/Observable";
 import * as initialActions from "../actions/initial.action";
-import {GetPlayers, GetSeasons, GetTeams, SetPlayers, SetSeasons, SetTeams} from "../actions/initial.action";
+import {
+  GetPlayers,
+  GetSeasons,
+  GetTeams,
+  SetPlayers,
+  SetSeasons,
+  SetSeasons3, SetSeasons5,
+  SetTeams
+} from "../actions/initial.action";
 import * as searchActions from "../actions/search.action";
 import {
   CompareShotSearch,
@@ -30,7 +38,13 @@ import 'rxjs/add/operator/mergeMap';
 import 'rxjs/add/operator/switchMap';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/withLatestFrom';
-import {selectPlayers, selectSeasons, selectTeams} from "../selectors/initial.selectors";
+import {
+  selectFiveYearSeasons,
+  selectPlayers,
+  selectSeasons,
+  selectTeams,
+  selectThreeYearSeasons
+} from "../selectors/initial.selectors";
 import {FourFactorsParams, PlayerId, ShotParams, TeamId} from "../models/options.models";
 import {
   CompareShotResponse,
@@ -98,6 +112,40 @@ export class InitializeEffects {
       return this.playersService.getSeasons().map(v => v.seasons);
     }
     return selectSeasons(this.store);
+  };
+
+  @Effect()
+  getSeasons3Effect = (): Observable<Action> =>
+    this.actions
+      .ofType(initialActions.GET_SEASONS3)
+      .withLatestFrom(this.store)
+      .mergeMap(this.callSeason3Service)
+      .map(response => {
+        return new SetSeasons3(response)
+      });
+
+  private callSeason3Service = (value: [GetSeasons, State]): Observable<Array<string>> => {
+    if (value[1].seasons == null || value[1].seasons.length < 1) {
+      return this.playersService.getSeasons3().map(v => v.seasons);
+    }
+    return selectThreeYearSeasons(this.store);
+  };
+
+  @Effect()
+  getSeasons5Effect = (): Observable<Action> =>
+    this.actions
+      .ofType(initialActions.GET_SEASONS5)
+      .withLatestFrom(this.store)
+      .mergeMap(this.callSeason5Service)
+      .map(response => {
+        return new SetSeasons5(response)
+      });
+
+  private callSeason5Service = (value: [GetSeasons, State]): Observable<Array<string>> => {
+    if (value[1].seasons == null || value[1].seasons.length < 1) {
+      return this.playersService.getSeasons5().map(v => v.seasons);
+    }
+    return selectFiveYearSeasons(this.store);
   };
 
 
@@ -185,6 +233,48 @@ export class InitializeEffects {
     };
 
     return this.playersService.getFourFactors(params);
+  };
+
+  @Effect()
+  fourFactors3YrEffect = (): Observable<Action> =>
+    this.actions
+      .ofType(searchActions.FOUR_FACTORS_THREE_YEAR_SEARCH)
+      .withLatestFrom(this.store)
+      .mergeMap(this.callFourFactors3YrService)
+      .map(response => {
+        return new StoreFourFactors(response);
+      });
+
+
+  private callFourFactors3YrService = (value: [FourFactorsSearch, State]): Observable<FourFactorsResponse> => {
+    const options = value[1].fourFactorsOptions;
+    const params = {
+      hash: options.hash,
+      params: toFourFactorsParams(options)
+    };
+
+    return this.playersService.getFourFactors3Yr(params);
+  };
+
+  @Effect()
+  fourFactors5YrEffect = (): Observable<Action> =>
+    this.actions
+      .ofType(searchActions.FOUR_FACTORS_FIVE_YEAR_SEARCH)
+      .withLatestFrom(this.store)
+      .mergeMap(this.callFourFactors5YrService)
+      .map(response => {
+        return new StoreFourFactors(response);
+      });
+
+
+  private callFourFactors5YrService = (value: [FourFactorsSearch, State]): Observable<FourFactorsResponse> => {
+    const options = value[1].fourFactorsOptions;
+    const params = {
+      hash: options.hash,
+      params: toFourFactorsParams(options)
+    };
+
+    return this.playersService.getFourFactors5Yr(params);
   };
 
   @Effect()

@@ -41,12 +41,36 @@ export const selectSeasons = (store: Store<State>): Observable<Array<string>> =>
   return store.select(state => state.seasons);
 };
 
+export const selectThreeYearSeasons = (store: Store<State>): Observable<Array<string>> => {
+  return store.select(state => state.threeYearSeasons);
+};
+
+export const selectFiveYearSeasons = (store: Store<State>): Observable<Array<string>> => {
+  return store.select(state => state.fiveYearSeasons);
+};
+
 export const selectSearchInProgress = (store: Store<State>): Observable<boolean> => {
   return store.select(state => state.searchInProgress);
-}
+};
 
 export const selectPageLoaded = (store: Store<State>): Observable<boolean> => {
   return selectPlayers(store).combineLatest(selectTeams(store), selectSeasons(store), selectSearchInProgress(store))
+    .map(value => {
+      const [players, teams, seasons, searchInProgress]: [Array<PlayerId>, Array<TeamId>, Array<string>, boolean] = value;
+      return players.length > 0 && teams.length > 0 && seasons.length > 0 && !searchInProgress
+    })
+};
+
+export const selectPageLoaded3 = (store: Store<State>): Observable<boolean> => {
+  return selectPlayers(store).combineLatest(selectTeams(store), selectThreeYearSeasons(store), selectSearchInProgress(store))
+    .map(value => {
+      const [players, teams, seasons, searchInProgress]: [Array<PlayerId>, Array<TeamId>, Array<string>, boolean] = value;
+      return players.length > 0 && teams.length > 0 && seasons.length > 0 && !searchInProgress
+    })
+};
+
+export const selectPageLoaded5 = (store: Store<State>): Observable<boolean> => {
+  return selectPlayers(store).combineLatest(selectTeams(store), selectFiveYearSeasons(store), selectSearchInProgress(store))
     .map(value => {
       const [players, teams, seasons, searchInProgress]: [Array<PlayerId>, Array<TeamId>, Array<string>, boolean] = value;
       return players.length > 0 && teams.length > 0 && seasons.length > 0 && !searchInProgress

@@ -6,12 +6,17 @@ import * as d3 from 'd3';
 import * as d3Select from 'd3-selection';
 import * as d3Scale from 'd3-scale';
 import * as d3Shape from 'd3-shape';
-
+import { saveAs } from 'file-saver';
 
 @Component({
   selector: 'raw-shot-chart',
   template: `
-    <svg class="shot-chart" width="750" height="705"></svg>
+      <div>
+          <button class="save" (click)="this.exportImage()">Save Image</button>
+      </div>
+      <div>
+          <svg class="shot-chart" id="shot-chart" width="750" height="705"></svg>
+      </div>
   `,
   styleUrls: ['../../css/general.css']
 })
@@ -60,7 +65,7 @@ export class RawShotsComponent implements OnInit {
       .attr("cy", (shot) => {
         return this.scaleYPoint(shot.yCoordinate);
       })
-      .attr('r', this.scaleR(5))
+      .attr('r', this.scaleR(2))
       .attr('fill', this.madeToColor)
       .attr('id', "SHOT")
       //.on('mouseover', this.handleMouseOver)
@@ -305,5 +310,113 @@ export class RawShotsComponent implements OnInit {
     this.svg.select("#x" + shot.xCoordinate + "-" + shot.yCoordinate + "-" + i + "box").remove();  // Remove text location
     this.svg.select("#x" + shot.xCoordinate + "-" + shot.yCoordinate + "-" + i).remove();  // Remove text location
   };
+
+  getSVGString = ( svgNode ) => {
+    svgNode.setAttribute('xlink', 'http://www.w3.org/1999/xlink');
+    var cssStyleText = getCSSStyles( svgNode );
+    appendCSS( cssStyleText, svgNode );
+
+    var serializer = new XMLSerializer();
+    var svgString = serializer.serializeToString(svgNode);
+    svgString = svgString.replace(/(\w+)?:?xlink=/g, 'xmlns:xlink='); // Fix root xlink without namespace
+    svgString = svgString.replace(/NS\d+:href/g, 'xlink:href'); // Safari NS namespace fix
+
+    return svgString;
+
+    function getCSSStyles( parentElement ) {
+      var selectorTextArr = [];
+
+      // Add Parent element Id and Classes to the list
+      selectorTextArr.push( '#'+parentElement.id );
+      for (var c = 0; c < parentElement.classList.length; c++)
+        if ( !contains('.'+parentElement.classList[c], selectorTextArr) )
+          selectorTextArr.push( '.'+parentElement.classList[c] );
+
+      // Add Children element Ids and Classes to the list
+      var nodes = parentElement.getElementsByTagName("*");
+      for (var i = 0; i < nodes.length; i++) {
+        var id = nodes[i].id;
+        if ( !contains('#'+id, selectorTextArr) )
+          selectorTextArr.push( '#'+id );
+
+        var classes = nodes[i].classList;
+        for (var c = 0; c < classes.length; c++)
+          if ( !contains('.'+classes[c], selectorTextArr) )
+            selectorTextArr.push( '.'+classes[c] );
+      }
+
+      // Extract CSS Rules
+      var extractedCSSText = "";
+      for (var i = 0; i < document.styleSheets.length; i++) {
+        var s = <CSSStyleSheet>document.styleSheets[i];
+
+        try {
+          if(!s.cssRules) continue;
+        } catch( e ) {
+          if(e.name !== 'SecurityError') throw e; // for Firefox
+          continue;
+        }
+
+        var cssRules = s.cssRules;
+        for (var r = 0; r < cssRules.length; r++) {
+          if ( contains( (<CSSStyleRule>cssRules[r]).selectorText, selectorTextArr ) )
+            extractedCSSText += cssRules[r].cssText;
+        }
+      }
+
+
+      return extractedCSSText;
+
+      function contains(str,arr) {
+        return arr.indexOf(str) !== -1;
+      }
+
+    }
+
+    function appendCSS( cssText, element ) {
+      var styleElement = document.createElement("style");
+      styleElement.setAttribute("type","text/css");
+      styleElement.innerHTML = cssText;
+      var refNode = element.hasChildNodes() ? element.children[0] : null;
+      element.insertBefore( styleElement, refNode );
+    }
+  }
+
+  exportImage = () => {
+    var svgString = this.getSVGString(this.svg.node());
+    this.svgString2Image( svgString, 2*this.width, 2*this.height, 'png', save ); // passes Blob and filesize String to the callback
+
+    function save( dataBlob, filesize ){
+      saveAs( dataBlob, 'ShotChart.png' ); // FileSaver.js function
+    }
+  };
+
+
+  svgString2Image = ( svgString, width, height, format, callback ) => {
+    var format = format ? format : 'png';
+
+    var imgsrc = 'data:image/svg+xml;base64,'+ btoa( unescape( encodeURIComponent( svgString ) ) ); // Convert SVG string to data URL
+
+    var canvas = document.createElement("canvas");
+    var context = canvas.getContext("2d");
+
+    canvas.width = width;
+    canvas.height = height;
+
+    var image = new Image();
+    image.onload = function() {
+      context.clearRect ( 0, 0, width, height );
+      context.drawImage(image, 0, 0, width, height);
+
+      canvas.toBlob( function(blob: Blob) {
+        var filesize = Math.round( blob.size/1024 ) + ' KB';
+        if ( callback ) callback( blob, filesize );
+      });
+
+
+    };
+
+    image.src = imgsrc;
+  }
 
 }
