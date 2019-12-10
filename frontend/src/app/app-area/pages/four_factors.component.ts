@@ -157,7 +157,7 @@ export class FourFactorsComponent implements OnInit {
       this.store.dispatch(new SetHash(hash));
       this.searchWithHash();
     } else {
-      this.store.dispatch(new SetHash("-1106328546")); //TODO Update when new season rolls around
+      this.store.dispatch(new SetHash("1109440799")); //TODO Update when new season rolls around
       this.searchWithHash();
     }
 
