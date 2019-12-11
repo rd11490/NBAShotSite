@@ -8,9 +8,6 @@ import org.json4s.jackson.JsonMethods._
 object Creds {
   implicit val defaultFormats = DefaultFormats
   private val fileLocation: String = "/Creds.json"
-  private val environment: String = "ENV"
-  private val localEnvironment: String = "Local"
-  private val productionEnvironment: String = "Production"
   private lazy val creds: Creds = parse(
     scala.io.Source.fromInputStream(getStream()).getLines.mkString
   )
@@ -20,10 +17,7 @@ object Creds {
     getClass.getResourceAsStream(fileLocation)
 
   def getCreds: EnvironmentCreds =
-    if (getEnvironment().contains(productionEnvironment)) creds.Production
-    else creds.Local
-
-  def getEnvironment( /*IO*/ ): Option[String] = sys.env.get(environment)
+    creds.Production
 }
 final case class Creds(Local: EnvironmentCreds, Production: EnvironmentCreds)
 
