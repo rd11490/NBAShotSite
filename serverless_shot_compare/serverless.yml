@@ -22,8 +22,6 @@ provider:
   runtime: java8
   memorySize: 2048
   timeout: 30
-  environment:
-      ENV: 'Production'
 
 # you can overwrite defaults here
 #  stage: dev
