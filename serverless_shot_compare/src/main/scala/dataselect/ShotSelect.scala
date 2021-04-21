@@ -1,4 +1,4 @@
-package shotselect
+package dataselect
 
 import datamodel._
 import storage.PostgresClient
@@ -19,9 +19,8 @@ object ShotSelect {
       })
       .map(fillEmptyZonesAndStats)
 
-
   private def toShotsForReduction(shot: ShotWithPlayers)(
-      implicit executionContext: ExecutionContext): ZonedShot = {
+    implicit executionContext: ExecutionContext): ZonedShot = {
     ZonedShot(
       s"${shot.shotValue}_${shot.shotZone}",
       shot.shotZone,
@@ -31,6 +30,32 @@ object ShotSelect {
       0.0
     )
   }
+
+  def selectZonedRoleShots(params: ShotRequestWithRole)(
+    implicit executionContext: ExecutionContext): Future[ZonedShots] =
+    selectRoleShots(params)
+      .map(v => {
+        v.map(toRoleShotsForReduction)
+          .groupBy(_.key)
+          .map(c => c._2.reduce(_ + _))
+          .toSeq
+      })
+      .map(fillEmptyZonesAndStats)
+
+  private def toRoleShotsForReduction(shot: ShotWithPlayersAndRole)(
+    implicit executionContext: ExecutionContext): ZonedShot = {
+    ZonedShot(
+      s"${shot.shotValue}_${shot.shotZone}",
+      shot.shotZone,
+      shot.shotAttemptedFlag,
+      shot.shotMadeFlag,
+      shot.shotValue,
+      0.0
+    )
+  }
+
+
+
 
   private def fillEmptyZonesAndStats(shots: Seq[ZonedShot])(
       implicit executionContext: ExecutionContext): ZonedShots = {
@@ -138,6 +163,16 @@ object ShotSelect {
     PostgresClient.selectFrom[ShotWithPlayers](
       NBATables.lineup_shots,
       ShotWithPlayers.apply,
+      params.toWhereClause: _*
+    )
+  }
+
+  def selectRoleShots(params: ShotRequestWithRole)(
+    implicit executionContext: ExecutionContext)
+  : Future[Seq[ShotWithPlayersAndRole]] = {
+    PostgresClient.selectFrom[ShotWithPlayersAndRole](
+      NBATables.role_shots,
+      ShotWithPlayersAndRole.apply,
       params.toWhereClause: _*
     )
   }

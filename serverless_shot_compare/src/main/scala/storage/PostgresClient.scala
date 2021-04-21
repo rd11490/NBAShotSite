@@ -142,6 +142,23 @@ object PostgresClient {
   private def selectSeasonStatement(table: PostgresTable): String =
     s"$Select DISTINCT season $From ${table.name}"
 
+  def selectRoles(table: PostgresTable): Future[Seq[String]] = {
+    val future: Future[QueryResult] = PostgresConnection
+      .getConnection(Database.nba)
+      .sendQuery(selectRolesStatement(table))
+
+    future.map(queryResult =>
+      queryResult.rows match {
+        case Some(rows) =>
+          rows.map(v => v(0).asInstanceOf[String])
+        case None =>
+          Seq.empty[String]
+      })
+  }
+
+  private def selectRolesStatement(table: PostgresTable): String =
+    s"$Select DISTINCT role $From ${table.name}"
+
   /*
     Private Methods
    */
@@ -246,7 +263,7 @@ object PostgresClient {
     }
 
   private def trace[T](stmt: T): T = {
-//    println(stmt)
+    println(stmt)
     stmt
   }
 }

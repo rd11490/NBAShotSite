@@ -12,18 +12,22 @@ import utils.Creds
 
 import scala.concurrent.ExecutionContext
 
-class RawShotsAdderHandler extends Proxy[Seq[ShotWithPlayers], String] {
+class PossessionsAdderHandler extends Proxy[Seq[OneWayPossession], String] {
   implicit val executionContext: ExecutionContext = ExecutionContext.global
 
   override def handle(
-                       input: proxy.ProxyRequest[Seq[ShotWithPlayers]],
+                       input: proxy.ProxyRequest[Seq[OneWayPossession]],
                        c: Context): Either[Throwable, ProxyResponse[String]] = {
 
+    val logger = c.getLogger
+    logger.log("Adding possessions - check auth")
     val auth = input.headers.flatMap(v => v.get("Authorization"))
-    if (auth.exists(RawShotsAdderHandler.verifyId)) {
+    if (auth.exists(PossessionsAdderHandler.verifyId)) {
       val message = input.body match {
-        case Some(shot) =>
-          val success = PostgresClient.insertInto(NBATables.lineup_shots, shot)
+        case Some(possessions) =>
+          logger.log("possessions - auth passed")
+          val success = PostgresClient.insertInto(NBATables.possessions_table, possessions)
+          logger.log("wrote to table - auth passed")
           if (success) "Success" else "Failure"
         case None => "No Shot Provided"
       }
@@ -35,13 +39,22 @@ class RawShotsAdderHandler extends Proxy[Seq[ShotWithPlayers], String] {
   }
 }
 
-object RawShotsAdderHandler {
+object PossessionsAdderHandler {
   implicit val executionContext: ExecutionContext = ExecutionContext.global
 
   def verifyId(id: String): Boolean = {
     Creds.getCreds.Write.exists(v => v.equalsIgnoreCase(id))
   }
 }
+
+
+
+
+
+
+
+
+
 
 
 

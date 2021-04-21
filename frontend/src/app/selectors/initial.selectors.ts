@@ -56,6 +56,7 @@ export const selectSearchInProgress = (store: Store<State>): Observable<boolean>
 export const selectPageLoaded = (store: Store<State>): Observable<boolean> => {
   return selectPlayers(store).combineLatest(selectTeams(store), selectSeasons(store), selectSearchInProgress(store))
     .map(value => {
+      console.log(value)
       const [players, teams, seasons, searchInProgress]: [Array<PlayerId>, Array<TeamId>, Array<string>, boolean] = value;
       return players.length > 0 && teams.length > 0 && seasons.length > 0 && !searchInProgress
     })

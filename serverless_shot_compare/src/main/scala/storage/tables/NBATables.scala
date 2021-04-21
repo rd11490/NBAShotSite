@@ -6,12 +6,17 @@ object NBATables {
 
   val lineup_shots: PostgresTable =
     PostgresTable[ShotWithPlayers]("lineup_shots")
+
+  val role_shots: PostgresTable =
+    PostgresTable[ShotWithPlayersAndRole]("role_shots")
+
   val team_info: PostgresTable = PostgresTable[TeamInfo]("team_info")
   val player_info: PostgresTable = PostgresTable[PlayerInfo]("player_info")
   val game_dates: PostgresTable = PostgresTable[GameDate]("game_date")
   val seasons: PostgresTable = PostgresTable[Seasons]("seasons")
   val seasons3: PostgresTable = PostgresTable[Seasons]("seasons3")
   val seasons5: PostgresTable = PostgresTable[Seasons]("seasons5")
+  val roles: PostgresTable = PostgresTable[Role]("roles")
 
 
   val real_adjusted_four_factors: PostgresTable =
@@ -31,5 +36,19 @@ object NBATables {
     PostgresTable[CacheParams]("compare_cache_table")
   val four_factors_cache_table: PostgresTable =
     PostgresTable[CacheParams]("four_factors_cache_table")
+
+  val possessions_table: PostgresTable =
+    PostgresTable[OneWayPossession]("possessions_table")
+
+  val possessions_cache_table: PostgresTable =
+    PostgresTable[CacheParams]("possessions_cache_table")
+
+
+  val role_cache_table: PostgresTable =
+    PostgresTable[CacheParams]("raw_cache_table")
+  val frequency_role_cache_table: PostgresTable =
+    PostgresTable[CacheParams]("frequency_cache_table")
+  val compare_role_cache_table: PostgresTable =
+    PostgresTable[CacheParams]("compare_cache_table")
 
 }

@@ -37,7 +37,7 @@ export class StartDateSelectorComponent implements OnInit {
 
   _source: string;
   minDate: Date = new Date(2000, 0, 1);
-  maxDate: Date = new Date(2020, 0, 1);
+  maxDate: Date = new Date(2030, 0, 1);
   startAt: Date;
 
   constructor(private store: Store<State>) {

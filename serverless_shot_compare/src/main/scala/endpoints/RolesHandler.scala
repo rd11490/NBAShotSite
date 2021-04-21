@@ -1,7 +1,7 @@
 package endpoints
 
 import com.amazonaws.services.lambda.runtime.Context
-import datamodel.{SeasonsResponse}
+import datamodel.RolesResponse
 import io.circe.generic.auto._
 import io.github.mkotsur.aws.handler.Lambda.{Proxy, _}
 import io.github.mkotsur.aws.proxy
@@ -11,23 +11,22 @@ import storage.tables.NBATables
 
 import scala.concurrent.{ExecutionContext, Future}
 
-class Season5Handler extends Proxy[String, SeasonsResponse] {
+class RolesHandler extends Proxy[String, RolesResponse] {
   import utils.RichFuture._
   implicit val executionContext: ExecutionContext = ExecutionContext.global
   override def handle(
       input: proxy.ProxyRequest[String],
-      c: Context): Either[Throwable, ProxyResponse[SeasonsResponse]] = {
-    val response = Season5Handler.selectSeasons().map(v => SeasonsResponse(v.sorted.reverse)).await
+      c: Context): Either[Throwable, ProxyResponse[RolesResponse]] = {
+    val response = RolesHandler.selectRoles().map(v => RolesResponse(v.sorted.reverse)).await
     APIResponse.response(Some(response))
   }
 }
 
-object Season5Handler {
+
+object RolesHandler {
   implicit val executionContext: ExecutionContext = ExecutionContext.global
-  def selectSeasons( /*IO*/ ): Future[Seq[String]] = {
+  def selectRoles( /*IO*/ ): Future[Seq[String]] = {
     PostgresClient
-      .selectSeasons(NBATables.seasons5)
+      .selectRoles(NBATables.roles)
   }
 }
-
-

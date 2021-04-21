@@ -11,33 +11,33 @@ import utils.ShotZone
 
 import scala.concurrent.{ExecutionContext, Future}
 
-class RawShotHandler extends Proxy[FrequencyShotRequest, RawShots] {
+class RoleRawShotHandler extends Proxy[FrequencyRoleShotRequest, RoleShots] {
   implicit val executionContext: ExecutionContext = ExecutionContext.global
 
   import utils.RichFuture._
 
   override def handle(
-      input: proxy.ProxyRequest[FrequencyShotRequest],
-      c: Context): Either[Throwable, ProxyResponse[RawShots]] = {
+                       input: proxy.ProxyRequest[FrequencyRoleShotRequest],
+                       c: Context): Either[Throwable, ProxyResponse[RoleShots]] = {
 
     val response = input.body.map(v => {
-      val shotParams = ParamsHandler.handleFrequencyParams(v)
-      RawShotHandler.selectRawShots(shotParams).await
+      val shotParams = ParamsHandler.handleFrequencyRoleParams(v)
+      RoleRawShotHandler.selectRoleShots(shotParams).await
     })
     APIResponse.response(response)
   }
 }
 
-object RawShotHandler {
+object RoleRawShotHandler {
   implicit val executionContext: ExecutionContext = ExecutionContext.global
 
-  def selectRawShots(params: FrequencyShotRequest): Future[RawShots] =
+  def selectRoleShots(params: FrequencyRoleShotRequest): Future[RoleShots] =
     ShotSelect
-      .selectData(params.params.getOrElse(ShotRequest()))
-      .map(v => (calculateStats(v), v.map(c => RawShotResponse(c))))
-      .map(v => RawShots(params, v._1, v._2))
+      .selectRoleShots(params.params.getOrElse(ShotRequestWithRole()))
+      .map(v => (calculateStats(v), v.map(c => RawShotResponse.fromShotWithPlayersAndRole(c))))
+      .map(v => RoleShots(params, v._1, v._2))
 
-  def calculateStats(shots: Seq[ShotWithPlayers]): ShotStatisticsContainer = {
+  def calculateStats(shots: Seq[ShotWithPlayersAndRole]): ShotStatisticsContainer = {
     if (shots.isEmpty) {
       ShotStatisticsContainer.empty
     } else {
@@ -118,30 +118,30 @@ object RawShotHandler {
     }
   }
 
-  private def toShotZone(shot: ShotWithPlayers): Seq[ZonedShot] = {
+  private def toShotZone(shot: ShotWithPlayersAndRole): Seq[ZonedShot] = {
     val total = Some(
       ZonedShot("total",
-                "total",
-                shot.shotAttemptedFlag,
-                shot.shotMadeFlag,
-                shot.shotValue,
-                0.0))
+        "total",
+        shot.shotAttemptedFlag,
+        shot.shotMadeFlag,
+        shot.shotValue,
+        0.0))
     val points = if (shot.shotValue == 3) {
       Some(
         ZonedShot("three",
-                  "three",
-                  shot.shotAttemptedFlag,
-                  shot.shotMadeFlag,
-                  shot.shotValue,
-                  0.0))
+          "three",
+          shot.shotAttemptedFlag,
+          shot.shotMadeFlag,
+          shot.shotValue,
+          0.0))
     } else if (shot.shotValue == 2) {
       Some(
         ZonedShot("two",
-                  "two",
-                  shot.shotAttemptedFlag,
-                  shot.shotMadeFlag,
-                  shot.shotValue,
-                  0.0))
+          "two",
+          shot.shotAttemptedFlag,
+          shot.shotMadeFlag,
+          shot.shotValue,
+          0.0))
     } else {
       None
     }
@@ -149,19 +149,19 @@ object RawShotHandler {
       if (shot.shotValue == 2 && shot.shotZone != ShotZone.RestrictedArea.toString) {
         Some(
           ZonedShot("mid",
-                    "mid",
-                    shot.shotAttemptedFlag,
-                    shot.shotMadeFlag,
-                    shot.shotValue,
-                    0.0))
+            "mid",
+            shot.shotAttemptedFlag,
+            shot.shotMadeFlag,
+            shot.shotValue,
+            0.0))
       } else if (shot.shotValue == 2 && shot.shotZone == ShotZone.RestrictedArea.toString) {
         Some(
           ZonedShot("rim",
-                    "rim",
-                    shot.shotAttemptedFlag,
-                    shot.shotMadeFlag,
-                    shot.shotValue,
-                    0.0))
+            "rim",
+            shot.shotAttemptedFlag,
+            shot.shotMadeFlag,
+            shot.shotValue,
+            0.0))
       } else {
         None
       }

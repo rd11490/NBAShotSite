@@ -1,7 +1,7 @@
 package endpoints
 
 import com.amazonaws.services.lambda.runtime.Context
-import datamodel.SeasonsResponse
+import datamodel.{SeasonsResponse}
 import io.circe.generic.auto._
 import io.github.mkotsur.aws.handler.Lambda.{Proxy, _}
 import io.github.mkotsur.aws.proxy

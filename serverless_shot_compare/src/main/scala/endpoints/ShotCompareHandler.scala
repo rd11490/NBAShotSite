@@ -6,7 +6,7 @@ import io.circe.generic.auto._
 import io.github.mkotsur.aws.handler.Lambda.{Proxy, _}
 import io.github.mkotsur.aws.proxy
 import io.github.mkotsur.aws.proxy.ProxyResponse
-import shotselect.ShotSelect
+import dataselect.ShotSelect
 
 import scala.concurrent.{ExecutionContext, Future}
 

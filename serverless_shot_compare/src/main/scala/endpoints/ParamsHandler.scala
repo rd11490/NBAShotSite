@@ -83,6 +83,78 @@ object ParamsHandler {
   }
 
 
+  def handleFrequencyRoleParams(request: FrequencyRoleShotRequest): FrequencyRoleShotRequest = {
+    storeFrequencyRoleParams(request)
+    val params = extractFrequencyRoleParams(request)
+    val id = params.hashCode().toString
+    FrequencyRoleShotRequest(Some(id), Some(params))
+  }
+
+  private def extractFrequencyRoleParams(request: FrequencyRoleShotRequest): ShotRequestWithRole = {
+    request.hash.flatMap(getFrequencyRoleParamsFromCache)
+      .getOrElse(request.params
+        .getOrElse(ShotRequestWithRole()))
+  }
+
+  private def storeFrequencyRoleParams(request: FrequencyRoleShotRequest): Unit = {
+    request.params.foreach(params => {
+      try {
+        val cachedParams = toCachedParams(params)
+        PostgresClient.insertInto[CacheParams](NBATables.frequency_role_cache_table, cachedParams)
+      } catch {
+        case e: Throwable =>
+          println(e.getMessage)
+          println(e)
+          throw e
+      }
+    })
+  }
+
+  private def getFrequencyRoleParamsFromCache(hash: String): Option[ShotRequestWithRole] = {
+    PostgresClient.selectFrom(
+      NBATables.frequency_role_cache_table,
+      CacheParams.apply,
+      s"primarykey = '$hash'")
+      .map(_.headOption.flatMap(_.params.extractOpt[ShotRequestWithRole])).await()
+  }
+
+  def handlePossessionParams(request: PossessionsRequest): PossessionsRequest = {
+    storePossessionParams(request)
+    val params = extractPossessionsParams(request)
+    val id = params.hashCode().toString
+    PossessionsRequest(Some(id), Some(params))
+  }
+
+  private def extractPossessionsParams(request: PossessionsRequest): PossessionRequestParams = {
+    request.hash.flatMap(getPossessionsParamsFromCache)
+      .getOrElse(request.params
+        .getOrElse(PossessionRequestParams()))
+  }
+
+  private def storePossessionParams(request: PossessionsRequest): Unit = {
+    request.params.foreach(params => {
+      try {
+        val cachedParams = toCachedParams(params)
+        PostgresClient.insertInto[CacheParams](NBATables.frequency_cache_table, cachedParams)
+      } catch {
+        case e: Throwable =>
+          println(e.getMessage)
+          println(e)
+          throw e
+      }
+    })
+  }
+
+  private def getPossessionsParamsFromCache(hash: String): Option[PossessionRequestParams] = {
+    PostgresClient.selectFrom(
+      NBATables.possessions_cache_table,
+      CacheParams.apply,
+      s"primarykey = '$hash'")
+      .map(_.headOption.flatMap(_.params.extractOpt[PossessionRequestParams])).await()
+  }
+
+
+
   def handleCompareParams(request: CompareShotRequest): CompareShotRequest = {
     storeCompareyParams(request)
     val params = extractCompareParams(request)
@@ -90,7 +162,7 @@ object ParamsHandler {
     CompareShotRequest(Some(id), Some(params))
   }
 
-  private def extractCompareParams(request: CompareShotRequest): ShotCompareRequest = {
+  private def extractCompareParams(request: CompareShotRequest): ShotCompareRequest[ShotRequest] = {
     request.hash.flatMap(getCompareParamsFromCache)
       .getOrElse(request.params.getOrElse(ShotCompareRequest(ShotRequest(), ShotRequest())))
   }
@@ -103,12 +175,12 @@ object ParamsHandler {
   }
 
 
-  private def getCompareParamsFromCache(hash: String): Option[ShotCompareRequest] = {
+  private def getCompareParamsFromCache(hash: String): Option[ShotCompareRequest[ShotRequest]] = {
     PostgresClient.selectFrom(
       NBATables.compare_cache_table,
       CacheParams.apply,
       s"primarykey = '$hash'")
-      .map(_.headOption.flatMap(_.params.extractOpt[ShotCompareRequest])).await()
+      .map(_.headOption.flatMap(_.params.extractOpt[ShotCompareRequest[ShotRequest]])).await()
   }
 
 
@@ -138,5 +210,34 @@ object ParamsHandler {
       CacheParams.apply,
       s"primarykey = '$hash'")
       .map(_.headOption.flatMap(_.params.extractOpt[FourFactorsRequestParams])).await()
+  }
+
+
+  def handleRoleCompareParams(request: CompareRoleShotRequest): CompareRoleShotRequest = {
+    storeRoleCompareyParams(request)
+    val params = extractRoleCompareParams(request)
+    val id = params.hashCode().toString
+    CompareRoleShotRequest(Some(id), Some(params))
+  }
+
+  private def extractRoleCompareParams(request: CompareRoleShotRequest): ShotCompareRequest[ShotRequestWithRole] = {
+    request.hash.flatMap(getRoleCompareParamsFromCache)
+      .getOrElse(request.params.getOrElse(ShotCompareRequest(ShotRequestWithRole(), ShotRequestWithRole())))
+  }
+
+  private def storeRoleCompareyParams(request: CompareRoleShotRequest): Unit = {
+    request.params.foreach(params => {
+      val cachedParams = toCachedParams(params)
+      PostgresClient.insertInto[CacheParams](NBATables.compare_role_cache_table, cachedParams)
+    })
+  }
+
+
+  private def getRoleCompareParamsFromCache(hash: String): Option[ShotCompareRequest[ShotRequestWithRole]] = {
+    PostgresClient.selectFrom(
+      NBATables.compare_role_cache_table,
+      CacheParams.apply,
+      s"primarykey = '$hash'")
+      .map(_.headOption.flatMap(_.params.extractOpt[ShotCompareRequest[ShotRequestWithRole]])).await()
   }
 }

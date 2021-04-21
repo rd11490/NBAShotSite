@@ -12,18 +12,19 @@ import utils.Creds
 
 import scala.concurrent.ExecutionContext
 
-class RawShotAdderHandler extends Proxy[ShotWithPlayers, String] {
+class RoleShotAdderHandler extends Proxy[Seq[ShotWithPlayersAndRole], String] {
   implicit val executionContext: ExecutionContext = ExecutionContext.global
 
-  override def handle(input: proxy.ProxyRequest[ShotWithPlayers],
+  override def handle(input: proxy.ProxyRequest[Seq[ShotWithPlayersAndRole]],
                       c: Context): Either[Throwable, ProxyResponse[String]] = {
 
     val auth = input.headers.flatMap(v => v.get("Authorization"))
-    if (auth.exists(RawShotAdderHandler.verifyId)) {
+    if (auth.exists(RoleShotAdderHandler.verifyId)) {
+      println("Handle Events")
       val message = input.body match {
-        case Some(shot) =>
+        case Some(shots) =>
           val success =
-            PostgresClient.insertInto(NBATables.lineup_shots, Seq(shot))
+            PostgresClient.insertInto(NBATables.role_shots, shots)
           if (success) "Success" else "Failure"
         case None => "No Shot Provided"
       }
@@ -34,7 +35,8 @@ class RawShotAdderHandler extends Proxy[ShotWithPlayers, String] {
 
   }
 }
-object RawShotAdderHandler {
+
+object RoleShotAdderHandler {
   implicit val executionContext: ExecutionContext = ExecutionContext.global
 
   def verifyId(id: String): Boolean = {

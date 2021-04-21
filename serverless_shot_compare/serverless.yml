@@ -57,7 +57,6 @@ package:
 functions:
   players:
       handler: endpoints.PlayerInfoHandler::handle
-      provisionedConcurrency: 5
       events:
         - http:
             method: get
@@ -65,7 +64,6 @@ functions:
 
   teams:
       handler: endpoints.TeamNameHandler::handle
-      provisionedConcurrency: 5
       events:
         - http:
             method: get
@@ -73,7 +71,6 @@ functions:
 
   seasons:
           handler: endpoints.SeasonHandler::handle
-          provisionedConcurrency: 5
           events:
             - http:
                 method: get
@@ -81,26 +78,37 @@ functions:
 
   seasons3:
           handler: endpoints.Season3Handler::handle
-          provisionedConcurrency: 5
           events:
             - http:
                 method: get
                 path: /seasons3
   seasons5:
             handler: endpoints.Season5Handler::handle
-            provisionedConcurrency: 5
             events:
               - http:
                   method: get
                   path: /seasons5
 
+  roles:
+    handler: endpoints.RolesHandler::handle
+    events:
+      - http:
+          method: get
+          path: /roles
+
   raw:
       handler: endpoints.RawShotHandler::handle
-      provisionedConcurrency: 5
       events:
         - http:
             method: post
             path: /raw
+
+  roleshots:
+    handler: endpoints.RoleRawShotHandler::handle
+    events:
+      - http:
+          method: post
+          path: /roleRaw
 
   addraws:
         handler: endpoints.RawShotsAdderHandler::handle
@@ -108,6 +116,13 @@ functions:
           - http:
               method: post
               path: /addraws
+
+  addroles:
+    handler: endpoints.RoleShotAdderHandler::handle
+    events:
+      - http:
+          method: post
+          path: /addroles
 
   addfourfactors:
           handler: endpoints.FourFactorsAdderHandler::handle
@@ -133,22 +148,35 @@ functions:
 
   frequency:
       handler: endpoints.ShotFrequencyHandler::handle
-      provisionedConcurrency: 5
       events:
         - http:
             method: post
             path: /frequency
 
+
+  frequencyroles:
+    handler: endpoints.RoleShotFrequencyHandler::handle
+    events:
+      - http:
+          method: post
+          path: /roleFrequency
+
   compare:
         handler: endpoints.ShotCompareHandler::handle
-        provisionedConcurrency: 5
         events:
           - http:
               method: post
               path: /compare
+
+  compareroles:
+    handler: endpoints.RoleShotCompareHandler::handle
+    events:
+      - http:
+          method: post
+          path: /roleCompare
+
   fourfactors:
         handler: endpoints.FourFactorsHandler::handle
-        provisionedConcurrency: 5
         events:
           - http:
               method: post
@@ -156,22 +184,34 @@ functions:
 
   addfourfactors3:
             handler: endpoints.FourFactorsThreeYearAdderHandler::handle
-            provisionedConcurrency: 5
             events:
               - http:
                   method: post
                   path: /addfourfactors3
 
   addfourfactors5:
-            handler: endpoints.FourFactorsFiveYearAdderHandler::handle
-            events:
-              - http:
-                  method: post
-                  path: /addfourfactors5
+    handler: endpoints.FourFactorsFiveYearAdderHandler::handle
+    events:
+      - http:
+          method: post
+          path: /addfourfactors5
+
+  possessions:
+    handler: endpoints.PossessionsHandler::handle
+    events:
+      - http:
+          method: post
+          path: /possessions
+
+  addPossessions:
+    handler: endpoints.PossessionsAdderHandler::handle
+    events:
+      - http:
+          method: post
+          path: /addPossessions
 
   fourfactors3:
           handler: endpoints.FourFactorsThreeYearHandler::handle
-          provisionedConcurrency: 5
           events:
             - http:
                 method: post
@@ -179,7 +219,6 @@ functions:
 
   fourfactors5:
             handler: endpoints.FourFactorsFiveYearHandler::handle
-            provisionedConcurrency: 5
             events:
               - http:
                   method: post

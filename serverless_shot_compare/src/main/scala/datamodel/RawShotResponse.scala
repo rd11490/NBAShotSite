@@ -22,9 +22,26 @@ object RawShotResponse {
           shotWithPlayers.secondsRemaining.toString)
       )
     )
+
+  def fromShotWithPlayersAndRole(shotWithPlayers: ShotWithPlayersAndRole): RawShotResponse =
+    RawShotResponse(
+      xCoordinate = shotWithPlayers.xCoordinate,
+      yCoordinate = shotWithPlayers.yCoordinate,
+      shotMadeFlag = shotWithPlayers.shotMadeFlag,
+      metadata = Seq(
+        RawShotMetadata("Distance", s"${shotWithPlayers.shotDistance} Ft"),
+        RawShotMetadata("Qtr", shotWithPlayers.period.toString),
+        RawShotMetadata("Sec Left In Qtr",
+          shotWithPlayers.secondsRemaining.toString)
+      )
+    )
 }
 
 final case class RawShots(params: FrequencyShotRequest,
+                          statistics: ShotStatisticsContainer,
+                          shots: Seq[RawShotResponse])
+
+final case class RoleShots(params: FrequencyRoleShotRequest,
                           statistics: ShotStatisticsContainer,
                           shots: Seq[RawShotResponse])
 
@@ -57,14 +74,16 @@ object ShotStatistics {
   def empty: ShotStatistics = ShotStatistics(0, 0, 0.0, 0.0)
 }
 
-final case class ZonedShotsResponse(params: FrequencyShotRequest,
-                                    data: ZonedShots) {
-}
+final case class ZonedShotsResponse(params: FrequencyShotRequest, data: ZonedShots)
+
+final case class ZonedRoleShotsResponse(params: FrequencyRoleShotRequest, data: ZonedShots)
+
 
 final case class ZonedShotCompare(shots1: ZonedShots, shots2: ZonedShots)
 
-final case class ZonedShotCompareResponse(params: CompareShotRequest,
-                                          data: ZonedShotCompare)
+final case class ZonedShotCompareResponse(params: CompareShotRequest, data: ZonedShotCompare)
+final case class ZonedRoleShotCompareResponse(params: CompareRoleShotRequest, data: ZonedShotCompare)
+
 
 final case class ZonedShot(
                             key: String,

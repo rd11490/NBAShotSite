@@ -28,7 +28,7 @@ import {selectHash} from "../../selectors/fourfactors_options.selectors";
 @Component({
   selector: 'four_factors_5_year_page',
   template: `
-    <h1>Real Adjusted Four Factors</h1>
+    <h1>Regularized Adjusted Four Factors</h1>
     <div [hidden]="(this._searchFailure | async)">
       <h1 style="color:red;">{{(this._searchFailureMessage | async)}}</h1>
     </div>
@@ -69,8 +69,8 @@ import {selectHash} from "../../selectors/fourfactors_options.selectors";
       'LA_RAPM__Def', 'LA_RAPM__Def_Rank', 'season']"
           ></four_factors_table>
         </mat-tab>
-        <mat-tab label="Real Adjusted Effective Field Goal Percentage">
-          <h2>Real Adjusted Effective Field Goal Percentage</h2>
+        <mat-tab label="RA Effective Field Goal Percentage">
+          <h2>Regularized Adjusted Effective Field Goal Percentage</h2>
           <div *ngIf="this._showEFG === false">
             <button (click)="this.flipEFG(true)">Explain</button>
           </div>
@@ -84,8 +84,8 @@ import {selectHash} from "../../selectors/fourfactors_options.selectors";
       'RA_EFG__Def', 'RA_EFG__Def_Rank', 'season']"
           ></four_factors_table>
         </mat-tab>
-        <mat-tab label="Real Adjusted Turnover Rate">
-          <h2>Real Adjusted Turnover Rate</h2>
+        <mat-tab label="RA Turnover Rate">
+          <h2>Regularized Adjusted Turnover Rate</h2>
           <div *ngIf="this._showTOV === false">
             <button (click)="this.flipTOV(true)">Explain</button>
           </div>
@@ -99,7 +99,7 @@ import {selectHash} from "../../selectors/fourfactors_options.selectors";
       'RA_TOV__Def', 'RA_TOV__Def_Rank', 'season']"
           ></four_factors_table>
         </mat-tab>
-        <mat-tab label="Real Adjusted Free Throw Rate"> <h2>Real Adjusted Free Throw Rate</h2>
+        <mat-tab label="RA Free Throw Rate"> <h2>Regularized Adjusted Free Throw Rate</h2>
           <div *ngIf="this._showFTR === false">
             <button (click)="this.flipFTR(true)">Explain</button>
           </div>
@@ -113,8 +113,8 @@ import {selectHash} from "../../selectors/fourfactors_options.selectors";
       'RA_FTR__Def', 'RA_FTR__Def_Rank', 'season']"
           ></four_factors_table>
         </mat-tab>
-        <mat-tab label="Real Adjusted Rebound Rate">
-          <h2>Real Adjusted Rebound Rate</h2>
+        <mat-tab label="RA Rebound Rate">
+          <h2>Regularized Adjusted Rebound Rate</h2>
           <div *ngIf="this._showRBD === false">
             <button (click)="this.flipRBD(true)">Explain</button>
           </div>
@@ -166,7 +166,7 @@ export class FourFactorsFiveYearComponent implements OnInit {
       this.store.dispatch(new SetHash(hash));
       this.searchWithHash();
     } else {
-      this.store.dispatch(new SetHash("-1983789079")); //TODO Update when new season rolls around
+      this.store.dispatch(new SetHash("1827831455")); //TODO Update when new season rolls around
       this.searchWithHash();
     }
 
