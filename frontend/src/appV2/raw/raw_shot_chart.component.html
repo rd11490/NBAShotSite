@@ -1,0 +1,18 @@
+<h1>Raw Shots</h1>
+<div [hidden]="(this._searchFailure)">
+  <h1 style="color:red;">{{(this._searchFailureMessage)}}</h1>
+</div>
+<div [hidden]="(this._done_loading)">
+<!--  <options [source]="this._source"></options>-->
+  <button class="search-button" (click)="search()">Search</button>
+  <br>
+  <div class="shot-stats-container">
+<!--    <stats-totals-component class="shot-stats" [stats]="(this._stats | async)"></stats-totals-component>-->
+  </div>
+  <div>
+<!--    <raw-shot-chart class="shot-chart" [shots]="(this._shots | async)"></raw-shot-chart>-->
+  </div>
+</div>
+<div [hidden]="(this._loading)">
+  <loading-component></loading-component>
+</div>

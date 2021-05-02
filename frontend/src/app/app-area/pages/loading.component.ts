@@ -1,7 +1,6 @@
 import {Component} from '@angular/core';
 import {State} from '../../app.state'
 import {Store} from "@ngrx/store";
-import {GetPlayers, GetSeasons, GetTeams} from "../../actions/initial.action";
 
 @Component({
   selector: 'loading-component',
